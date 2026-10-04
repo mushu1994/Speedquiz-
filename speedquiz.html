@@ -12,7 +12,7 @@
 <title>SpeedQuiz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Figtree:wght@500;700&family=Lilita+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Figtree:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root {
   box-sizing: border-box;
@@ -399,7 +399,6 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
 @media (min-width: 900px) { .tv .tiles4 { gap: 18px; } }
 
 .tickets.lv { grid-template-columns: 1fr 1fr; }
-.tile[data-key="blindtest"] { grid-column: 1 / -1; }
 .btbox { display: grid; gap: 8px; justify-items: center; margin-top: 8px; }
 .eq { display: flex; align-items: flex-end; gap: 5px; height: 58px; }
 .eq i { width: 9px; height: 10px; border-radius: 5px; background: linear-gradient(#FF5A8A, #C2185B); }
@@ -534,27 +533,29 @@ html, body {
       <h1 class="sr">SpeedQuiz</h1>
       <svg class="logo" viewBox="-12 -12 632 224" aria-hidden="true">
         <defs>
-          <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF7B0"/><stop offset=".42" stop-color="#FFD23F"/><stop offset="1" stop-color="#FF8A1F"/></linearGradient>
-          <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4C8DFF"/><stop offset="1" stop-color="#1E2A9A"/></linearGradient>
-          <linearGradient id="gOr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF9A1F" stop-opacity="0"/><stop offset="1" stop-color="#FF9A1F"/></linearGradient>
-          <linearGradient id="gCy" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38BDF8" stop-opacity="0"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
-          <filter id="fGlow" x="-15%" y="-25%" width="130%" height="150%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="gGold" gradientUnits="userSpaceOnUse" x1="0" y1="-80" x2="0" y2="6"><stop offset="0" stop-color="#FFF7B0"/><stop offset=".42" stop-color="#FFD23F"/><stop offset="1" stop-color="#FF8A1F"/></linearGradient>
+          <linearGradient id="gBlue" gradientUnits="userSpaceOnUse" x1="0" y1="-80" x2="490" y2="10"><stop offset="0" stop-color="#4C8DFF"/><stop offset="1" stop-color="#1E2A9A"/></linearGradient>
+          <linearGradient id="gGoldB" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="178"><stop offset="0" stop-color="#FFF7B0"/><stop offset=".42" stop-color="#FFD23F"/><stop offset="1" stop-color="#FF8A1F"/></linearGradient>
+          <linearGradient id="gBlueB" gradientUnits="userSpaceOnUse" x1="26" y1="14" x2="100" y2="178"><stop offset="0" stop-color="#4C8DFF"/><stop offset="1" stop-color="#1E2A9A"/></linearGradient>
+          <linearGradient id="gOr" gradientUnits="userSpaceOnUse" x1="-8" y1="0" x2="34" y2="0"><stop offset="0" stop-color="#FF9A1F" stop-opacity="0"/><stop offset="1" stop-color="#FF9A1F"/></linearGradient>
+          <linearGradient id="gCy" gradientUnits="userSpaceOnUse" x1="-8" y1="0" x2="34" y2="0"><stop offset="0" stop-color="#38BDF8" stop-opacity="0"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
           <path id="spk" d="M0-10L2.6-2.6L10 0L2.6 2.6L0 10L-2.6 2.6L-10 0L-2.6-2.6Z"/>
+          <path id="word" d="M7.6 -24.4Q9.5 -22.9 14.2 -20.3Q18.8 -17.7 23.1 -17.7Q27.3 -17.7 27.3 -21Q27.3 -22.5 26.1 -23.6Q24.9 -24.8 21.7 -26.3Q18.5 -27.8 16.9 -28.6Q15.3 -29.5 12.7 -31.4Q10 -33.4 8.6 -35.5Q4.6 -41.2 4.6 -50Q4.6 -58.8 11.2 -64.9Q17.7 -70.9 28.3 -70.9Q35.5 -70.9 41.6 -69.3Q47.7 -67.8 47.9 -65.3Q47.9 -65 47.9 -64.7Q47.9 -61.2 45.7 -55.9Q43.5 -50.5 42.6 -49.9Q36.2 -53.2 31.2 -53.2Q26.1 -53.2 26.1 -49.6Q26.1 -47.4 29.8 -45.7Q30.6 -45.3 32.1 -44.6Q33.6 -43.9 35.5 -43Q37.5 -42 39.8 -40.5Q42 -39.1 44.6 -36.7Q49.9 -31.7 49.9 -23.5Q49.9 -12.8 44 -6Q38.1 0.8 25.8 1Q19.8 1 15 0Q10.1 -1 6.5 -3.9Q2.9 -6.8 2.9 -10.9Q2.9 -15 4.4 -19.1Q5.9 -23.1 7.6 -24.4ZM64.8 0.2Q55.7 0.2 55.7 -1.8V-66.6Q55.7 -70 58.8 -70H76.4Q91.2 -70 97.8 -63.9Q104.3 -57.8 104.3 -46.2Q104.3 -36.6 98.1 -28.6Q95 -24.6 89 -22.2Q83 -19.8 75 -19.8V-1.9Q75 -0.7 71.2 -0.2Q67.5 0.2 64.8 0.2ZM75 -52.6V-36.8H76.3Q79.8 -36.8 82.2 -39Q84.6 -41.2 84.6 -45.2Q84.6 -49.2 83 -50.9Q81.3 -52.6 77.1 -52.6ZM143.6 -42.2Q145.5 -42.2 145.5 -35.2Q145.5 -33.1 145.1 -30.2Q144.6 -27.4 143.4 -27.4H130.7V-17.4H149.1Q150.8 -17.4 151.4 -13Q151.7 -11.1 151.7 -9Q151.7 -6.8 151.1 -3.4Q150.5 0 149.1 0H114.9Q111.1 0 111.1 -3.1V-67.4Q111.1 -70 113.4 -70H149.2Q151.3 -70 151.3 -61.2Q151.3 -52.3 149.2 -52.3H130.7V-42.2ZM190.9 -42.2Q192.8 -42.2 192.8 -35.2Q192.8 -33.1 192.4 -30.2Q191.9 -27.4 190.7 -27.4H178V-17.4H196.4Q198.1 -17.4 198.7 -13Q199 -11.1 199 -9Q199 -6.8 198.4 -3.4Q197.8 0 196.4 0H162.2Q158.4 0 158.4 -3.1V-67.4Q158.4 -70 160.7 -70H196.5Q198.6 -70 198.6 -61.2Q198.6 -52.3 196.5 -52.3H178V-42.2ZM205.7 -4.6V-64.6Q205.7 -67.1 207 -68.6Q208.2 -70 210.2 -70H226.9Q242.8 -70 251.1 -62Q259.3 -54 259.3 -36.8Q259.3 0 227.9 0H210.8Q205.7 0 205.7 -4.6ZM224.9 -51V-21.1Q224.9 -19 225.2 -18.5Q225.5 -17.9 227 -17.9Q232.5 -17.9 235.4 -22Q238.2 -26.1 238.2 -35.7Q238.2 -45.2 235.2 -48.1Q232.3 -51 225.9 -51ZM263.3 -34.9Q263.3 -52.7 272.2 -61.8Q281.2 -70.9 295.4 -70.9Q309.5 -70.9 318.2 -62Q326.9 -53 326.9 -34.9Q326.9 -21 321.5 -12.5Q316.1 -4 306.7 -0.8L317.3 6.5Q317.9 6.9 317.9 8Q317.9 9 315.7 11.9Q313.4 14.8 310.2 16.4Q307.1 17.9 305.5 17.9Q303.9 17.9 302.9 16.8L288.3 0.6Q277.1 -1.5 270.2 -10.7Q263.3 -19.8 263.3 -34.9ZM295.1 -51.7Q290.3 -51.7 287.1 -47.3Q283.8 -42.9 283.8 -35Q283.8 -27 286.9 -22.8Q290 -18.5 295.1 -18.5Q300.1 -18.5 303.2 -22.8Q306.4 -27.1 306.4 -35.1Q306.4 -43.1 303.2 -47.4Q299.9 -51.7 295.1 -51.7ZM366.6 -68Q366.6 -70 377.5 -70Q388.3 -70 388.3 -68V-22.1Q388.3 -11.9 381 -5.5Q373.7 1 360.9 1Q348 1 340 -5.7Q331.9 -12.3 331.9 -23.6V-67.9Q331.9 -69.9 342.8 -69.9Q353.6 -69.9 353.6 -67.9V-22.8Q353.6 -20.8 355.7 -19.6Q357.9 -18.4 360.3 -18.4Q362.7 -18.4 364.7 -19.5Q366.6 -20.6 366.6 -22.8ZM401.3 -17.2V-52.8H394.2Q392.5 -52.8 391.8 -57.1Q391.5 -59.2 391.5 -61.4Q391.5 -63.6 391.8 -65.7Q392.5 -70 394.2 -70H427.8Q429.5 -70 430.1 -65.7Q430.5 -63.6 430.5 -61.4Q430.5 -59.2 430.1 -57.1Q429.5 -52.8 427.8 -52.8H421.1V-17.2H428.1Q429.8 -17.2 430.5 -12.9Q430.9 -10.8 430.9 -8.6Q430.9 -6.4 430.5 -4.3Q429.8 0 428.1 0H394.4Q392.7 0 392.1 -4.3Q391.7 -6.4 391.7 -8.6Q391.7 -10.8 392.1 -12.9Q392.7 -17.2 394.4 -17.2ZM438.2 -51.8Q436.5 -51.8 435.8 -56.4Q435.5 -58.3 435.5 -60.6Q435.5 -62.9 436 -65.4Q436.9 -70 439 -70H476Q482.1 -70 483.9 -58.9Q484.3 -56.5 484.3 -55.4L460.9 -19.9H479.2Q479.3 -19.9 479.4 -19.9Q481.6 -19.9 482.5 -15.1Q482.9 -12.8 482.9 -10.3Q482.9 -7.8 482.3 -5Q481.2 0 478.9 0H440Q439.1 0 436.8 -6.1Q434.4 -12.1 434.4 -13.6Q434.4 -15.1 434.7 -15.5L458.1 -51.8Z"/>
         </defs>
         <g stroke-linecap="round" fill="none">
           <path d="M-4 88H34" stroke="url(#gOr)" stroke-width="5"/>
           <path d="M4 112H30" stroke="url(#gCy)" stroke-width="4"/>
           <path d="M-8 136H26" stroke="url(#gOr)" stroke-width="4"/>
         </g>
-        <g filter="url(#fGlow)">
+        <g>
           <path d="M70 14 L26 96 H54 L34 178 L100 84 H72 L98 14 Z" fill="#0B1245" stroke="#0B1245" stroke-width="16" stroke-linejoin="round"/>
-          <path d="M70 14 L26 96 H54 L34 178 L100 84 H72 L98 14 Z" fill="url(#gBlue)" stroke="url(#gBlue)" stroke-width="10" stroke-linejoin="round"/>
-          <path d="M70 14 L26 96 H54 L34 178 L100 84 H72 L98 14 Z" fill="url(#gGold)"/>
+          <path d="M70 14 L26 96 H54 L34 178 L100 84 H72 L98 14 Z" fill="url(#gBlueB)" stroke="url(#gBlueB)" stroke-width="10" stroke-linejoin="round"/>
+          <path d="M70 14 L26 96 H54 L34 178 L100 84 H72 L98 14 Z" fill="url(#gGoldB)"/>
           <path d="M74 24 L42 90" stroke="#fff" stroke-opacity=".55" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <g transform="skewX(-8)" font-family="'Lilita One','Bricolage Grotesque','Avenir Next',system-ui,sans-serif" font-size="98" font-weight="800" text-anchor="start">
-            <text x="146" y="148" textLength="446" lengthAdjust="spacingAndGlyphs" fill="#0B1245" stroke="#0B1245" stroke-width="22" stroke-linejoin="round">SPEEDQUIZ</text>
-            <text x="146" y="148" textLength="446" lengthAdjust="spacingAndGlyphs" fill="url(#gBlue)" stroke="url(#gBlue)" stroke-width="13" stroke-linejoin="round">SPEEDQUIZ</text>
-            <text x="146" y="148" textLength="446" lengthAdjust="spacingAndGlyphs" fill="url(#gGold)">SPEEDQUIZ</text>
+          <g transform="translate(124 140) skewX(-8) scale(.92)">
+            <use href="#word" fill="#0B1245" stroke="#0B1245" stroke-width="25" stroke-linejoin="round"/>
+            <use href="#word" fill="url(#gBlue)" stroke="url(#gBlue)" stroke-width="14" stroke-linejoin="round"/>
+            <use href="#word" fill="url(#gGold)"/>
           </g>
         </g>
         <g>
@@ -1784,6 +1785,7 @@ html, body {
   var THEMES = {
     culture: { label: "Culture générale", icon: "🧠", color: "#D62839" },
     drapeaux: { label: "Drapeaux du monde", icon: "🌍", color: "#00796B" },
+    capitales: { label: "Capitales du monde", icon: "🗺️", color: "#2F5BFF" },
     jeuxvideo: { label: "Jeux vidéo", icon: "🎮", color: "#6A3DE8" },
     france: { label: "Culture française", icon: "🇫🇷", color: "#C2185B" },
     gastronomie: { label: "Gastronomie du monde", icon: "🍜", color: "#BF4A00" },
@@ -1802,7 +1804,7 @@ html, body {
     t5: { type: "time", ms: 5 * 60000, label: "5 minutes" },
     t10: { type: "time", ms: 10 * 60000, label: "10 minutes" }
   };
-  var MIX_THEMES = ["culture", "drapeaux", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs"];
+  var MIX_THEMES = ["culture", "drapeaux", "capitales", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs"];
   var LEVELS = {
     all: { label: "🎯 Tous niveaux", short: "Tous niveaux" },
     easy: { label: "🟢 Facile", short: "Facile", d: 1 },
@@ -1810,8 +1812,200 @@ html, body {
     hard: { label: "🔴 Expert", short: "Expert", d: 3 }
   };
   var CAT_THEME = { "Jeux vidéo": "jeuxvideo", "Culture France": "france", "Gastronomie": "gastronomie", "Pokémon": "pokemon", "Séries TV": "series", "Les Sims": "sims", "Disney": "disney", "Parcs d'attractions": "parcs" };
-  var SEEN_KEY = { culture: "pq:seen", drapeaux: "pq:seenflags", jeuxvideo: "pq:seen:jv", france: "pq:seen:fr", gastronomie: "pq:seen:gast", pokemon: "pq:seen:pk", series: "pq:seen:tv", sims: "pq:seen:sims", disney: "pq:seen:dis", parcs: "pq:seen:parcs", blindtest: "pq:seen:bt" };
+  var SEEN_KEY = { culture: "pq:seen", drapeaux: "pq:seenflags", jeuxvideo: "pq:seen:jv", france: "pq:seen:fr", gastronomie: "pq:seen:gast", pokemon: "pq:seen:pk", series: "pq:seen:tv", sims: "pq:seen:sims", disney: "pq:seen:dis", parcs: "pq:seen:parcs", blindtest: "pq:seen:bt", capitales: "pq:seen:cap" };
 
+  /* Capitales du monde : [ISO, pays, « de … », capitale, région, niveau, ville-piège, anecdote, question particulière] */
+  var CAPS = [["AL","Albanie","de l'Albanie","Tirana",0,2,"","",""],
+    ["AD","Andorre","d'Andorre","Andorre-la-Vieille",0,3,"","",""],
+    ["AT","Autriche","de l'Autriche","Vienne",0,1,"","",""],
+    ["BY","Biélorussie","de la Biélorussie","Minsk",0,2,"","",""],
+    ["BE","Belgique","de la Belgique","Bruxelles",0,1,"","",""],
+    ["BA","Bosnie-Herzégovine","de la Bosnie-Herzégovine","Sarajevo",0,2,"","",""],
+    ["BG","Bulgarie","de la Bulgarie","Sofia",0,2,"","",""],
+    ["HR","Croatie","de la Croatie","Zagreb",0,2,"","",""],
+    ["CY","Chypre","de Chypre","Nicosie",0,2,"","",""],
+    ["CZ","Tchéquie","de la Tchéquie","Prague",0,1,"","",""],
+    ["DK","Danemark","du Danemark","Copenhague",0,1,"","",""],
+    ["EE","Estonie","de l'Estonie","Tallinn",0,2,"","",""],
+    ["FI","Finlande","de la Finlande","Helsinki",0,1,"","",""],
+    ["FR","France","de la France","Paris",0,1,"","",""],
+    ["DE","Allemagne","de l'Allemagne","Berlin",0,1,"","",""],
+    ["GR","Grèce","de la Grèce","Athènes",0,1,"","",""],
+    ["HU","Hongrie","de la Hongrie","Budapest",0,1,"","",""],
+    ["IS","Islande","de l'Islande","Reykjavik",0,2,"","C'est la capitale d'un État souverain la plus au nord du monde.",""],
+    ["IE","Irlande","de l'Irlande","Dublin",0,1,"","",""],
+    ["IT","Italie","de l'Italie","Rome",0,1,"","",""],
+    ["LV","Lettonie","de la Lettonie","Riga",0,2,"","",""],
+    ["LI","Liechtenstein","du Liechtenstein","Vaduz",0,3,"","",""],
+    ["LT","Lituanie","de la Lituanie","Vilnius",0,2,"","",""],
+    ["LU","Luxembourg","du Luxembourg","Luxembourg",0,2,"","",""],
+    ["MT","Malte","de Malte","La Valette",0,2,"","C'est la plus petite capitale de l'Union européenne.",""],
+    ["MD","Moldavie","de la Moldavie","Chisinau",0,2,"","",""],
+    ["MC","Monaco","de Monaco","Monaco",0,2,"","",""],
+    ["ME","Monténégro","du Monténégro","Podgorica",0,2,"","",""],
+    ["NL","Pays-Bas","des Pays-Bas","Amsterdam",0,1,"","Le gouvernement et le Parlement siègent à La Haye.",""],
+    ["MK","Macédoine du Nord","de la Macédoine du Nord","Skopje",0,3,"","",""],
+    ["NO","Norvège","de la Norvège","Oslo",0,1,"","",""],
+    ["PL","Pologne","de la Pologne","Varsovie",0,1,"","",""],
+    ["PT","Portugal","du Portugal","Lisbonne",0,1,"","",""],
+    ["RO","Roumanie","de la Roumanie","Bucarest",0,2,"","",""],
+    ["RU","Russie","de la Russie","Moscou",0,1,"","",""],
+    ["SM","Saint-Marin","de Saint-Marin","Saint-Marin",0,3,"","",""],
+    ["RS","Serbie","de la Serbie","Belgrade",0,2,"","",""],
+    ["SK","Slovaquie","de la Slovaquie","Bratislava",0,2,"","",""],
+    ["SI","Slovénie","de la Slovénie","Ljubljana",0,2,"","",""],
+    ["ES","Espagne","de l'Espagne","Madrid",0,1,"","",""],
+    ["SE","Suède","de la Suède","Stockholm",0,1,"","",""],
+    ["CH","Suisse","de la Suisse","Berne",0,2,"Zurich","Zurich et Genève sont plus peuplées que Berne.",""],
+    ["UA","Ukraine","de l'Ukraine","Kiev",0,1,"","On l'écrit aussi Kyïv.",""],
+    ["GB","Royaume-Uni","du Royaume-Uni","Londres",0,1,"","",""],
+    ["AF","Afghanistan","de l'Afghanistan","Kaboul",1,2,"","",""],
+    ["AM","Arménie","de l'Arménie","Erevan",1,2,"","",""],
+    ["AZ","Azerbaïdjan","de l'Azerbaïdjan","Bakou",1,2,"","",""],
+    ["BH","Bahreïn","de Bahreïn","Manama",1,2,"","",""],
+    ["BD","Bangladesh","du Bangladesh","Dacca",1,2,"","",""],
+    ["BT","Bhoutan","du Bhoutan","Thimphou",1,2,"","On dit qu'elle n'a aucun feu de circulation.",""],
+    ["BN","Brunei","du Brunei","Bandar Seri Begawan",1,3,"","",""],
+    ["KH","Cambodge","du Cambodge","Phnom Penh",1,2,"","",""],
+    ["CN","Chine","de la Chine","Pékin",1,1,"Shanghai","",""],
+    ["GE","Géorgie","de la Géorgie","Tbilissi",1,2,"","",""],
+    ["IN","Inde","de l'Inde","New Delhi",1,1,"Bombay","",""],
+    ["ID","Indonésie","de l'Indonésie","Jakarta",1,2,"","L'Indonésie prépare une future capitale, Nusantara.",""],
+    ["IR","Iran","de l'Iran","Téhéran",1,2,"","",""],
+    ["IQ","Irak","de l'Irak","Bagdad",1,2,"","",""],
+    ["JP","Japon","du Japon","Tokyo",1,1,"Osaka","",""],
+    ["JO","Jordanie","de la Jordanie","Amman",1,2,"","",""],
+    ["KZ","Kazakhstan","du Kazakhstan","Astana",1,2,"Almaty","Elle a porté le nom de Noursoultan de 2019 à 2022.",""],
+    ["KW","Koweït","du Koweït","Koweït",1,2,"","",""],
+    ["KG","Kirghizistan","du Kirghizistan","Bichkek",1,2,"","",""],
+    ["LA","Laos","du Laos","Vientiane",1,2,"","",""],
+    ["LB","Liban","du Liban","Beyrouth",1,1,"","",""],
+    ["MY","Malaisie","de la Malaisie","Kuala Lumpur",1,2,"","L'administration du gouvernement est installée à Putrajaya.",""],
+    ["MV","Maldives","des Maldives","Malé",1,2,"","",""],
+    ["MN","Mongolie","de la Mongolie","Oulan-Bator",1,2,"","On la présente souvent comme la capitale la plus froide du monde.",""],
+    ["MM","Birmanie","de la Birmanie","Naypyidaw",1,2,"Rangoun","Elle a remplacé Rangoun en 2006.",""],
+    ["NP","Népal","du Népal","Katmandou",1,2,"","",""],
+    ["KP","Corée du Nord","de la Corée du Nord","Pyongyang",1,2,"","",""],
+    ["OM","Oman","d'Oman","Mascate",1,2,"","",""],
+    ["PK","Pakistan","du Pakistan","Islamabad",1,2,"Karachi","",""],
+    ["PH","Philippines","des Philippines","Manille",1,2,"","",""],
+    ["QA","Qatar","du Qatar","Doha",1,2,"","",""],
+    ["SA","Arabie saoudite","de l'Arabie saoudite","Riyad",1,2,"Djeddah","",""],
+    ["SG","Singapour","de Singapour","Singapour",1,2,"","",""],
+    ["KR","Corée du Sud","de la Corée du Sud","Séoul",1,1,"","",""],
+    ["LK","Sri Lanka","du Sri Lanka","Sri Jayawardenapura Kotte",1,3,"Colombo","Colombo reste la plus grande ville du pays.","Quelle est la capitale officielle du Sri Lanka ?"],
+    ["SY","Syrie","de la Syrie","Damas",1,2,"","",""],
+    ["TJ","Tadjikistan","du Tadjikistan","Douchanbé",1,2,"","",""],
+    ["TH","Thaïlande","de la Thaïlande","Bangkok",1,1,"","",""],
+    ["TL","Timor oriental","du Timor oriental","Dili",1,3,"","",""],
+    ["TM","Turkménistan","du Turkménistan","Achgabat",1,3,"","",""],
+    ["AE","Émirats arabes unis","des Émirats arabes unis","Abou Dabi",1,2,"Dubaï","Dubaï est la ville la plus connue, mais pas la capitale.",""],
+    ["UZ","Ouzbékistan","de l'Ouzbékistan","Tachkent",1,2,"","",""],
+    ["VN","Viêt Nam","du Viêt Nam","Hanoï",1,2,"Hô Chi Minh-Ville","",""],
+    ["YE","Yémen","du Yémen","Sanaa",1,2,"","",""],
+    ["TR","Turquie","de la Turquie","Ankara",1,1,"Istanbul","Istanbul est plus grande, mais Ankara est la capitale depuis 1923.",""],
+    ["DZ","Algérie","de l'Algérie","Alger",2,1,"","",""],
+    ["AO","Angola","de l'Angola","Luanda",2,2,"","",""],
+    ["BJ","Bénin","du Bénin","Porto-Novo",2,3,"Cotonou","Le gouvernement siège à Cotonou, la plus grande ville.","Quelle est la capitale officielle du Bénin ?"],
+    ["BW","Botswana","du Botswana","Gaborone",2,2,"","",""],
+    ["BF","Burkina Faso","du Burkina Faso","Ouagadougou",2,2,"","",""],
+    ["BI","Burundi","du Burundi","Gitega",2,3,"Bujumbura","Gitega est capitale politique depuis 2019 ; Bujumbura reste la capitale économique.",""],
+    ["CV","Cap-Vert","du Cap-Vert","Praia",2,3,"","",""],
+    ["CM","Cameroun","du Cameroun","Yaoundé",2,2,"Douala","",""],
+    ["CF","République centrafricaine","de la République centrafricaine","Bangui",2,3,"","",""],
+    ["TD","Tchad","du Tchad","N'Djamena",2,3,"","",""],
+    ["KM","Comores","des Comores","Moroni",2,3,"","",""],
+    ["CG","Congo","du Congo","Brazzaville",2,2,"","",""],
+    ["CD","République démocratique du Congo","de la République démocratique du Congo","Kinshasa",2,2,"","",""],
+    ["CI","Côte d'Ivoire","de la Côte d'Ivoire","Yamoussoukro",2,2,"Abidjan","Abidjan est la plus grande ville ; Yamoussoukro est capitale politique depuis 1983.","Quelle ville est la capitale politique de la Côte d'Ivoire ?"],
+    ["DJ","Djibouti","de Djibouti","Djibouti",2,3,"","",""],
+    ["EG","Égypte","de l'Égypte","Le Caire",2,1,"Alexandrie","",""],
+    ["ER","Érythrée","de l'Érythrée","Asmara",2,3,"","",""],
+    ["SZ","Eswatini","d'Eswatini","Mbabane",2,3,"","Lobamba est la capitale législative et royale.","Quelle ville est la capitale administrative d'Eswatini ?"],
+    ["ET","Éthiopie","de l'Éthiopie","Addis-Abeba",2,2,"","",""],
+    ["GA","Gabon","du Gabon","Libreville",2,2,"","",""],
+    ["GM","Gambie","de la Gambie","Banjul",2,2,"","",""],
+    ["GH","Ghana","du Ghana","Accra",2,2,"Kumasi","",""],
+    ["GN","Guinée","de la Guinée","Conakry",2,2,"","",""],
+    ["GW","Guinée-Bissau","de la Guinée-Bissau","Bissau",2,3,"","",""],
+    ["KE","Kenya","du Kenya","Nairobi",2,1,"Mombasa","",""],
+    ["LS","Lesotho","du Lesotho","Maseru",2,3,"","",""],
+    ["LR","Liberia","du Liberia","Monrovia",2,2,"","",""],
+    ["LY","Libye","de la Libye","Tripoli",2,2,"","",""],
+    ["MG","Madagascar","de Madagascar","Antananarivo",2,2,"","",""],
+    ["MW","Malawi","du Malawi","Lilongwe",2,3,"","",""],
+    ["ML","Mali","du Mali","Bamako",2,2,"","",""],
+    ["MR","Mauritanie","de la Mauritanie","Nouakchott",2,2,"","",""],
+    ["MU","Maurice","de Maurice","Port-Louis",2,2,"","",""],
+    ["MA","Maroc","du Maroc","Rabat",2,1,"Casablanca","Casablanca est la plus grande ville du pays.",""],
+    ["MZ","Mozambique","du Mozambique","Maputo",2,2,"","",""],
+    ["NA","Namibie","de la Namibie","Windhoek",2,2,"","",""],
+    ["NE","Niger","du Niger","Niamey",2,2,"","",""],
+    ["NG","Nigeria","du Nigeria","Abuja",2,2,"Lagos","Abuja a remplacé Lagos comme capitale en 1991.",""],
+    ["RW","Rwanda","du Rwanda","Kigali",2,2,"","",""],
+    ["ST","Sao Tomé-et-Principe","de Sao Tomé-et-Principe","São Tomé",2,3,"","",""],
+    ["SN","Sénégal","du Sénégal","Dakar",2,1,"","",""],
+    ["SC","Seychelles","des Seychelles","Victoria",2,3,"","",""],
+    ["SL","Sierra Leone","de la Sierra Leone","Freetown",2,2,"","",""],
+    ["SO","Somalie","de la Somalie","Mogadiscio",2,3,"","",""],
+    ["ZA","Afrique du Sud","de l'Afrique du Sud","Pretoria",2,2,"Le Cap","Le pays a trois capitales : Pretoria (exécutif), Le Cap (législatif) et Bloemfontein (judiciaire).","Quelle ville est la capitale administrative de l'Afrique du Sud ?"],
+    ["SS","Soudan du Sud","du Soudan du Sud","Djouba",2,3,"","",""],
+    ["SD","Soudan","du Soudan","Khartoum",2,2,"","",""],
+    ["TZ","Tanzanie","de la Tanzanie","Dodoma",2,2,"Dar es Salaam","Dar es Salaam est la plus grande ville ; Dodoma est la capitale officielle.",""],
+    ["TG","Togo","du Togo","Lomé",2,2,"","",""],
+    ["TN","Tunisie","de la Tunisie","Tunis",2,1,"","",""],
+    ["UG","Ouganda","de l'Ouganda","Kampala",2,2,"","",""],
+    ["ZM","Zambie","de la Zambie","Lusaka",2,2,"","",""],
+    ["ZW","Zimbabwe","du Zimbabwe","Harare",2,2,"","",""],
+    ["AG","Antigua-et-Barbuda","d'Antigua-et-Barbuda","Saint John's",3,3,"","",""],
+    ["BS","Bahamas","des Bahamas","Nassau",3,2,"","",""],
+    ["BB","Barbade","de la Barbade","Bridgetown",3,3,"","",""],
+    ["BZ","Belize","du Belize","Belmopan",3,3,"","",""],
+    ["CA","Canada","du Canada","Ottawa",3,1,"Toronto","",""],
+    ["CR","Costa Rica","du Costa Rica","San José",3,2,"","",""],
+    ["CU","Cuba","de Cuba","La Havane",3,1,"","",""],
+    ["DM","Dominique","de la Dominique","Roseau",3,3,"","",""],
+    ["DO","République dominicaine","de la République dominicaine","Saint-Domingue",3,2,"","",""],
+    ["SV","Salvador","du Salvador","San Salvador",3,2,"","",""],
+    ["GD","Grenade","de la Grenade","Saint-Georges",3,3,"","",""],
+    ["GT","Guatemala","du Guatemala","Guatemala",3,2,"","",""],
+    ["HT","Haïti","d'Haïti","Port-au-Prince",3,2,"","",""],
+    ["HN","Honduras","du Honduras","Tegucigalpa",3,2,"","",""],
+    ["JM","Jamaïque","de la Jamaïque","Kingston",3,2,"","",""],
+    ["MX","Mexique","du Mexique","Mexico",3,1,"","",""],
+    ["NI","Nicaragua","du Nicaragua","Managua",3,2,"","",""],
+    ["PA","Panama","du Panama","Panama",3,2,"","",""],
+    ["KN","Saint-Christophe-et-Niévès","de Saint-Christophe-et-Niévès","Basseterre",3,3,"","",""],
+    ["LC","Sainte-Lucie","de Sainte-Lucie","Castries",3,3,"","",""],
+    ["VC","Saint-Vincent-et-les-Grenadines","de Saint-Vincent-et-les-Grenadines","Kingstown",3,3,"","",""],
+    ["TT","Trinité-et-Tobago","de Trinité-et-Tobago","Port-d'Espagne",3,3,"","",""],
+    ["US","États-Unis","des États-Unis","Washington",3,1,"New York","",""],
+    ["AR","Argentine","de l'Argentine","Buenos Aires",4,1,"","",""],
+    ["BO","Bolivie","de la Bolivie","Sucre",4,3,"La Paz","Le gouvernement siège à La Paz.","Quelle ville est la capitale constitutionnelle de la Bolivie ?"],
+    ["BR","Brésil","du Brésil","Brasilia",4,1,"Rio de Janeiro","Elle a été inaugurée en 1960.",""],
+    ["CL","Chili","du Chili","Santiago",4,2,"Valparaíso","",""],
+    ["CO","Colombie","de la Colombie","Bogota",4,2,"Medellín","",""],
+    ["EC","Équateur","de l'Équateur","Quito",4,2,"Guayaquil","",""],
+    ["GY","Guyana","du Guyana","Georgetown",4,3,"","",""],
+    ["PY","Paraguay","du Paraguay","Asunción",4,2,"","",""],
+    ["PE","Pérou","du Pérou","Lima",4,1,"","",""],
+    ["SR","Suriname","du Suriname","Paramaribo",4,3,"","",""],
+    ["UY","Uruguay","de l'Uruguay","Montevideo",4,2,"","",""],
+    ["VE","Venezuela","du Venezuela","Caracas",4,2,"","",""],
+    ["AU","Australie","de l'Australie","Canberra",5,1,"Sydney","Elle a été choisie comme compromis entre Sydney et Melbourne.",""],
+    ["FJ","Fidji","des Fidji","Suva",5,2,"","",""],
+    ["KI","Kiribati","des Kiribati","Tarawa-Sud",5,3,"","",""],
+    ["MH","Îles Marshall","des Îles Marshall","Majuro",5,3,"","",""],
+    ["FM","Micronésie","de la Micronésie","Palikir",5,3,"","",""],
+    ["NR","Nauru","de Nauru","Yaren",5,3,"","Nauru n'a pas de capitale officielle : Yaren est le siège du gouvernement.","Quelle ville abrite le gouvernement de Nauru ?"],
+    ["NZ","Nouvelle-Zélande","de la Nouvelle-Zélande","Wellington",5,2,"Auckland","",""],
+    ["PW","Palaos","des Palaos","Ngerulmud",5,3,"","Elle a remplacé Koror comme capitale en 2006.",""],
+    ["PG","Papouasie-Nouvelle-Guinée","de la Papouasie-Nouvelle-Guinée","Port Moresby",5,2,"","",""],
+    ["WS","Samoa","des Samoa","Apia",5,3,"","",""],
+    ["SB","Îles Salomon","des Îles Salomon","Honiara",5,3,"","",""],
+    ["TO","Tonga","des Tonga","Nukuʻalofa",5,3,"","",""],
+    ["TV","Tuvalu","des Tuvalu","Funafuti",5,3,"","",""],
+    ["VU","Vanuatu","du Vanuatu","Port-Vila",5,3,"","",""]];
   /* Blind test : identifiants de morceaux iTunes ; les aperçus de 30 secondes sont demandés à Apple au moment de jouer. */
   var BT = [[1472093121,"Le Roi Lion",1,"L'histoire de la vie/Nants' Ingonyama","China Moses & Lebo M",0],
     [1472093417,"Le Roi Lion",1,"Hakuna Matata","Jamel Debbouze & Alban Ivanov",0],
@@ -1929,10 +2123,11 @@ html, body {
     [217271368,"Armageddon",2,"I Don't Want to Miss a Thing","Aerosmith",2],
     [566322365,"Skyfall",3,"Skyfall","Adele",2],
     [1440892107,"Moulin Rouge !",3,"Lady Marmalade","Christina Aguilera, Lil' Kim, Mya & Pink",2]];
-  var POOLS = { culture: [], jeuxvideo: [], france: [], gastronomie: [], pokemon: [], series: [], sims: [], disney: [], parcs: [], blindtest: [], drapeaux: [] };
+  var POOLS = { culture: [], jeuxvideo: [], france: [], gastronomie: [], pokemon: [], series: [], sims: [], disney: [], parcs: [], blindtest: [], capitales: [], drapeaux: [] };
   QUESTIONS.forEach(function (q, i) { POOLS[CAT_THEME[q.c] || "culture"].push(i); });
   FLAGS.forEach(function (_, i) { POOLS.drapeaux.push(i); });
   BT.forEach(function (_, i) { POOLS.blindtest.push(i); });
+  CAPS.forEach(function (_, i) { POOLS.capitales.push(i); });
 
   function loadConfig() {
     var c = { theme: "culture", limit: "q10", level: "all" };
@@ -2019,7 +2214,7 @@ html, body {
   }
 
   /* Difficulté d'une question (1 facile, 2 intermédiaire, 3 expert). */
-  function dOf(theme, i) { return theme === "drapeaux" ? (FLAGS[i][4] || 2) : theme === "blindtest" ? BT[i][2] : (QUESTIONS[i].d || 2); }
+  function dOf(theme, i) { return theme === "drapeaux" ? (FLAGS[i][4] || 2) : theme === "blindtest" ? BT[i][2] : theme === "capitales" ? CAPS[i][5] : (QUESTIONS[i].d || 2); }
 
   /* Questions du niveau demandé ; si elles sont trop peu nombreuses, on complète avec les niveaux voisins. */
   function levelPool(theme, level, need) {
@@ -2035,7 +2230,7 @@ html, body {
 
   /* Chaque question se construit à partir de (thème, numéro, graine) : c'est ce qui permet de la rejouer à l'identique
      (multijoueur, défis par lien). */
-  var TKEYS = ["culture", "drapeaux", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs", "blindtest"];
+  var TKEYS = ["culture", "drapeaux", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs", "blindtest", "capitales"];
   var DATA_V = 1;
 
   function flagQ(i) {
@@ -2050,6 +2245,33 @@ html, body {
       return { c: "Drapeaux", d: f[4], q: "Quel est le drapeau " + f[2] + " ?", f: f[3], grid: true, opts: shuffle(opts) };
     }
     return { c: "Drapeaux", d: f[4], q: "À quel pays appartient ce drapeau ?", flag: f[1], f: f[3], opts: shuffle(opts) };
+  }
+
+  /* Capitales : « Quelle est la capitale de … ? » (avec le drapeau), ou l'inverse. */
+  function capFlag(iso) { return String.fromCodePoint(0x1F1E6 + iso.charCodeAt(0) - 65, 0x1F1E6 + iso.charCodeAt(1) - 65); }
+  function plain(x) { return x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+  var CAP_NOREV = ["Victoria", "Georgetown", "Kingston", "Saint-Georges", "San José", "Santiago", "Panama", "Luxembourg", "Singapour", "Monaco", "Djibouti", "Guatemala", "Koweït", "Saint-Marin", "Mexico", "Washington", "Kiev", "Berne", "Alger", "Tunis", "Tripoli", "Sanaa"];
+  function capNoRev(c) {
+    if (c[8] || CAP_NOREV.indexOf(c[3]) >= 0) return true;
+    var a = plain(c[1]), b = plain(c[3]);
+    return a.indexOf(b.slice(0, 4)) >= 0 || b.indexOf(a.slice(0, 4)) >= 0;
+  }
+  function capQ(i) {
+    var c = CAPS[i], names = [], k;
+    for (k = 0; k < CAPS.length; k++) if (k !== i && CAPS[k][4] === c[4]) names.push(k);
+    names = shuffle(names);
+    var rev = !capNoRev(c) && rng() < 0.3;
+    if (rev) {
+      var optsR = [{ t: c[1], ok: true }].concat(names.slice(0, 3).map(function (n) { return { t: CAPS[n][1] }; }));
+      return { c: "Capitales", d: c[5], q: "De quel pays " + c[3] + " est-elle la capitale ?", f: c[7] || ("La capitale " + c[2] + " est " + c[3] + "."), opts: shuffle(optsR) };
+    }
+    var opts = [{ t: c[3], ok: true }];
+    if (c[6] && c[6] !== c[3]) opts.push({ t: c[6] });
+    for (k = 0; k < names.length && opts.length < 4; k++) {
+      var cap = CAPS[names[k]][3];
+      if (!opts.some(function (o) { return o.t === cap; })) opts.push({ t: cap });
+    }
+    return { c: "Capitales", d: c[5], q: c[8] || ("Quelle est la capitale " + c[2] + " ?"), flag: capFlag(c[0]), f: c[7] || ("La capitale " + c[2] + " est " + c[3] + "."), opts: shuffle(opts) };
   }
 
   /* Blind test : un extrait musical, quatre propositions du même genre (dessin animé, série ou film). */
@@ -2079,7 +2301,7 @@ html, body {
     var prev = rng;
     rng = seeded(seed);
     try {
-      var q = t === "drapeaux" ? flagQ(i) : t === "blindtest" ? btQ(i) : textQ(i);
+      var q = t === "drapeaux" ? flagQ(i) : t === "capitales" ? capQ(i) : t === "blindtest" ? btQ(i) : textQ(i);
       q._t = t; q._i = i;
       return q;
     } finally { rng = prev; }
@@ -3573,6 +3795,14 @@ html, body {
         cells: [[1, 0, 1, 0], [1, 0, 0, 1], [0, 1, 1, 0], [1, 1, 0, 1]],
         lead: [["triangle", 0.14, 1.2, 0], ["triangle", 0.04, 1.2, 1200]],
         bassPat: [1, 2, 1, 2], bassVol: 0.18, bassDur: 1.6, compPat: [0, 1, 0, 1], comp: ["triangle", 0.035, 0.14], drumPat: [0, 0.035, 0, 0.035]
+      },
+      /* Capitales : voyage autour du monde, bossa légère */
+      capitales: {
+        seed: 139, root: 65, eighth: 0.18, per: 4, scale: "pent", rest: 0.12,
+        progA: [[0, "maj7"], [5, "maj7"], [2, "min7"], [7, "dom7"]], progB: [[9, "min7"], [2, "min7"], [7, "dom7"], [0, "maj7"]],
+        cells: [[1, 0, 1, 1], [1, 1, 0, 1], [1, 0, 1, 0], [1, 1, 1, 0]],
+        lead: [["triangle", 0.13, 1.1, 0], ["sine", 0.05, 1.1, 1200]],
+        bassPat: [1, 0, 0, 2], bassVol: 0.19, bassDur: 1.7, compPat: [0, 1, 0, 1], comp: ["triangle", 0.035, 0.12], drumPat: [0, 0.04, 0.02, 0.04]
       },
       /* Pokémon : marche d'aventure */
       pokemon: {
