@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0A0F2E">
 <meta name="apple-mobile-web-app-title" content="SpeedQuiz">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -514,6 +516,32 @@ html, body {
   background: rgba(10, 15, 46, 0.92); color: #fff; font-weight: 700; font-size: 14px; padding: 8px 14px; border-radius: 999px;
   border: 1.5px solid var(--neon-soft); box-shadow: 0 0 18px rgba(60, 130, 255, 0.35); pointer-events: none; animation: rise .2s ease-out; }
 
+.chinput { width: 100%; font: inherit; font-size: 17px; padding: 11px 13px; border-radius: 12px; border: 2px solid var(--neon-soft); background: rgba(6, 10, 40, 0.75); color: #fff; }
+.chrank { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.chrank li { display: flex; justify-content: space-between; gap: 10px; padding: 7px 12px; border-radius: 10px; background: rgba(76, 155, 255, 0.14); font-weight: 700; font-size: 15px; white-space: pre; }
+.chrank li.me { background: linear-gradient(180deg, #FFE15A, #FFB020); color: #2A1200; }
+.chrank b { font-family: var(--display); font-variant-numeric: tabular-nums; }
+.chbtns.one { grid-template-columns: 1fr; }
+.chnotif { background: linear-gradient(160deg, rgba(36, 54, 140, 0.95), rgba(16, 24, 84, 0.97)); border: 1.5px solid var(--neon-soft); border-radius: 20px; padding: 14px 16px; display: grid; gap: 10px; color: var(--ink); box-shadow: 0 0 22px rgba(60, 130, 255, 0.22); }
+.chnotif b { font-family: var(--display); font-size: 19px; }
+.chnotif p { margin: 0; color: var(--ink-soft); line-height: 1.35; }
+.chnotif .btn { font-size: 17px; padding: 13px 14px; }
+.chnotif .chmsg { font-weight: 700; color: var(--accent); }
+.chmsg { margin: 0; font-weight: 700; min-height: 1.2em; }
+.mych { gap: 14px; }
+.mylist { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.myitem { background: linear-gradient(160deg, rgba(36, 54, 140, 0.95), rgba(16, 24, 84, 0.97)); border: 1.5px solid var(--neon-soft); border-radius: 18px; padding: 14px; display: grid; gap: 6px; color: #fff; }
+.myitem b { font-family: var(--display); font-size: 17px; }
+.myitem span { font-weight: 700; }
+.myitem small { color: var(--ink-soft); font-weight: 600; font-size: 14px; }
+.myrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px; }
+.myrow .btn { font-size: 14px; padding: 10px 6px; border-radius: 14px; }
+.myalerts { display: grid; gap: 10px; }
+.myalert { background: rgba(255, 201, 58, 0.16); border: 1.5px solid rgba(255, 201, 58, 0.7); border-radius: 16px; padding: 12px; display: grid; gap: 8px; font-weight: 700; }
+.myalert .btn { font-size: 16px; padding: 11px; }
+.badge { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; margin-left: 8px; border-radius: 999px; background: #FF4D5A; color: #fff; font-size: 13px; }
+.chcard.alert { border-color: #FF4D5A; box-shadow: 0 0 28px rgba(255, 77, 90, 0.35); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .steam { opacity: .7; }
@@ -573,7 +601,15 @@ html, body {
     <div class="chcard" id="chcard" hidden>
       <b id="chtitle"></b>
       <p id="chtext"></p>
+      <ol class="chrank" id="chtop" hidden></ol>
+      <input id="chname" class="chinput" maxlength="14" autocomplete="off" placeholder="Ton prénom (pour le classement)" hidden>
+      <p class="chmsg" id="chmsg2" role="status" aria-live="polite"></p>
       <div class="chbtns"><button class="btn" id="chgo" type="button">⚔️ Relever le défi</button><button class="btn ghost" id="chno" type="button">Ignorer</button></div>
+    </div>
+    <div class="chcard alert" id="chalert" hidden>
+      <b>🔔 Un ami t'a doublé !</b>
+      <p id="chalert-text"></p>
+      <div class="chbtns one"><button class="btn" id="chalert-go" type="button">Voir mes défis</button></div>
     </div>
     <div class="group">
       <h2 id="h-theme">Choisis ton stand</h2>
@@ -588,6 +624,7 @@ html, body {
       <div class="tickets lv" id="levels" role="radiogroup" aria-labelledby="h-level"></div>
     </div>
     <p class="best" id="best"></p>
+    <button class="btn mpbtn" id="mych-btn" type="button" hidden>⚔️ Mes défis <b class="badge" id="mych-badge" hidden></b></button>
     <button class="btn mpbtn" id="mp-btn" type="button">👥 Jouer à plusieurs</button>
     <button class="btn play" id="play-btn" type="button">⚡ Jouer !</button>
   </section>
@@ -651,6 +688,20 @@ html, body {
     <button class="btn ghost" id="pad-quit" type="button">Quitter</button>
   </section>
 
+  <!-- Mes défis -->
+  <section id="mych" class="screen mych" hidden>
+    <div class="top"><span>⚔️ Mes défis</span></div>
+    <div class="chnotif" id="mynotif">
+      <p id="mynotif-text"></p>
+      <button class="btn" id="mynotif-btn" type="button">🔔 Activer les notifications</button>
+      <button class="btn ghost" id="mynotif-test" type="button" hidden>Envoyer une notification de test</button>
+    </div>
+    <div class="myalerts" id="myalerts" hidden></div>
+    <ul class="mylist" id="mylist"></ul>
+    <p class="mpnote" id="mymsg" role="status" aria-live="polite"></p>
+    <button class="btn ghost" id="myback" type="button">← Retour</button>
+  </section>
+
   <!-- Question -->
   <section id="play" class="screen" hidden>
     <div class="top"><span id="count"></span><b id="score">0 pts</b></div>
@@ -701,6 +752,13 @@ html, body {
       <button class="btn" id="chsend" type="button">Envoyer le défi</button>
       <input id="chlink" class="chlink" readonly hidden aria-label="Lien du défi">
       <p class="chmsg" id="chmsg" role="status" aria-live="polite"></p>
+    </div>
+    <div class="chnotif" id="chnotif" hidden>
+      <b>🔔 Être prévenu quand on te bat</b>
+      <p>Reçois une notification dès qu'un ami dépasse ton score.</p>
+      <input id="chnotif-nick" class="chinput" maxlength="14" autocomplete="off" placeholder="Ton prénom" hidden>
+      <button class="btn" id="chnotif-btn" type="button">Activer les notifications</button>
+      <p class="chmsg" id="chnotif-msg" role="status" aria-live="polite"></p>
     </div>
     <div class="actions">
       <button class="btn" id="again" type="button">Rejouer</button>
@@ -2347,7 +2405,7 @@ html, body {
   function levelTag(level) { return level && level !== "all" ? " · " + LEVELS[level].short : ""; }
 
   function show(name) {
-    ["home", "play", "result", "mp", "tv", "pad"].forEach(function (n) { $(n).hidden = n !== name; });
+    ["home", "play", "result", "mp", "tv", "pad", "mych"].forEach(function (n) { $(n).hidden = n !== name; });
     $("app").scrollTop = 0;
     if (name !== "play") btStop();
     if (name === "home") Music.quiet(false);
@@ -2423,114 +2481,151 @@ html, body {
 
 
 
-  /* ---------- Défis par lien : un ami rejoue exactement tes questions et compare son score au tien ---------- */
+  /* ---------- Défis : lien partageable, scores partagés en ligne (Supabase) et notifications ---------- */
   var Challenge = (function () {
-    var pending = null;
-    var standalone = !window.claude;     /* dans l'application Claude, l'adresse de la page n'est pas partageable */
+    var CLOUD = { url: "https://loknoaqmzulxkcposrnv.supabase.co/functions/v1/speedquiz", key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxva25vYXFtenVseGtjcG9zcm52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwOTcyMTMsImV4cCI6MjEwNjY3MzIxM30.YYzTTTyGJZ-SgTKBKsjv-xfngr6rt_HoUlw0X33sXaw", vapid: "BDz_TCai9sOpCm7fSpVkXIB_Ikr5i64i2_AHUrradtiFByBHF42a8nHLmhSOajOSCTd4PJxk8M7-bYGtFbOva1Q" };
+    var pending = null, lastShare = null, items = [], events = [];
+    var standalone = !window.claude;     /* dans l'application Claude, le réseau est bloqué et l'adresse n'est pas partageable */
+    var CODE_RE = /^[A-HJ-NP-Z2-9]{6}$/;
+
     function cleanNick(x) {
       return String(x == null ? "" : x).replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u206f\ufeff]/g, "").trim().slice(0, 14);
     }
     function baseUrl() { return location.href.split(/[?#]/)[0]; }
     function toInt(x, max) { var v = parseInt(x, 10); return isFinite(v) ? Math.max(0, Math.min(max, v)) : 0; }
+    function myNick() { return cleanNick(storeGet("pq:nick") || ""); }
+    function uuid() {
+      try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) { /* repli */ }
+      var b = new Uint8Array(16);
+      for (var i = 0; i < 16; i++) b[i] = Math.floor(Math.random() * 256);
+      b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+      var h = Array.prototype.map.call(b, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+      return h.slice(0, 8) + "-" + h.slice(8, 12) + "-" + h.slice(12, 16) + "-" + h.slice(16, 20) + "-" + h.slice(20);
+    }
+    function pid() {
+      var p = storeGet("pq:pid");
+      if (!p || p.length !== 36) { p = uuid(); storeSet("pq:pid", p); }
+      return p;
+    }
+    function codes() {
+      try { var a = JSON.parse(storeGet("pq:codes") || "[]"); return Array.isArray(a) ? a.filter(function (c) { return CODE_RE.test(c); }) : []; } catch (e) { return []; }
+    }
+    function remember(code) {
+      var a = codes().filter(function (c) { return c !== code; });
+      a.unshift(code);
+      storeSet("pq:codes", JSON.stringify(a.slice(0, 40)));
+      updateMyBtn();
+    }
 
-    function parse() {
+    /* ----- appel du serveur ----- */
+    function api(a, body) {
+      var ctrl = typeof AbortController === "function" ? new AbortController() : null;
+      var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
+      var payload = { a: a };
+      Object.keys(body || {}).forEach(function (k) { payload[k] = body[k]; });
+      return fetch(CLOUD.url, {
+        method: "POST", signal: ctrl ? ctrl.signal : undefined,
+        headers: { "Content-Type": "application/json", "apikey": CLOUD.key, "Authorization": "Bearer " + CLOUD.key },
+        body: JSON.stringify(payload)
+      }).then(function (r) {
+        clearTimeout(to);
+        return r.json().then(function (j) { j.status = r.status; return j; }, function () { return { ok: false, status: r.status }; });
+      }).catch(function () { clearTimeout(to); return { ok: false, offline: true }; });
+    }
+
+    function decodePlan(plan) {
+      if (typeof plan !== "string" || plan.length < 3 || plan.length % 3 !== 0 || plan.length > 90) return null;
+      var out = [];
+      for (var k = 0; k < plan.length; k += 3) {
+        var t = TKEYS[parseInt(plan.charAt(k), 36)];
+        var id = parseInt(plan.substr(k + 1, 2), 36);
+        if (!t || !isFinite(id) || POOLS[t].indexOf(id) < 0) return null;
+        out.push({ t: t, i: id });
+      }
+      return out;
+    }
+    function ordinal(n) { return n === 1 ? "1er" : n + "e"; }
+
+    /* ----- ancien format de lien (sans serveur) : tout est dans l'adresse ----- */
+    function parseLegacy(sp) {
       try {
-        var sp = new URLSearchParams(location.search);
         var d = sp.get("d");
         if (!d) return null;
         var f = d.split(".");
         if (f.length !== 5) return null;
-        var theme = f[0], limit = f[1], level = f[2], plan = f[4];
+        var theme = f[0], limit = f[1], level = f[2];
         var g = parseInt(f[3], 36);
         if (!THEMES[theme] || !LIMITS[limit] || LIMITS[limit].type !== "count" || !LEVELS[level]) return null;
         if (!isFinite(g) || g < 0 || g > 4294967295) return null;
-        if (plan.length < 3 || plan.length % 3 !== 0 || plan.length > 90) return null;
         if (parseInt(sp.get("v") || "1", 10) !== DATA_V) return null;
-        var items = [];
-        for (var k = 0; k < plan.length; k += 3) {
-          var t = TKEYS[parseInt(plan.charAt(k), 36)];
-          var id = parseInt(plan.substr(k + 1, 2), 36);
-          if (!t || !isFinite(id) || POOLS[t].indexOf(id) < 0) return null;
-          items.push({ t: t, i: id });
-        }
+        var plan = decodePlan(f[4]);
+        if (!plan) return null;
         return {
-          theme: theme, limit: limit, level: level, g: g, plan: items, n: items.length,
-          score: toInt(sp.get("s"), 100000), right: toInt(sp.get("r"), items.length), nick: cleanNick(sp.get("n")) || "Un ami"
+          theme: theme, limit: limit, level: level, g: g, plan: plan, n: plan.length,
+          score: toInt(sp.get("s"), 100000), right: toInt(sp.get("r"), plan.length), nick: cleanNick(sp.get("n")) || "Un ami"
         };
       } catch (e) { return null; }
     }
 
-    function clearUrl() {
-      try { history.replaceState(null, "", baseUrl()); } catch (e) { /* ignoré */ }
-    }
+    function clearUrl() { try { history.replaceState(null, "", baseUrl()); } catch (e) { /* ignoré */ } }
 
+    /* ----- bannière d'un défi reçu ----- */
+    function topList(box, scores, max) {
+      box.textContent = "";
+      (scores || []).slice(0, max).forEach(function (s) {
+        var li = document.createElement("li");
+        if (s.me) li.className = "me";
+        var a = document.createElement("span"); a.textContent = ordinal(s.rank) + "  " + (s.me ? s.nick + " (toi)" : s.nick);
+        var b = document.createElement("b"); b.textContent = fmt(s.score);
+        li.appendChild(a); li.appendChild(b); box.appendChild(li);
+      });
+      box.hidden = !scores || !scores.length;
+    }
     function showBanner() {
-      if (!pending) { $("chcard").hidden = true; return; }
-      $("chtitle").textContent = "⚔️ " + pending.nick + " te défie !";
-      $("chtext").textContent = THEMES[pending.theme].label + levelTag(pending.level) + " · " + pending.n + " questions. " +
-        pending.nick + " a fait " + fmt(pending.score) + " pts (" + pending.right + "/" + pending.n + "). À toi de faire mieux !";
+      var card = $("chcard");
+      if (!pending) { card.hidden = true; return; }
+      $("chmsg2").textContent = "";
+      if (pending.code) {
+        $("chtitle").textContent = "⚔️ " + pending.nick + " te défie !";
+        var t = THEMES[pending.theme].label + levelTag(pending.level) + " · " + pending.n + " questions.";
+        t += pending.me ? " Ton meilleur score : " + fmt(pending.me.score) + " pts (" + ordinal(pending.me.rank) + " sur " + pending.total + ")." : pending.total > 1 ? " " + pending.total + " joueurs ont déjà joué." : " 1 joueur a déjà joué.";
+        $("chtext").textContent = t;
+        topList($("chtop"), pending.scores, 3);
+        $("chname").hidden = !!myNick();
+        $("chgo").textContent = pending.me ? "⚔️ Rejouer pour progresser" : "⚔️ Relever le défi";
+        $("chgo").hidden = false;
+      } else {
+        $("chtitle").textContent = "⚔️ " + pending.nick + " te défie !";
+        $("chtext").textContent = THEMES[pending.theme].label + levelTag(pending.level) + " · " + pending.n + " questions. " +
+          pending.nick + " a fait " + fmt(pending.score) + " pts (" + pending.right + "/" + pending.n + "). À toi de faire mieux !";
+        $("chtop").hidden = true; $("chname").hidden = true;
+        $("chgo").textContent = "⚔️ Relever le défi"; $("chgo").hidden = false;
+      }
+      card.hidden = false;
+    }
+    function loadCode(code) {
+      $("chtitle").textContent = "⚔️ Chargement du défi…"; $("chtext").textContent = "";
+      $("chtop").hidden = true; $("chname").hidden = true; $("chgo").hidden = true; $("chmsg2").textContent = "";
       $("chcard").hidden = false;
+      return api("get", { code: code, nick: myNick() }).then(function (r) {
+        var plan = r.ok && r.ch ? decodePlan(r.ch.plan) : null;
+        if (!plan || !THEMES[r.ch.theme] || !LIMITS[r.ch.limit] || !LEVELS[r.ch.level]) {
+          $("chtitle").textContent = r.offline ? "Pas de connexion" : "Défi introuvable";
+          $("chtext").textContent = r.offline ? "Vérifie ta connexion internet et rouvre le lien." : "Ce défi n'existe plus, ou le lien est incorrect.";
+          return;
+        }
+        pending = { code: code, theme: r.ch.theme, limit: r.ch.limit, level: r.ch.level, g: r.ch.g, plan: plan, n: plan.length, nick: r.ch.nick, scores: r.scores || [], total: r.total || 0, me: r.me };
+        showBanner();
+      });
     }
-
-    function buildLink(nick) {
-      var n = LIMITS[state.limit].n;
-      var qs = state.qs.slice(0, n);
-      var plan = qs.map(function (q) { return TKEYS.indexOf(q._t).toString(36) + ("00" + q._i.toString(36)).slice(-2); }).join("");
-      return baseUrl() + "?d=" + [state.theme, state.limit, state.level, qs[0]._g.toString(36), plan].join(".") +
-        "&v=" + DATA_V + "&n=" + encodeURIComponent(nick) + "&s=" + state.score + "&r=" + state.right;
-    }
-
-    function copy(text) {
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
-      } catch (e) { /* repli ci-dessous */ }
-      return Promise.reject(new Error("pas de presse-papiers"));
-    }
-
-    function send() {
-      if (!state || !state.qs[0] || state.qs[0]._g == null) return;
-      var nick = cleanNick($("chnick").value) || "Un ami";
-      storeSet("pq:nick", nick);
-      var url = buildLink(nick);
-      var n = LIMITS[state.limit].n;
-      var text = "⚔️ Je te défie sur SpeedQuiz ! " + THEMES[state.theme].label + levelTag(state.level) + ", " + n + " questions. J'ai fait " + fmt(state.score) + " pts. Peux-tu me battre ?";
-      var msg = $("chmsg"), box = $("chlink");
-      box.value = url;
-      function manual() { box.hidden = false; try { box.focus(); box.select(); } catch (e) { /* ignoré */ } msg.textContent = "Copie ce lien et envoie-le à ton ami."; }
-      if (navigator.share) {
-        navigator.share({ title: "SpeedQuiz", text: text, url: url }).then(function () { msg.textContent = "Défi envoyé ! Reviens voir son score quand il aura joué."; }, function (e) {
-          if (e && e.name === "AbortError") return;
-          copy(url).then(function () { msg.textContent = "Lien copié ! Colle-le dans un message."; }, manual);
-        });
-      } else {
-        copy(text + " " + url).then(function () { msg.textContent = "Lien copié ! Colle-le dans un message."; box.hidden = true; }, manual);
-      }
-    }
-
-    /* À la fin d'une partie : proposer d'envoyer un défi, et afficher le résultat d'un défi relevé. */
-    function onFinish() {
-      var can = standalone && state && !state.mp && LIMITS[state.limit].type === "count" && state.qs[0] && state.qs[0]._g != null && state.res.length === LIMITS[state.limit].n;
-      $("chmake").hidden = !can;
-      $("chlink").hidden = true; $("chmsg").textContent = "";
-      if (can) $("chnick").value = storeGet("pq:nick") || "";
-      var box = $("chres");
-      if (state && state.ch) {
-        var c = state.ch, diff = state.score - c.score;
-        box.textContent = "";
-        var b = document.createElement("b");
-        b.textContent = diff > 0 ? "🏆 Tu bats " + c.nick + " de " + fmt(diff) + " pts !" : diff < 0 ? c.nick + " reste devant de " + fmt(-diff) + " pts. Revanche ?" : "Égalité parfaite avec " + c.nick + " !";
-        var sp = document.createElement("span");
-        sp.textContent = c.nick + " : " + fmt(c.score) + " pts (" + c.right + "/" + c.n + ")  ·  Toi : " + fmt(state.score) + " pts (" + state.right + "/" + c.n + ")";
-        box.appendChild(b); box.appendChild(sp);
-        box.hidden = false;
-        if (diff > 0) FX.party();
-      } else {
-        box.hidden = true;
-      }
-    }
-
     function accept() {
       if (!pending) return;
+      if (pending.code) {
+        var nick = cleanNick($("chname").value) || myNick();
+        if (!nick) { $("chmsg2").textContent = "Entre ton prénom pour apparaître dans le classement."; try { $("chname").focus(); } catch (e) { /* ignoré */ } return; }
+        storeSet("pq:nick", nick);
+        remember(pending.code);
+      }
       var ch = pending;
       pending = null;
       $("chcard").hidden = true;
@@ -2539,11 +2634,275 @@ html, body {
     }
     function ignore() { pending = null; $("chcard").hidden = true; clearUrl(); }
 
+    /* ----- envoyer un défi ----- */
+    function copy(text) {
+      try { if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text); } catch (e) { /* repli */ }
+      return Promise.reject(new Error("pas de presse-papiers"));
+    }
+    function buildLegacyLink(nick) {
+      var n = LIMITS[state.limit].n, qs = state.qs.slice(0, n);
+      var plan = qs.map(function (q) { return TKEYS.indexOf(q._t).toString(36) + ("00" + q._i.toString(36)).slice(-2); }).join("");
+      return baseUrl() + "?d=" + [state.theme, state.limit, state.level, qs[0]._g.toString(36), plan].join(".") +
+        "&v=" + DATA_V + "&n=" + encodeURIComponent(nick) + "&s=" + state.score + "&r=" + state.right;
+    }
+    function share(url, text, online) {
+      var msg = $("chmsg"), box = $("chlink");
+      box.value = url;
+      lastShare = { url: url, text: text, online: online };
+      function manual() { box.hidden = false; try { box.focus(); box.select(); } catch (e) { /* ignoré */ } msg.textContent = "Copie ce lien et envoie-le à ton ami."; }
+      var done = online ? "Défi envoyé ! Tu verras son score dans « Mes défis »." : "Lien envoyé (sans connexion : le classement ne sera pas enregistré).";
+      $("chsend").textContent = "Partager le lien";
+      if (navigator.share) {
+        navigator.share({ title: "SpeedQuiz", text: text, url: url }).then(function () { msg.textContent = done; }, function (e) {
+          if (e && e.name === "AbortError") return;
+          if (e && e.name === "NotAllowedError") { msg.textContent = "Touche « Partager le lien » pour l'envoyer."; box.hidden = true; return; }
+          copy(url).then(function () { msg.textContent = "Lien copié ! Colle-le dans un message."; }, manual);
+        });
+      } else {
+        copy(text + " " + url).then(function () { msg.textContent = "Lien copié ! Colle-le dans un message."; box.hidden = true; }, manual);
+      }
+      updateNotifBox();
+    }
+    function send() {
+      if (!state || !state.qs[0] || state.qs[0]._g == null) return;
+      var msg = $("chmsg");
+      if (lastShare && lastShare.game === state) { share(lastShare.url, lastShare.text, lastShare.online); lastShare.game = state; return; }
+      var nick = cleanNick($("chnick").value);
+      if (!nick) { msg.textContent = "Entre ton prénom : il apparaîtra dans le classement."; try { $("chnick").focus(); } catch (e) { /* ignoré */ } return; }
+      storeSet("pq:nick", nick);
+      var n = LIMITS[state.limit].n, qs = state.qs.slice(0, n), game = state;
+      var plan = qs.map(function (q) { return TKEYS.indexOf(q._t).toString(36) + ("00" + q._i.toString(36)).slice(-2); }).join("");
+      var text = "⚔️ Je te défie sur SpeedQuiz ! " + THEMES[state.theme].label + levelTag(state.level) + ", " + n + " questions. J'ai fait " + fmt(state.score) + " pts. Peux-tu me battre ?";
+      var btn = $("chsend");
+      btn.disabled = true; msg.textContent = "Création du défi…";
+      api("create", { pid: pid(), nick: nick, theme: state.theme, limit: state.limit, level: state.level, g: qs[0]._g, plan: plan, score: state.score, right: state.right }).then(function (r) {
+        btn.disabled = false;
+        if (state !== game) return;
+        var online = !!(r.ok && r.code);
+        var url = online ? baseUrl() + "?c=" + r.code : buildLegacyLink(nick);
+        if (online) remember(r.code);
+        share(url, text, online);
+        lastShare.game = game;
+      });
+    }
+
+    /* ----- notifications ----- */
+    function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+    function isInstalled() { return navigator.standalone === true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches); }
+    function pushSupported() { return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window; }
+    function pushEnabled() { return storeGet("pq:push") === myNick() && !!myNick() && pushSupported() && Notification.permission === "granted"; }
+    function b64ToU8(b) {
+      var p = "=".repeat((4 - b.length % 4) % 4), s = (b + p).replace(/-/g, "+").replace(/_/g, "/"), r = atob(s), o = new Uint8Array(r.length);
+      for (var i = 0; i < r.length; i++) o[i] = r.charCodeAt(i);
+      return o;
+    }
+    function enablePush(msgEl, nickInput) {
+      var nick = cleanNick(nickInput ? nickInput.value : "") || myNick();
+      if (!nick) { msgEl.textContent = "Entre d'abord ton prénom."; return Promise.resolve(false); }
+      storeSet("pq:nick", nick);
+      if (isIOS() && !isInstalled()) {
+        msgEl.textContent = "Sur iPhone : touche Partager, puis « Sur l'écran d'accueil », ouvre SpeedQuiz depuis son icône et reviens ici pour activer les notifications.";
+        return Promise.resolve(false);
+      }
+      if (!pushSupported()) { msgEl.textContent = "Ce navigateur ne gère pas les notifications."; return Promise.resolve(false); }
+      msgEl.textContent = "Activation…";
+      var asked = Notification.requestPermission();
+      return Promise.resolve(asked).then(function (p) {
+        if (p !== "granted") { msgEl.textContent = "Notifications refusées. Autorise-les dans les réglages de l'iPhone puis réessaie."; return false; }
+        return navigator.serviceWorker.register("sw.js").then(function () { return navigator.serviceWorker.ready; }).then(function (reg) {
+          return reg.pushManager.getSubscription().then(function (s) { return s || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(CLOUD.vapid) }); });
+        }).then(function (sub) { return api("sub", { pid: pid(), nick: nick, sub: sub.toJSON() }); }).then(function (r) {
+          if (!r.ok) throw new Error("sub");
+          storeSet("pq:push", nick);
+          msgEl.textContent = "🔔 Notifications activées ! Tu seras prévenu quand un ami bat ton score.";
+          return true;
+        });
+      }).catch(function () { msgEl.textContent = "Impossible d'activer les notifications pour le moment."; return false; });
+    }
+    function updateNotifBox() {
+      var box = $("chnotif");
+      var show = standalone && !pushEnabled() && !!lastShare || standalone && !pushEnabled() && state && state.ch && !!state.ch.code;
+      box.hidden = !show;
+      if (show) $("chnotif-nick").hidden = !!myNick();
+    }
+
+    /* ----- résultat d'un défi relevé ----- */
+    function renderRank(r, c) {
+      var box = $("chres");
+      box.textContent = "";
+      var b = document.createElement("b");
+      var best = r.best;
+      if (r.total === 1) b.textContent = "🏆 Tu es le premier à jouer ce défi !";
+      else if (r.rank === 1) b.textContent = r.improved ? "🏆 Tu prends la tête du défi !" : "🏆 Tu restes en tête !";
+      else b.textContent = "Tu es " + ordinal(r.rank) + " sur " + r.total + ".";
+      var sp = document.createElement("span");
+      var lead = (r.scores || [])[0];
+      sp.textContent = r.improved ? "Ton score : " + fmt(best) + " pts" : "Ton meilleur score reste " + fmt(best) + " pts";
+      if (r.rank > 1 && lead) sp.textContent += "  ·  il te manque " + fmt(lead.score - best + 1) + " pts pour la tête";
+      box.appendChild(b); box.appendChild(sp);
+      var ol = document.createElement("ol"); ol.className = "chrank";
+      topList(ol, r.scores, 5);
+      box.appendChild(ol);
+      box.hidden = false;
+      if (r.rank === 1 && r.total > 1 && r.improved) FX.party();
+    }
+    function renderLocal(c) {
+      var box = $("chres"), diff = state.score - (c.score || 0);
+      box.textContent = "";
+      var b = document.createElement("b");
+      b.textContent = diff > 0 ? "🏆 Tu bats " + c.nick + " de " + fmt(diff) + " pts !" : diff < 0 ? c.nick + " reste devant de " + fmt(-diff) + " pts. Revanche ?" : "Égalité parfaite avec " + c.nick + " !";
+      box.appendChild(b);
+      if (c.score != null) {
+        var sp = document.createElement("span");
+        sp.textContent = c.nick + " : " + fmt(c.score) + " pts (" + c.right + "/" + c.n + ")  ·  Toi : " + fmt(state.score) + " pts (" + state.right + "/" + c.n + ")";
+        box.appendChild(sp);
+      }
+      box.hidden = false;
+      if (diff > 0) FX.party();
+    }
+
+    /* À la fin d'une partie : proposer d'envoyer un défi, enregistrer le score d'un défi relevé. */
+    function onFinish() {
+      var can = standalone && state && !state.mp && LIMITS[state.limit].type === "count" && state.qs[0] && state.qs[0]._g != null && state.res.length === LIMITS[state.limit].n;
+      $("chmake").hidden = !can;
+      $("chlink").hidden = true; $("chmsg").textContent = "";
+      $("chsend").textContent = "Envoyer le défi"; $("chsend").disabled = false;
+      lastShare = null;
+      if (can) $("chnick").value = myNick();
+      var box = $("chres");
+      if (state && state.ch) {
+        var c = state.ch;
+        if (c.code && myNick()) {
+          box.textContent = "Envoi de ton score…"; box.hidden = false;
+          remember(c.code);
+          api("submit", { code: c.code, pid: pid(), nick: myNick(), score: state.score, right: state.right, base: baseUrl() }).then(function (r) {
+            if (!state || state.ch !== c) return;
+            if (r.ok) renderRank(r, c); else renderLocal({ nick: c.nick, score: (c.scores && c.scores[0]) ? c.scores[0].score : null, right: 0, n: c.n });
+            updateNotifBox();
+          });
+        } else {
+          renderLocal(c);
+        }
+      } else {
+        box.hidden = true;
+      }
+      updateNotifBox();
+    }
+
+    /* ----- « Mes défis » ----- */
+    function updateMyBtn() {
+      var btn = $("mych-btn");
+      if (!btn) return;
+      btn.hidden = !(standalone && myNick() && (codes().length || items.length));
+      var bd = $("mych-badge");
+      bd.hidden = !events.length; bd.textContent = events.length ? String(events.length) : "";
+    }
+    function refresh() {
+      if (!standalone || !myNick()) return Promise.resolve();
+      return api("mine", { nick: myNick() }).then(function (r) {
+        if (!r.ok) return;
+        items = r.items || []; events = r.events || [];
+        updateMyBtn();
+        var al = $("chalert");
+        if (events.length) {
+          $("chalert-text").textContent = events.length === 1 ? events[0].by_nick + " a battu ton score (" + fmt(events[0].by_score) + " contre " + fmt(events[0].your_score) + ") !" : events.length + " amis ont battu tes scores !";
+          al.hidden = false;
+        } else al.hidden = true;
+      });
+    }
+    function rankBox(li, code) {
+      var holder = li.querySelector(".rk");
+      if (!holder.hidden) { holder.hidden = true; return; }
+      holder.textContent = "Chargement…"; holder.hidden = false;
+      api("get", { code: code, nick: myNick() }).then(function (r) {
+        holder.textContent = "";
+        if (!r.ok) { holder.textContent = "Impossible de charger le classement."; return; }
+        var ol = document.createElement("ol"); ol.className = "chrank"; topList(ol, r.scores, 10);
+        holder.appendChild(ol);
+      });
+    }
+    function replay(code) {
+      api("get", { code: code, nick: myNick() }).then(function (r) {
+        var plan = r.ok && r.ch ? decodePlan(r.ch.plan) : null;
+        if (!plan) { $("mymsg").textContent = "Impossible de relancer ce défi."; return; }
+        startGame(null, { code: code, theme: r.ch.theme, limit: r.ch.limit, level: r.ch.level, g: r.ch.g, plan: plan, n: plan.length, nick: r.ch.nick, scores: r.scores || [], total: r.total || 0, me: r.me });
+      });
+    }
+    function invite(code, it) {
+      var url = baseUrl() + "?c=" + code;
+      var text = "⚔️ Je te défie sur SpeedQuiz ! " + THEMES[it.theme].label + levelTag(it.level) + ". Mon score : " + fmt(it.my_score) + " pts. Peux-tu me battre ?";
+      if (navigator.share) navigator.share({ title: "SpeedQuiz", text: text, url: url }).catch(function () { /* annulé */ });
+      else copy(text + " " + url).then(function () { $("mymsg").textContent = "Lien copié !"; }, function () { $("mymsg").textContent = url; });
+    }
+    function renderMyScreen() {
+      var list = $("mylist"); list.textContent = "";
+      $("mymsg").textContent = items.length ? "" : "Aucun défi pour l'instant. Termine une partie de 10, 20 ou 30 questions et touche « Envoyer le défi ».";
+      items.forEach(function (it) {
+        var li = document.createElement("li");
+        li.className = "myitem";
+        var h = document.createElement("b"); h.textContent = THEMES[it.theme].icon + " " + THEMES[it.theme].label + levelTag(it.level) + " · " + (LIMITS[it.limit] ? LIMITS[it.limit].n : "") + " questions";
+        var p1 = document.createElement("span"); p1.textContent = "Ton score : " + fmt(it.my_score) + " pts · " + ordinal(it.rank) + " sur " + it.total;
+        var p2 = document.createElement("small");
+        p2.textContent = it.leader ? (it.rank === 1 ? "Tu es en tête 🏆" : "En tête : " + it.leader.nick + " (" + fmt(it.leader.score) + " pts)") : "";
+        var row = document.createElement("div"); row.className = "myrow";
+        [["Classement", function () { rankBox(li, it.code); }], ["Rejouer", function () { replay(it.code); }], ["Inviter", function () { invite(it.code, it); }]].forEach(function (x) {
+          var bt = document.createElement("button"); bt.type = "button"; bt.className = "btn ghost"; bt.textContent = x[0]; bt.addEventListener("click", x[1]); row.appendChild(bt);
+        });
+        var rk = document.createElement("div"); rk.className = "rk"; rk.hidden = true;
+        li.appendChild(h); li.appendChild(p1); li.appendChild(p2); li.appendChild(row); li.appendChild(rk);
+        list.appendChild(li);
+      });
+      var al = $("myalerts"); al.textContent = "";
+      events.forEach(function (e) {
+        var d = document.createElement("div"); d.className = "myalert";
+        d.textContent = "🔔 " + e.by_nick + " t'a battu : " + fmt(e.by_score) + " pts contre " + fmt(e.your_score) + ".";
+        var go = document.createElement("button"); go.type = "button"; go.className = "btn"; go.textContent = "Reprendre la tête"; go.addEventListener("click", function () { replay(e.code); });
+        d.appendChild(go); al.appendChild(d);
+      });
+      al.hidden = !events.length;
+      var on = pushEnabled();
+      $("mynotif-text").textContent = on ? "🔔 Notifications activées : tu es prévenu dès qu'un ami bat ton score." : "Reçois une notification dès qu'un ami bat ton score.";
+      $("mynotif-btn").hidden = on; $("mynotif-test").hidden = !on;
+    }
+    function openMy() {
+      show("mych");
+      renderMyScreen();
+      var ids = events.map(function (e) { return e.id; });
+      refresh().then(function () {
+        renderMyScreen();
+        var seenIds = events.map(function (e) { return e.id; });
+        if (seenIds.length) api("seen", { nick: myNick(), ids: seenIds }).then(function () { events = []; updateMyBtn(); $("chalert").hidden = true; });
+      });
+      void ids;
+    }
+
     $("chgo").addEventListener("click", accept);
     $("chno").addEventListener("click", ignore);
     $("chsend").addEventListener("click", send);
-    pending = parse();
-    showBanner();
+    $("chnotif-btn").addEventListener("click", function () { enablePush($("chnotif-msg"), $("chnotif-nick")).then(function (ok) { if (ok) { updateNotifBox(); } }); });
+    $("mynotif-btn").addEventListener("click", function () { enablePush($("mymsg"), null).then(function () { renderMyScreen(); }); });
+    $("mynotif-test").addEventListener("click", function () {
+      $("mymsg").textContent = "Envoi de la notification de test…";
+      api("test", { nick: myNick() }).then(function (r) {
+        if (r.status === 429) $("mymsg").textContent = "Patiente quelques secondes avant un nouveau test.";
+        else if (r.ok && r.results && r.results.every(function (x) { return x.r === "ok"; })) $("mymsg").textContent = "Notification envoyée ! Elle devrait arriver dans quelques secondes.";
+        else if (r.ok) $("mymsg").textContent = "L'envoi a échoué (code " + ((r.results[0] || {}).code || "?") + "). Réactive les notifications.";
+        else $("mymsg").textContent = "Aucun appareil enregistré : touche « Activer les notifications ».";
+      });
+    });
+    $("mych-btn").addEventListener("click", openMy);
+    $("chalert-go").addEventListener("click", openMy);
+    $("myback").addEventListener("click", function () { show("home"); });
+
+    if (!standalone) {
+      $("mych-btn").hidden = true;
+    } else {
+      var sp = new URLSearchParams(location.search), c = (sp.get("c") || "").toUpperCase();
+      if (CODE_RE.test(c)) loadCode(c);
+      else { pending = parseLegacy(sp); showBanner(); }
+      updateMyBtn();
+      refresh();
+    }
     return { onFinish: onFinish };
   })();
 
