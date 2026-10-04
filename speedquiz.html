@@ -441,6 +441,23 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
 .bthint { margin: 0; min-height: 1.2em; font-size: 14px; font-weight: 700; color: #C2185B; text-align: center; }
 .btbox small { color: var(--ink-soft); font-size: 12px; text-align: center; line-height: 1.3; }
 
+.chcard { background: #fff; color: var(--ink); border-radius: 20px; padding: 14px 16px; display: grid; gap: 8px; border: 3px solid var(--accent); box-shadow: 0 5px 0 rgba(0, 0, 0, 0.22); }
+.chcard b { font-family: var(--display); font-size: 21px; }
+.chcard p { margin: 0; line-height: 1.35; font-weight: 600; }
+.chbtns { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
+.chbtns .btn { font-size: 17px; padding: 12px 10px; }
+.chcard .btn.ghost { color: var(--ink); border-color: #AEB6E8; background: #F3F4FF; }
+.chres { text-align: center; background: rgba(255, 255, 255, 0.14); border-radius: 16px; padding: 12px; color: #fff; display: grid; gap: 4px; }
+.chres b { font-family: var(--display); font-size: 22px; color: var(--accent); }
+.chres span { font-weight: 700; font-size: 15px; }
+.chmake { background: #fff; color: var(--ink); border-radius: 20px; padding: 14px 16px; display: grid; gap: 10px; }
+.chmake b { font-family: var(--display); font-size: 20px; }
+.chmake p { margin: 0; color: var(--ink-soft); line-height: 1.35; }
+.chmake input { width: 100%; font: inherit; font-size: 17px; padding: 11px 13px; border-radius: 12px; border: 2px solid var(--tile-edge); background: #fff; color: #13194A; }
+.chmake .btn { font-size: 18px; padding: 13px 14px; }
+.chmake .chlink { font-size: 13px; }
+.chmake .chmsg { font-weight: 700; min-height: 1.2em; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .steam { opacity: .7; }
@@ -464,6 +481,11 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
         <p class="lead">Le grand quiz de la fête !</p>
       </div>
       <svg class="wheel" viewBox="0 0 120 120" aria-hidden="true"><path d="M60 58L34 114M60 58L86 114" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/><g class="spin"><circle cx="60" cy="58" r="44" fill="none" stroke="#fff" stroke-width="4"/><circle cx="60" cy="58" r="24" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/><g stroke="#fff" stroke-width="2.5"><line x1="60" y1="58" x2="104.0" y2="58.0"/><line x1="60" y1="58" x2="91.1" y2="89.1"/><line x1="60" y1="58" x2="60.0" y2="102.0"/><line x1="60" y1="58" x2="28.9" y2="89.1"/><line x1="60" y1="58" x2="16.0" y2="58.0"/><line x1="60" y1="58" x2="28.9" y2="26.9"/><line x1="60" y1="58" x2="60.0" y2="14.0"/><line x1="60" y1="58" x2="91.1" y2="26.9"/></g><circle cx="104.0" cy="58.0" r="6.5" fill="#FFD23F" stroke="#13194A" stroke-width="2"/><circle cx="91.1" cy="89.1" r="6.5" fill="#FF6B6B" stroke="#13194A" stroke-width="2"/><circle cx="60.0" cy="102.0" r="6.5" fill="#7DF9FF" stroke="#13194A" stroke-width="2"/><circle cx="28.9" cy="89.1" r="6.5" fill="#9BFF7A" stroke="#13194A" stroke-width="2"/><circle cx="16.0" cy="58.0" r="6.5" fill="#FFD23F" stroke="#13194A" stroke-width="2"/><circle cx="28.9" cy="26.9" r="6.5" fill="#FF6B6B" stroke="#13194A" stroke-width="2"/><circle cx="60.0" cy="14.0" r="6.5" fill="#7DF9FF" stroke="#13194A" stroke-width="2"/><circle cx="91.1" cy="26.9" r="6.5" fill="#9BFF7A" stroke="#13194A" stroke-width="2"/></g><circle cx="60" cy="58" r="8" fill="#FFD23F" stroke="#13194A" stroke-width="2"/></svg>
+    </div>
+    <div class="chcard" id="chcard" hidden>
+      <b id="chtitle"></b>
+      <p id="chtext"></p>
+      <div class="chbtns"><button class="btn" id="chgo" type="button">⚔️ Relever le défi</button><button class="btn ghost" id="chno" type="button">Ignorer</button></div>
     </div>
     <div class="group">
       <h2 id="h-theme">Choisis ton stand</h2>
@@ -583,6 +605,15 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
     </p>
     <span class="record" id="rrec" hidden></span>
     <ol class="board" id="rboard" hidden aria-label="Classement"></ol>
+    <div class="chres" id="chres" hidden></div>
+    <div class="chmake" id="chmake" hidden>
+      <b>⚔️ Défie un ami</b>
+      <p>Il joue exactement les mêmes questions que toi, et tu verras qui gagne.</p>
+      <input id="chnick" maxlength="14" autocomplete="off" placeholder="Ton prénom">
+      <button class="btn" id="chsend" type="button">Envoyer le défi</button>
+      <input id="chlink" class="chlink" readonly hidden aria-label="Lien du défi">
+      <p class="chmsg" id="chmsg" role="status" aria-live="polite"></p>
+    </div>
     <div class="actions">
       <button class="btn" id="again" type="button">Rejouer</button>
       <button class="btn ghost" id="share" type="button" hidden>Partager mon score</button>
@@ -1674,7 +1705,7 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
     sims: { label: "Les Sims", icon: "🏡", color: "#2E7D32" },
     disney: { label: "Disney", icon: "🏰", color: "#6B2FA0" },
     parcs: { label: "Parcs d'attractions", icon: "🎢", color: "#0A7A8F" },
-    blindtest: { label: "Blind test dessins animés", icon: "🎧", color: "#C2185B" },
+    blindtest: { label: "Blind test musical", icon: "🎧", color: "#C2185B" },
     mix: { label: "Tout mélanger", icon: "🎪", color: "#13194A" }
   };
   var LIMITS = {
@@ -1695,62 +1726,122 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
   var SEEN_KEY = { culture: "pq:seen", drapeaux: "pq:seenflags", jeuxvideo: "pq:seen:jv", france: "pq:seen:fr", gastronomie: "pq:seen:gast", pokemon: "pq:seen:pk", series: "pq:seen:tv", sims: "pq:seen:sims", disney: "pq:seen:dis", parcs: "pq:seen:parcs", blindtest: "pq:seen:bt" };
 
   /* Blind test : identifiants de morceaux iTunes ; les aperçus de 30 secondes sont demandés à Apple au moment de jouer. */
-  var BT = [[1472093121,"Le Roi Lion",1,"L'histoire de la vie/Nants' Ingonyama","China Moses & Lebo M"],
-    [1472093417,"Le Roi Lion",1,"Hakuna Matata","Jamel Debbouze & Alban Ivanov"],
-    [724918476,"Le Roi Lion",1,"Je voudrais déjà être roi","Dimitri Rougeul & Melinda Attia"],
-    [1440620516,"La Reine des neiges",1,"Libérée, délivrée","Anaïs Delva"],
-    [1440634671,"La Reine des neiges",1,"Je voudrais un bonhomme de neige","Coralie Thuilier & Issia Lorrain"],
-    [1440620510,"La Reine des neiges",2,"Le cœur de Glace","Frozen - Cast"],
-    [1464587524,"Aladdin",1,"Ce rêve bleu","Julien Alluguette & Hiba Tawaji"],
-    [1460038147,"Aladdin",1,"Prince Ali","Richard Darbois"],
-    [1689350261,"La Petite Sirène",1,"Sous l'océan","Jean-Michel Vaubien & Cast - La Petite Sirène"],
-    [1442259976,"La Petite Sirène",2,"Partir là-bas","Claire Guyot"],
-    [1440746658,"La Belle et la Bête",2,"Histoire éternelle","Frédérique Varda & Sophie Delmas"],
-    [724348935,"Le Livre de la jungle",1,"Il en faut peu pour être heureux","Jean Stout & Pascal Bressy"],
-    [724348942,"Le Livre de la jungle",2,"Être un homme comme vous","Jean Stout & Jose Bartel"],
-    [1534783648,"Mary Poppins",1,"Supercalifragilisticexpialidocious","Zizi Strallen & Adelaide Barham"],
-    [1561429289,"Blanche-Neige et les Sept Nains",1,"Sifflez en travaillant","Rachel Pignot"],
-    [1561429418,"Blanche-Neige et les Sept Nains",1,"Heigh-Ho!","Jean-Claude Donda & Gerard Rinaldi"],
-    [1442427019,"Cendrillon",2,"Bibbidi-Bobbidi-Boo","Helena Bonham Carter"],
-    [1644166411,"Pinocchio",2,"Quand on prie la bonne étoile","Dominique Magloire"],
-    [1561429262,"Pocahontas",2,"L' air Du Vent","Laura Mayne"],
-    [1443910051,"Mulan",2,"Comme un homme","Patrick Fiori & José Garcia"],
-    [1440836455,"Hercule",3,"Jamais Je N'Avouerai","Jessica Parker & Mimi Félixine"],
-    [1440802187,"Vaiana",1,"Le bleu lumière","Cerise Calixte"],
-    [1440876743,"Coco",2,"Ne m'oublie pas","Andrea Santamaria & Evelyne Grandjean"],
-    [1594753130,"Encanto",1,"Ne parlons pas de Bruno","Sharon Laloum & Julian Ortiz Cardona"],
-    [724258053,"Les Aristochats",2,"Tout le monde veut devenir un cat","José Germain"],
-    [724318284,"Le Bossu de Notre-Dame",3,"Les cloches de Notre-Dame","Bernard Alane & Dominique Tirmont"],
-    [714529242,"Lilo & Stitch",3,"Hawaiian Roller Coaster Ride","Kamehameha Schools Children's Chorus & Mark Keali'i Ho'omalu"],
-    [712972735,"Toy Story",1,"Je suis ton ami","Charl Elie Couture"],
-    [1444209180,"Monstres & Cie",3,"If I Didn't Have You","Billy Crystal & John Goodman"],
-    [712408739,"Ratatouille",3,"Le festin","Camille"],
-    [1444380122,"La Princesse et la Grenouille",3,"Humains pour la vie","Richard Darbois & Alexis Tomassian"],
-    [1442707509,"Zootopie",3,"Try Everything","Shakira"],
-    [1556576990,"Pokémon",1,"Attrapez-les tous","Bob & Konnie Patline"],
-    [975349155,"Les Chevaliers du Zodiaque",1,"Le générique","Bernard Minet"],
-    [984319666,"Goldorak",1,"Le générique","Dorothée & Patrick Simpson-Jones"],
-    [901948611,"Ulysse 31",2,"Ulysse 31","Lionel Leroy"],
-    [901946087,"Les Mystérieuses Cités d'or",2,"Les mystérieuses cités d'or","Jacques Cardona"],
-    [984319668,"Albator",2,"Albator, le corsaire de l'espace","Dorothée & Patrick Simpson-Jones"],
-    [1444618723,"Capitaine Flam",2,"Capitaine Flam - Cap'tain Flam","Bernard Minet"],
-    [501594898,"Candy",2,"La chanson de Candy","Dorothée"],
-    [979744620,"Nicky Larson",1,"Nicky Larson","Jean-Paul Césari"],
-    [901926605,"Inspecteur Gadget",1,"Inspecteur Gadget","Jacques Cardona"],
-    [320467227,"Les Schtroumpfs",2,"Générique Schtroumpfs TV","Henri Seroka & Peyo"],
-    [1440517537,"Shrek",1,"All Star","Smash Mouth"],
-    [1440517522,"Shrek",2,"I'm a Believer","Smash Mouth"],
-    [1451766573,"Madagascar",1,"I Like to Move It","will.i.am"],
-    [1154239184,"Les Trolls",2,"CAN'T STOP THE FEELING!","Justin Timberlake"],
-    [863835363,"Moi, moche et méchant 2",1,"Happy","Pharrell Williams"],
-    [953536415,"La Panthère rose",2,"The Pink Panther Theme","Henry Mancini"],
-    [1853832349,"Lucky Luke",2,"I'm a Poor Lonesome Cowboy","Claude Bolling & Pat Woods"],
-    [1839268028,"Les Triplettes de Belleville",3,"Belleville rendez-vous","Béatrice Bonifassi"],
-    [1440617708,"Là-haut",2,"Married Life","Michael Giacchino"],
-    [1440667445,"Cars",2,"Real Gone","Sheryl Crow"],
-    [1443178621,"Vice-Versa",3,"Bundle of Joy","Michael Giacchino"],
-    [724345138,"Les Indestructibles",3,"The Incredits","Michael Giacchino"],
-    [1455697564,"Les Looney Tunes",2,"I'm a Martian","Marvin The Martian & Looney Tunes"]];
+  var BT = [[1472093121,"Le Roi Lion",1,"L'histoire de la vie/Nants' Ingonyama","China Moses & Lebo M",0],
+    [1472093417,"Le Roi Lion",1,"Hakuna Matata","Jamel Debbouze & Alban Ivanov",0],
+    [724918476,"Le Roi Lion",1,"Je voudrais déjà être roi","Dimitri Rougeul & Melinda Attia",0],
+    [1440620516,"La Reine des neiges",1,"Libérée, délivrée","Anaïs Delva",0],
+    [1440634671,"La Reine des neiges",1,"Je voudrais un bonhomme de neige","Coralie Thuilier & Issia Lorrain",0],
+    [1440620510,"La Reine des neiges",2,"Le cœur de Glace","Frozen - Cast",0],
+    [1464587524,"Aladdin",1,"Ce rêve bleu","Julien Alluguette & Hiba Tawaji",0],
+    [1460038147,"Aladdin",1,"Prince Ali","Richard Darbois",0],
+    [1689350261,"La Petite Sirène",1,"Sous l'océan","Jean-Michel Vaubien & Cast - La Petite Sirène",0],
+    [1442259976,"La Petite Sirène",2,"Partir là-bas","Claire Guyot",0],
+    [1440746658,"La Belle et la Bête",2,"Histoire éternelle","Frédérique Varda & Sophie Delmas",0],
+    [724348935,"Le Livre de la jungle",1,"Il en faut peu pour être heureux","Jean Stout & Pascal Bressy",0],
+    [724348942,"Le Livre de la jungle",2,"Être un homme comme vous","Jean Stout & Jose Bartel",0],
+    [1534783648,"Mary Poppins",1,"Supercalifragilisticexpialidocious","Zizi Strallen & Adelaide Barham",0],
+    [1561429289,"Blanche-Neige et les Sept Nains",1,"Sifflez en travaillant","Rachel Pignot",0],
+    [1561429418,"Blanche-Neige et les Sept Nains",1,"Heigh-Ho!","Jean-Claude Donda & Gerard Rinaldi",0],
+    [1442427019,"Cendrillon",2,"Bibbidi-Bobbidi-Boo","Helena Bonham Carter",0],
+    [1644166411,"Pinocchio",2,"Quand on prie la bonne étoile","Dominique Magloire",0],
+    [1561429262,"Pocahontas",2,"L' air Du Vent","Laura Mayne",0],
+    [1443910051,"Mulan",2,"Comme un homme","Patrick Fiori & José Garcia",0],
+    [1440836455,"Hercule",3,"Jamais Je N'Avouerai","Jessica Parker & Mimi Félixine",0],
+    [1440802187,"Vaiana",1,"Le bleu lumière","Cerise Calixte",0],
+    [1440876743,"Coco",2,"Ne m'oublie pas","Andrea Santamaria & Evelyne Grandjean",0],
+    [1594753130,"Encanto",1,"Ne parlons pas de Bruno","Sharon Laloum & Julian Ortiz Cardona",0],
+    [724258053,"Les Aristochats",2,"Tout le monde veut devenir un cat","José Germain",0],
+    [724318284,"Le Bossu de Notre-Dame",3,"Les cloches de Notre-Dame","Bernard Alane & Dominique Tirmont",0],
+    [714529242,"Lilo & Stitch",3,"Hawaiian Roller Coaster Ride","Kamehameha Schools Children's Chorus & Mark Keali'i Ho'omalu",0],
+    [712972735,"Toy Story",1,"Je suis ton ami","Charl Elie Couture",0],
+    [1444209180,"Monstres & Cie",3,"If I Didn't Have You","Billy Crystal & John Goodman",0],
+    [712408739,"Ratatouille",3,"Le festin","Camille",0],
+    [1444380122,"La Princesse et la Grenouille",3,"Humains pour la vie","Richard Darbois & Alexis Tomassian",0],
+    [1442707509,"Zootopie",3,"Try Everything","Shakira",0],
+    [1556576990,"Pokémon",1,"Attrapez-les tous","Bob & Konnie Patline",0],
+    [975349155,"Les Chevaliers du Zodiaque",1,"Le générique","Bernard Minet",0],
+    [984319666,"Goldorak",1,"Le générique","Dorothée & Patrick Simpson-Jones",0],
+    [901948611,"Ulysse 31",2,"Ulysse 31","Lionel Leroy",0],
+    [901946087,"Les Mystérieuses Cités d'or",2,"Les mystérieuses cités d'or","Jacques Cardona",0],
+    [984319668,"Albator",2,"Albator, le corsaire de l'espace","Dorothée & Patrick Simpson-Jones",0],
+    [1444618723,"Capitaine Flam",2,"Capitaine Flam - Cap'tain Flam","Bernard Minet",0],
+    [501594898,"Candy",2,"La chanson de Candy","Dorothée",0],
+    [979744620,"Nicky Larson",1,"Nicky Larson","Jean-Paul Césari",0],
+    [901926605,"Inspecteur Gadget",1,"Inspecteur Gadget","Jacques Cardona",0],
+    [320467227,"Les Schtroumpfs",2,"Générique Schtroumpfs TV","Henri Seroka & Peyo",0],
+    [1440517537,"Shrek",1,"All Star","Smash Mouth",0],
+    [1440517522,"Shrek",2,"I'm a Believer","Smash Mouth",0],
+    [1451766573,"Madagascar",1,"I Like to Move It","will.i.am",0],
+    [1154239184,"Les Trolls",2,"CAN'T STOP THE FEELING!","Justin Timberlake",0],
+    [863835363,"Moi, moche et méchant 2",1,"Happy","Pharrell Williams",0],
+    [953536415,"La Panthère rose",2,"The Pink Panther Theme","Henry Mancini",0],
+    [1853832349,"Lucky Luke",2,"I'm a Poor Lonesome Cowboy","Claude Bolling & Pat Woods",0],
+    [1839268028,"Les Triplettes de Belleville",3,"Belleville rendez-vous","Béatrice Bonifassi",0],
+    [1440617708,"Là-haut",2,"Married Life","Michael Giacchino",0],
+    [1440667445,"Cars",2,"Real Gone","Sheryl Crow",0],
+    [1443178621,"Vice-Versa",3,"Bundle of Joy","Michael Giacchino",0],
+    [724345138,"Les Indestructibles",3,"The Incredits","Michael Giacchino",0],
+    [1455697564,"Les Looney Tunes",2,"I'm a Martian","Marvin The Martian & Looney Tunes",0],
+    [1440799057,"Game of Thrones",1,"Main Title","Ramin Djawadi",1],
+    [318037530,"Friends",1,"I'll Be There for You","The Rembrandts",1],
+    [1142771420,"Stranger Things",1,"Stranger Things","Kyle Dixon & Michael Stein",1],
+    [1246764809,"La Casa de Papel",1,"My Life Is Going On","Cecilia Krull",1],
+    [1435808593,"Peaky Blinders",1,"Red Right Hand","Nick Cave & The Bad Seeds",1],
+    [724466700,"Dr House",2,"Teardrop","Massive Attack",1],
+    [1443271591,"Les Experts",2,"Who Are You","The Who",1],
+    [370928560,"Breaking Bad",2,"Main Title Theme","Dave Porter",1],
+    [464675958,"The Big Bang Theory",2,"Big Bang Theory Theme","Barenaked Ladies",1],
+    [1833089727,"Sherlock",3,"Irene's Theme","David Arnold & Michael Price",1],
+    [266774691,"Doctor Who",3,"Doctor Who Theme","Murray Gold",1],
+    [95844236,"X-Files",2,"The X-Files Theme","Mark Snow",1],
+    [374382372,"Twin Peaks",3,"Twin Peaks Theme","Angelo Badalamenti",1],
+    [1585115804,"Squid Game",2,"Way Back Then","Jung Jae-il",1],
+    [1486687344,"The Mandalorian",2,"The Mandalorian","Ludwig Göransson",1],
+    [1030042399,"Narcos",2,"Tuyo","Rodrigo Amarante",1],
+    [978060023,"Hélène et les garçons",2,"Le miracle de l'amour","Hélène Rollès",1],
+    [1342622773,"Alerte à Malibu",1,"I'm Always Here","Jimi Jamison",1],
+    [1528121767,"K 2000",2,"Main Title","Stu Phillips",1],
+    [671901505,"Vikings",3,"If I Had a Heart","Fever Ray",1],
+    [1509086365,"Prison Break",2,"Prison Break Theme","Ramin Djawadi",1],
+    [1535112259,"Dexter",3,"Dexter Main Title","Rolfe Kent",1],
+    [1500926127,"Succession",3,"Succession","Nicholas Britell",1],
+    [1619437211,"Downton Abbey",3,"Downton Abbey - The Suite","John Lunn & The Chamber Orchestra of London",1],
+    [52324250,"Mission: Impossible",1,"Mission: Impossible Theme","Lalo Schifrin",2],
+    [1480286268,"Star Wars",1,"Star Wars: Main Title","John Williams",2],
+    [1400941657,"Indiana Jones",1,"Raiders March","John Williams",2],
+    [1440800213,"Jurassic Park",1,"Theme from Jurassic Park","John Williams",2],
+    [89285956,"Harry Potter",1,"Hedwig's Theme","John Williams",2],
+    [724369568,"Pirates des Caraïbes",1,"He's a Pirate","Klaus Badelt",2],
+    [323714096,"Le Seigneur des anneaux",2,"Concerning Hobbits","Howard Shore",2],
+    [205745391,"Titanic",1,"My Heart Will Go On","Céline Dion",2],
+    [725785116,"Retour vers le futur",1,"The Power of Love","Huey Lewis & the News",2],
+    [387193955,"Top Gun",1,"Danger Zone","Kenny Loggins",2],
+    [1127014316,"SOS Fantômes",1,"Ghostbusters","Ray Parker Jr.",2],
+    [715748986,"Rocky",2,"Gonna Fly Now","Bill Conti",2],
+    [564356975,"Pulp Fiction",2,"Misirlou","Dick Dale",2],
+    [254938549,"Dirty Dancing",1,"(I've Had) The Time of My Life","Bill Medley & Jennifer Warnes",2],
+    [1440844700,"Grease",1,"You're the One That I Want","John Travolta & Olivia Newton-John",2],
+    [1575400460,"Le Fabuleux Destin d'Amélie Poulain",2,"La valse d'Amélie","Yann Tiersen",2],
+    [1860309163,"Intouchables",2,"Una mattina","Ludovico Einaudi",2],
+    [1674899300,"Les Choristes",2,"Vois sur ton chemin","Bruno Coulais & Les Petits Chanteurs de Saint-Marc",2],
+    [956529003,"La Boum",2,"Reality","Richard Sanderson",2],
+    [388151901,"Bodyguard",1,"I Will Always Love You","Whitney Houston",2],
+    [872478306,"Pretty Woman",2,"Oh, Pretty Woman","Roy Orbison",2],
+    [1720641175,"James Bond",1,"James Bond Theme","Monty Norman",2],
+    [1440844680,"Le Parrain",2,"The Godfather Waltz","Nino Rota",2],
+    [1440563274,"Gladiator",2,"Now We Are Free","Lisa Gerrard & Hans Zimmer",2],
+    [50235896,"Superman",2,"Superman March","John Williams",2],
+    [486088027,"Le Bon, la Brute et le Truand",3,"Le Bon, la Brute et le Truand (générique)","Ennio Morricone",2],
+    [1205680008,"La Liste de Schindler",3,"Theme from \"Schindler's List\"","John Williams",2],
+    [1594160847,"E.T. l'extra-terrestre",3,"Flying Theme","John Williams",2],
+    [1533984393,"Interstellar",3,"Cornfield Chase","Hans Zimmer",2],
+    [380350246,"Inception",3,"Time","Hans Zimmer",2],
+    [1440663698,"Avengers",2,"The Avengers","Alan Silvestri",2],
+    [1164757333,"Footloose",2,"Footloose","Kenny Loggins",2],
+    [280711410,"Flashdance",2,"Flashdance...What a Feeling","Irene Cara",2],
+    [217271368,"Armageddon",2,"I Don't Want to Miss a Thing","Aerosmith",2],
+    [566322365,"Skyfall",3,"Skyfall","Adele",2],
+    [1440892107,"Moulin Rouge !",3,"Lady Marmalade","Christina Aguilera, Lil' Kim, Mya & Pink",2]];
   var POOLS = { culture: [], jeuxvideo: [], france: [], gastronomie: [], pokemon: [], series: [], sims: [], disney: [], parcs: [], blindtest: [], drapeaux: [] };
   QUESTIONS.forEach(function (q, i) { POOLS[CAT_THEME[q.c] || "culture"].push(i); });
   FLAGS.forEach(function (_, i) { POOLS.drapeaux.push(i); });
@@ -1855,56 +1946,84 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
     return pool.concat(shuffle(near), shuffle(far)).slice(0, Math.max(need, pool.length));
   }
 
-  function flagQuestions(n, level) {
-    return pickIds(SEEN_KEY.drapeaux, levelPool("drapeaux", level, n), n).map(function (i) {
-      var f = FLAGS[i];
-      var ids = flagDistractors(i).concat([i]);
-      var reverse = rng() < 0.4;
-      var opts = ids.map(function (k) {
-        var o = FLAGS[k];
-        return reverse ? { t: o[1], l: o[0], ok: k === i } : { t: o[0], ok: k === i };
-      });
-      if (reverse) {
-        return { c: "Drapeaux", q: "Quel est le drapeau " + f[2] + " ?", f: f[3], grid: true, opts: shuffle(opts) };
-      }
-      return { c: "Drapeaux", q: "À quel pays appartient ce drapeau ?", flag: f[1], f: f[3], opts: shuffle(opts) };
+  /* Chaque question se construit à partir de (thème, numéro, graine) : c'est ce qui permet de la rejouer à l'identique
+     (multijoueur, défis par lien). */
+  var TKEYS = ["culture", "drapeaux", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs", "blindtest"];
+  var DATA_V = 1;
+
+  function flagQ(i) {
+    var f = FLAGS[i];
+    var ids = flagDistractors(i).concat([i]);
+    var reverse = rng() < 0.4;
+    var opts = ids.map(function (k) {
+      var o = FLAGS[k];
+      return reverse ? { t: o[1], l: o[0], ok: k === i } : { t: o[0], ok: k === i };
     });
+    if (reverse) {
+      return { c: "Drapeaux", d: f[4], q: "Quel est le drapeau " + f[2] + " ?", f: f[3], grid: true, opts: shuffle(opts) };
+    }
+    return { c: "Drapeaux", d: f[4], q: "À quel pays appartient ce drapeau ?", flag: f[1], f: f[3], opts: shuffle(opts) };
   }
 
-  /* Blind test : un extrait musical, quatre dessins animés possibles. */
-  function btQuestions(n, level) {
-    var ids = pickIds(SEEN_KEY.blindtest, levelPool("blindtest", level, n), n);
-    return ids.map(function (i) {
-      var t = BT[i];
-      var films = [];
-      BT.forEach(function (x) { if (x[1] !== t[1] && films.indexOf(x[1]) < 0) films.push(x[1]); });
-      var opts = [{ t: t[1], ok: true }].concat(shuffle(films).slice(0, 3).map(function (f) { return { t: f }; }));
-      return {
-        c: "Blind test", q: "De quel dessin animé vient cet extrait ?", d: t[2], audio: t[0], clip: [0, 15, 10, 6][t[2]],
-        f: "C'était « " + t[3] + " », par " + t[4] + ".", opts: shuffle(opts)
-      };
-    });
+  /* Blind test : un extrait musical, quatre propositions du même genre (dessin animé, série ou film). */
+  var BT_TYPES = [
+    { cat: "Dessins animés", q: "De quel dessin animé vient cet extrait ?" },
+    { cat: "Séries TV", q: "De quelle série vient cet extrait ?" },
+    { cat: "Films", q: "De quel film vient cet extrait ?" }
+  ];
+  function btQ(i) {
+    var t = BT[i], ty = BT_TYPES[t[5] || 0];
+    var films = [];
+    BT.forEach(function (x) { if ((x[5] || 0) === (t[5] || 0) && x[1] !== t[1] && films.indexOf(x[1]) < 0) films.push(x[1]); });
+    var opts = [{ t: t[1], ok: true }].concat(shuffle(films).slice(0, 3).map(function (f) { return { t: f }; }));
+    return {
+      c: "Blind test · " + ty.cat, q: ty.q, d: t[2], audio: t[0], clip: [0, 15, 10, 6][t[2]],
+      f: "C'était « " + t[3] + " », par " + t[4] + ".", opts: shuffle(opts)
+    };
   }
 
-  function themeQuestions(theme, n, level) {
-    if (theme === "blindtest") return btQuestions(n, level);
-    if (theme === "drapeaux") return flagQuestions(n, level);
-    return pickIds(SEEN_KEY[theme], levelPool(theme, level, n), n).map(function (i) {
-      var q = QUESTIONS[i];
-      var opts = q.a.map(function (t, k) { return { t: t, ok: k === q.r }; });
-      return { c: q.c, q: q.q, f: q.f, opts: shuffle(opts) };
-    });
+  function textQ(i) {
+    var q = QUESTIONS[i];
+    var opts = q.a.map(function (t, k) { return { t: t, ok: k === q.r }; });
+    return { c: q.c, d: q.d, q: q.q, f: q.f, opts: shuffle(opts) };
   }
 
-  function buildQuestions(theme, n, level) {
-    if (theme !== "mix") return themeQuestions(theme, n, level);
+  function makeQuestion(t, i, seed) {
+    var prev = rng;
+    rng = seeded(seed);
+    try {
+      var q = t === "drapeaux" ? flagQ(i) : t === "blindtest" ? btQ(i) : textQ(i);
+      q._t = t; q._i = i;
+      return q;
+    } finally { rng = prev; }
+  }
+
+  function planTheme(t, n, level) {
+    return pickIds(SEEN_KEY[t], levelPool(t, level, n), n).map(function (i) { return { t: t, i: i }; });
+  }
+
+  /* Choisit les questions (sans les construire) : une liste de { t: thème, i: numéro }. */
+  function planQuestions(theme, n, level) {
+    if (theme !== "mix") return planTheme(theme, n, level);
     var base = Math.floor(n / MIX_THEMES.length);
     var counts = MIX_THEMES.map(function () { return base; });
     var extra = n - base * MIX_THEMES.length;
     shuffle(MIX_THEMES.map(function (_, i) { return i; })).slice(0, extra).forEach(function (i) { counts[i]++; });
     var out = [];
-    MIX_THEMES.forEach(function (t, i) { if (counts[i] > 0) out = out.concat(themeQuestions(t, counts[i], level)); });
+    MIX_THEMES.forEach(function (t, i) { if (counts[i] > 0) out = out.concat(planTheme(t, counts[i], level)); });
     return shuffle(out);
+  }
+
+  function buildPlan(plan, gseed) {
+    return plan.map(function (p, k) {
+      var q = makeQuestion(p.t, p.i, (gseed + k * 40503) >>> 0);
+      q._g = gseed;
+      return q;
+    });
+  }
+
+  function buildQuestions(theme, n, level) {
+    return buildPlan(planQuestions(theme, n, level), Math.floor(Math.random() * 4294967296));
   }
 
   function isTimed() { return LIMITS[state.limit].type === "time"; }
@@ -1985,12 +2104,139 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
   }
 
   function seededQuestions(theme, n, seed, level) {
+    var plan;
     rng = seeded(seed); fresh = true;
-    try { return buildQuestions(theme, n, level || "all"); } finally { rng = Math.random; fresh = false; }
+    try { plan = planQuestions(theme, n, level || "all"); } finally { rng = Math.random; fresh = false; }
+    return buildPlan(plan, seed);
   }
 
   function start() { startGame(null); }
 
+
+
+  /* ---------- Défis par lien : un ami rejoue exactement tes questions et compare son score au tien ---------- */
+  var Challenge = (function () {
+    var pending = null;
+    var standalone = !window.claude;     /* dans l'application Claude, l'adresse de la page n'est pas partageable */
+    function cleanNick(x) {
+      return String(x == null ? "" : x).replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u206f\ufeff]/g, "").trim().slice(0, 14);
+    }
+    function baseUrl() { return location.href.split(/[?#]/)[0]; }
+    function toInt(x, max) { var v = parseInt(x, 10); return isFinite(v) ? Math.max(0, Math.min(max, v)) : 0; }
+
+    function parse() {
+      try {
+        var sp = new URLSearchParams(location.search);
+        var d = sp.get("d");
+        if (!d) return null;
+        var f = d.split(".");
+        if (f.length !== 5) return null;
+        var theme = f[0], limit = f[1], level = f[2], plan = f[4];
+        var g = parseInt(f[3], 36);
+        if (!THEMES[theme] || !LIMITS[limit] || LIMITS[limit].type !== "count" || !LEVELS[level]) return null;
+        if (!isFinite(g) || g < 0 || g > 4294967295) return null;
+        if (plan.length < 3 || plan.length % 3 !== 0 || plan.length > 90) return null;
+        if (parseInt(sp.get("v") || "1", 10) !== DATA_V) return null;
+        var items = [];
+        for (var k = 0; k < plan.length; k += 3) {
+          var t = TKEYS[parseInt(plan.charAt(k), 36)];
+          var id = parseInt(plan.substr(k + 1, 2), 36);
+          if (!t || !isFinite(id) || POOLS[t].indexOf(id) < 0) return null;
+          items.push({ t: t, i: id });
+        }
+        return {
+          theme: theme, limit: limit, level: level, g: g, plan: items, n: items.length,
+          score: toInt(sp.get("s"), 100000), right: toInt(sp.get("r"), items.length), nick: cleanNick(sp.get("n")) || "Un ami"
+        };
+      } catch (e) { return null; }
+    }
+
+    function clearUrl() {
+      try { history.replaceState(null, "", baseUrl()); } catch (e) { /* ignoré */ }
+    }
+
+    function showBanner() {
+      if (!pending) { $("chcard").hidden = true; return; }
+      $("chtitle").textContent = "⚔️ " + pending.nick + " te défie !";
+      $("chtext").textContent = THEMES[pending.theme].label + levelTag(pending.level) + " · " + pending.n + " questions. " +
+        pending.nick + " a fait " + fmt(pending.score) + " pts (" + pending.right + "/" + pending.n + "). À toi de faire mieux !";
+      $("chcard").hidden = false;
+    }
+
+    function buildLink(nick) {
+      var n = LIMITS[state.limit].n;
+      var qs = state.qs.slice(0, n);
+      var plan = qs.map(function (q) { return TKEYS.indexOf(q._t).toString(36) + ("00" + q._i.toString(36)).slice(-2); }).join("");
+      return baseUrl() + "?d=" + [state.theme, state.limit, state.level, qs[0]._g.toString(36), plan].join(".") +
+        "&v=" + DATA_V + "&n=" + encodeURIComponent(nick) + "&s=" + state.score + "&r=" + state.right;
+    }
+
+    function copy(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+      } catch (e) { /* repli ci-dessous */ }
+      return Promise.reject(new Error("pas de presse-papiers"));
+    }
+
+    function send() {
+      if (!state || !state.qs[0] || state.qs[0]._g == null) return;
+      var nick = cleanNick($("chnick").value) || "Un ami";
+      storeSet("pq:nick", nick);
+      var url = buildLink(nick);
+      var n = LIMITS[state.limit].n;
+      var text = "⚔️ Je te défie sur SpeedQuiz ! " + THEMES[state.theme].label + levelTag(state.level) + ", " + n + " questions. J'ai fait " + fmt(state.score) + " pts. Peux-tu me battre ?";
+      var msg = $("chmsg"), box = $("chlink");
+      box.value = url;
+      function manual() { box.hidden = false; try { box.focus(); box.select(); } catch (e) { /* ignoré */ } msg.textContent = "Copie ce lien et envoie-le à ton ami."; }
+      if (navigator.share) {
+        navigator.share({ title: "SpeedQuiz", text: text, url: url }).then(function () { msg.textContent = "Défi envoyé ! Reviens voir son score quand il aura joué."; }, function (e) {
+          if (e && e.name === "AbortError") return;
+          copy(url).then(function () { msg.textContent = "Lien copié ! Colle-le dans un message."; }, manual);
+        });
+      } else {
+        copy(text + " " + url).then(function () { msg.textContent = "Lien copié ! Colle-le dans un message."; box.hidden = true; }, manual);
+      }
+    }
+
+    /* À la fin d'une partie : proposer d'envoyer un défi, et afficher le résultat d'un défi relevé. */
+    function onFinish() {
+      var can = standalone && state && !state.mp && LIMITS[state.limit].type === "count" && state.qs[0] && state.qs[0]._g != null && state.res.length === LIMITS[state.limit].n;
+      $("chmake").hidden = !can;
+      $("chlink").hidden = true; $("chmsg").textContent = "";
+      if (can) $("chnick").value = storeGet("pq:nick") || "";
+      var box = $("chres");
+      if (state && state.ch) {
+        var c = state.ch, diff = state.score - c.score;
+        box.textContent = "";
+        var b = document.createElement("b");
+        b.textContent = diff > 0 ? "🏆 Tu bats " + c.nick + " de " + fmt(diff) + " pts !" : diff < 0 ? c.nick + " reste devant de " + fmt(-diff) + " pts. Revanche ?" : "Égalité parfaite avec " + c.nick + " !";
+        var sp = document.createElement("span");
+        sp.textContent = c.nick + " : " + fmt(c.score) + " pts (" + c.right + "/" + c.n + ")  ·  Toi : " + fmt(state.score) + " pts (" + state.right + "/" + c.n + ")";
+        box.appendChild(b); box.appendChild(sp);
+        box.hidden = false;
+        if (diff > 0) FX.party();
+      } else {
+        box.hidden = true;
+      }
+    }
+
+    function accept() {
+      if (!pending) return;
+      var ch = pending;
+      pending = null;
+      $("chcard").hidden = true;
+      clearUrl();
+      startGame(null, ch);
+    }
+    function ignore() { pending = null; $("chcard").hidden = true; clearUrl(); }
+
+    $("chgo").addEventListener("click", accept);
+    $("chno").addEventListener("click", ignore);
+    $("chsend").addEventListener("click", send);
+    pending = parse();
+    showBanner();
+    return { onFinish: onFinish };
+  })();
 
   /* ---------- Blind test : lecture des aperçus ---------- */
   var SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
@@ -2059,14 +2305,16 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
   }
 
   /* mp = null en solo ; en multijoueur { theme, limit, seed } : mêmes questions pour tous les joueurs. */
-  function startGame(mp) {
-    var limKey = mp ? mp.limit : config.limit;
-    var theme = mp ? mp.theme : config.theme;
-    var level = mp ? (mp.level || "all") : config.level;
+  function startGame(mp, ch) {
+    var limKey = mp ? mp.limit : ch ? ch.limit : config.limit;
+    var theme = mp ? mp.theme : ch ? ch.theme : config.theme;
+    var level = mp ? (mp.level || "all") : ch ? ch.level : config.level;
     var lim = LIMITS[limKey];
     var qs;
     if (mp) {
       qs = seededQuestions(theme, lim.n, mp.seed, level);
+    } else if (ch) {
+      qs = buildPlan(ch.plan, ch.g);
     } else {
       qs = buildQuestions(theme, lim.type === "count" ? lim.n : 20, level);
     }
@@ -2090,7 +2338,7 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
     state = {
       theme: theme, limit: limKey, level: level, qs: qs,
       i: 0, score: 0, streak: 0, bestStreak: 0, right: 0, res: [], locked: false,
-      gRemaining: lim.type === "time" ? lim.ms : 0, mp: !!mp
+      gRemaining: lim.type === "time" ? lim.ms : 0, mp: !!mp, ch: ch || null
     };
     state.best = mp ? 0 : (parseInt(storeGet(bestKey(limKey, level)) || "0", 10) || 0);
     state.recBanner = false;
@@ -2306,6 +2554,7 @@ h1 { font-size: clamp(40px, 12vw, 56px); }
     else if (record && answered >= 5) FX.party();
     $("share").hidden = !(navigator.share);
     updateHome();
+    Challenge.onFinish();
     if (state.mp) MP.onFinish();
     else {
       $("again").textContent = "Rejouer";
