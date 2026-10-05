@@ -521,6 +521,7 @@ html, body {
 .chrank li { display: flex; justify-content: space-between; gap: 10px; padding: 7px 12px; border-radius: 10px; background: rgba(76, 155, 255, 0.14); font-weight: 700; font-size: 15px; white-space: pre; }
 .chrank li.me { background: linear-gradient(180deg, #FFE15A, #FFB020); color: #2A1200; }
 .chrank b { font-family: var(--display); font-variant-numeric: tabular-nums; }
+.chres .chrank li.me b, .chcard .chrank li.me b { color: #2A1200; }
 .chbtns.one { grid-template-columns: 1fr; }
 .chnotif { background: linear-gradient(160deg, rgba(36, 54, 140, 0.95), rgba(16, 24, 84, 0.97)); border: 1.5px solid var(--neon-soft); border-radius: 20px; padding: 14px 16px; display: grid; gap: 10px; color: var(--ink); box-shadow: 0 0 22px rgba(60, 130, 255, 0.22); }
 .chnotif b { font-family: var(--display); font-size: 19px; }
@@ -541,6 +542,15 @@ html, body {
 .myalert .btn { font-size: 16px; padding: 11px; }
 .badge { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; margin-left: 8px; border-radius: 999px; background: #FF4D5A; color: #fff; font-size: 13px; }
 .chcard.alert { border-color: #FF4D5A; box-shadow: 0 0 28px rgba(255, 77, 90, 0.35); }
+
+.chcard.daily { border-color: #FF8A1F; box-shadow: 0 0 30px rgba(255, 138, 31, 0.35); }
+.chcard.daily b { font-size: 22px; }
+.ddate { color: var(--ink-soft) !important; font-weight: 700; font-size: 14px; }
+.ddate::first-letter { text-transform: uppercase; }
+.dtopic { font-family: var(--display); font-size: 19px !important; color: var(--accent) !important; }
+.dstreak { color: #FFB020 !important; font-weight: 800 !important; }
+.dres0 { font-weight: 800 !important; color: #fff !important; }
+.chres small { color: var(--on-bg-soft); font-weight: 700; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -605,6 +615,18 @@ html, body {
       <input id="chname" class="chinput" maxlength="14" autocomplete="off" placeholder="Ton prénom (pour le classement)" hidden>
       <p class="chmsg" id="chmsg2" role="status" aria-live="polite"></p>
       <div class="chbtns"><button class="btn" id="chgo" type="button">⚔️ Relever le défi</button><button class="btn ghost" id="chno" type="button">Ignorer</button></div>
+    </div>
+    <div class="chcard daily" id="dcard" hidden>
+      <b id="dtitle"></b>
+      <p class="ddate" id="ddate"></p>
+      <p class="dtopic" id="dtopic"></p>
+      <p id="dsub"></p>
+      <p class="dstreak" id="dstreak" hidden></p>
+      <p class="dres0" id="dres0" hidden></p>
+      <ol class="chrank" id="dtop" hidden aria-label="Classement du jour"></ol>
+      <input id="dname" class="chinput" maxlength="14" autocomplete="off" placeholder="Ton prénom (pour le classement)" hidden>
+      <p class="chmsg" id="dmsg" role="status" aria-live="polite"></p>
+      <div class="chbtns one"><button class="btn" id="dgo" type="button">📅 Jouer le défi du jour</button></div>
     </div>
     <div class="chcard alert" id="chalert" hidden>
       <b>🔔 Un ami t'a doublé !</b>
@@ -745,6 +767,7 @@ html, body {
     <span class="record" id="rrec" hidden></span>
     <ol class="board" id="rboard" hidden aria-label="Classement"></ol>
     <div class="chres" id="chres" hidden></div>
+    <div class="chres" id="dres" hidden></div>
     <div class="chmake" id="chmake" hidden>
       <b>⚔️ Défie un ami</b>
       <p>Il joue exactement les mêmes questions que toi, et tu verras qui gagne.</p>
@@ -1844,6 +1867,7 @@ html, body {
     culture: { label: "Culture générale", icon: "🧠", color: "#D62839" },
     drapeaux: { label: "Drapeaux du monde", icon: "🌍", color: "#00796B" },
     capitales: { label: "Capitales du monde", icon: "🗺️", color: "#2F5BFF" },
+    daily: { label: "Défi du jour", icon: "📅", color: "#FF8A1F", hidden: true },
     jeuxvideo: { label: "Jeux vidéo", icon: "🎮", color: "#6A3DE8" },
     france: { label: "Culture française", icon: "🇫🇷", color: "#C2185B" },
     gastronomie: { label: "Gastronomie du monde", icon: "🍜", color: "#BF4A00" },
@@ -1872,6 +1896,154 @@ html, body {
   var CAT_THEME = { "Jeux vidéo": "jeuxvideo", "Culture France": "france", "Gastronomie": "gastronomie", "Pokémon": "pokemon", "Séries TV": "series", "Les Sims": "sims", "Disney": "disney", "Parcs d'attractions": "parcs" };
   var SEEN_KEY = { culture: "pq:seen", drapeaux: "pq:seenflags", jeuxvideo: "pq:seen:jv", france: "pq:seen:fr", gastronomie: "pq:seen:gast", pokemon: "pq:seen:pk", series: "pq:seen:tv", sims: "pq:seen:sims", disney: "pq:seen:dis", parcs: "pq:seen:parcs", blindtest: "pq:seen:bt", capitales: "pq:seen:cap" };
 
+  /* Défi du jour : questions de thèmes qui n'existent pas dans les stands habituels. [thème, question, réponses, bonne réponse, anecdote, niveau] */
+  var DTOPICS = [["Espace", "🪐"], ["Animaux", "🐾"], ["Corps humain", "🧬"], ["Cinéma", "🎬"], ["Musique", "🎤"], ["Football", "⚽"], ["Mythologie", "🏛️"], ["Inventions", "💡"], ["Économie", "📈"], ["Nature", "🌿"], ["Langue française", "🗣️"], ["Records du monde", "🏆"]];
+  var DQ = [[0,"Quelle est la planète la plus proche du Soleil ?",["Mercure","Vénus","Mars","La Terre"],0,"Elle fait le tour du Soleil en 88 jours.",1],
+    [0,"Quelle planète est surnommée la planète rouge ?",["Vénus","Jupiter","Mars","Mercure"],2,"Sa couleur vient de l'oxyde de fer présent dans son sol.",1],
+    [0,"Comment s'appelle la galaxie dans laquelle se trouve la Terre ?",["La Voie lactée","Andromède","Le Triangle","Le Sombrero"],0,"Elle compte des centaines de milliards d'étoiles.",1],
+    [0,"Qui a été le premier homme à marcher sur la Lune ?",["Buzz Aldrin","Neil Armstrong","Youri Gagarine","Alan Shepard"],1,"C'était en juillet 1969, lors de la mission Apollo 11.",1],
+    [0,"Qui a été le premier humain dans l'espace ?",["Neil Armstrong","Alan Shepard","Valentina Terechkova","Youri Gagarine"],3,"Il a fait le tour de la Terre le 12 avril 1961.",1],
+    [0,"Quelle planète est entourée d'anneaux spectaculaires ?",["Jupiter","Uranus","Mars","Saturne"],3,"Ses anneaux sont surtout constitués de glace.",1],
+    [0,"Combien de temps la lumière du Soleil met-elle pour atteindre la Terre ?",["Environ 8 secondes","Environ 1 heure","Environ 1 jour","Environ 8 minutes"],3,"C'est environ 8 minutes et 20 secondes.",2],
+    [0,"Quel télescope spatial, lancé en 1990, porte le nom d'un astronome américain ?",["Kepler","Hubble","Spitzer","Planck"],1,"Il orbite autour de la Terre depuis plus de trente ans.",2],
+    [0,"Quel télescope spatial, lancé fin 2021, observe surtout dans l'infrarouge ?",["James Webb","Hubble","Gaia","Planck"],0,"Son miroir principal mesure 6,5 mètres de diamètre.",2],
+    [0,"Quel rover américain a atterri sur Mars en février 2021 ?",["Perseverance","Curiosity","Opportunity","Spirit"],0,"Il est accompagné d'un petit hélicoptère, Ingenuity.",2],
+    [0,"Comment s'appelle la plus grande lune de Jupiter ?",["Ganymède","Io","Europe","Callisto"],0,"C'est la plus grande lune du système solaire.",3],
+    [0,"Quelle planète tourne presque « couchée » sur le côté ?",["Neptune","Saturne","Uranus","Mars"],2,"Son axe est incliné d'environ 98 degrés.",3],
+    [0,"Quel astronome français a découvert Neptune par le calcul en 1846 ?",["Urbain Le Verrier","Pierre-Simon de Laplace","François Arago","Charles Messier"],0,"Il l'a prédite avant même de pouvoir l'observer.",3],
+    [1,"Quel est le plus grand animal terrestre ?",["La girafe","L'hippopotame","Le rhinocéros blanc","L'éléphant d'Afrique"],3,"Il peut peser plus de six tonnes.",1],
+    [1,"Combien de pattes possède une araignée ?",["8","6","10","12"],0,"Les araignées sont des arachnides, pas des insectes.",1],
+    [1,"Quel animal peut changer de couleur pour communiquer ou se camoufler ?",["Le gecko","L'iguane","Le lézard vert","Le caméléon"],3,"Ses yeux bougent aussi indépendamment l'un de l'autre.",1],
+    [1,"Comment appelle-t-on le petit du cheval ?",["Un faon","Un veau","Un poulain","Un chevreau"],2,"La femelle adulte s'appelle une jument.",1],
+    [1,"Quel animal est le symbole du WWF ?",["Le tigre","Le panda géant","Le koala","L'ours polaire"],1,"Le logo existe depuis 1961.",1],
+    [1,"Quel oiseau ne vole pas et vit surtout en Antarctique ?",["L'autruche","Le kiwi","L'émeu","Le manchot"],3,"Le manchot empereur est le plus grand de la famille.",1],
+    [1,"Quel mammifère pond des œufs et allaite ses petits ?",["Le kangourou","Le koala","L'ornithorynque","Le dauphin"],2,"C'est un monotrème qui vit en Australie.",2],
+    [1,"Quel est le seul mammifère capable de voler vraiment ?",["L'écureuil volant","Le colibri","La chauve-souris","Le pangolin"],2,"Les écureuils volants, eux, planent.",2],
+    [1,"Quel est le plus grand félin du monde ?",["Le lion","Le jaguar","Le tigre","Le léopard"],2,"Le tigre de Sibérie est le plus grand de tous.",2],
+    [1,"Quel animal a la plus longue gestation parmi les mammifères terrestres ?",["La girafe","Le rhinocéros","L'hippopotame","L'éléphant"],3,"Elle dure environ 22 mois.",2],
+    [1,"Quel animal marin possède trois cœurs ?",["La pieuvre","Le requin","Le dauphin","La tortue de mer"],0,"Son sang est bleu, car il contient du cuivre.",3],
+    [1,"Quel animal a des empreintes digitales très proches de celles de l'humain ?",["Le chimpanzé","Le panda","Le koala","Le raton laveur"],2,"Même la police scientifique pourrait les confondre.",3],
+    [2,"Quel est le plus grand organe du corps humain ?",["La peau","Le foie","Le cœur","L'intestin"],0,"Elle représente environ 2 m² chez un adulte.",1],
+    [2,"Combien d'os compte le squelette d'un adulte ?",["106","306","206","406"],2,"Un nouveau-né en possède plus, car certains os fusionnent.",2],
+    [2,"Quel organe filtre le sang et produit l'urine ?",["Le foie","Les poumons","Les reins","La rate"],2,"Nous en avons deux.",2],
+    [2,"Quel est le plus long os du corps humain ?",["Le tibia","L'humérus","Le péroné","Le fémur"],3,"Il se trouve dans la cuisse.",2],
+    [2,"Combien de dents compte un adulte, dents de sagesse comprises ?",["28","32","30","36"],1,"Les dents de sagesse sont les dernières à pousser.",2],
+    [2,"Quelle vitamine le corps fabrique-t-il grâce au soleil ?",["La vitamine C","La vitamine A","La vitamine D","La vitamine B12"],2,"Elle aide à fixer le calcium dans les os.",2],
+    [2,"Quel organe fabrique l'insuline ?",["Le pancréas","Le foie","La rate","L'estomac"],0,"Elle régule le taux de sucre dans le sang.",2],
+    [2,"Combien de litres de sang environ un adulte possède-t-il ?",["2 litres","8 litres","5 litres","10 litres"],2,"Le cœur le fait circuler en permanence.",2],
+    [2,"Quelle partie colorée de l'œil règle la quantité de lumière reçue ?",["La cornée","La rétine","L'iris","Le cristallin"],2,"Elle ouvre ou ferme la pupille.",2],
+    [2,"Que mesure un électrocardiogramme ?",["La pression artérielle","Le taux de sucre","La capacité des poumons","L'activité électrique du cœur"],3,"On l'abrège souvent ECG.",2],
+    [2,"Quel est le plus petit os du corps humain ?",["Le marteau","L'enclume","La rotule","L'étrier"],3,"Il se trouve dans l'oreille moyenne.",3],
+    [2,"Quel groupe sanguin est donneur universel pour les globules rouges ?",["O négatif","AB positif","A positif","B négatif"],0,"Il peut être transfusé à presque tout le monde.",3],
+    [3,"Quel acteur incarne le pirate Jack Sparrow ?",["Orlando Bloom","Brad Pitt","Tom Cruise","Johnny Depp"],3,"La saga compte cinq films.",1],
+    [3,"Dans quelle saga trouve-t-on le personnage de Dark Vador ?",["Star Trek","Matrix","Alien","Star Wars"],3,"Il est le père de Luke Skywalker.",1],
+    [3,"Quel film français de 2011 met en scène Omar Sy et François Cluzet ?",["Intouchables","Taxi","Les Visiteurs","La Famille Bélier"],0,"Il a été un énorme succès mondial.",1],
+    [3,"Quelle actrice joue Hermione Granger dans les films Harry Potter ?",["Emma Stone","Keira Knightley","Natalie Portman","Emma Watson"],3,"Elle est aussi apparue dans La Belle et la Bête en 2017.",1],
+    [3,"Qui joue Neo dans la saga Matrix ?",["Brad Pitt","Tom Hanks","Will Smith","Keanu Reeves"],3,"Le premier film est sorti en 1999.",1],
+    [3,"Quel festival décerne la Palme d'or ?",["La Mostra de Venise","La Berlinale","Sundance","Le festival de Cannes"],3,"Il se tient chaque année sur la Côte d'Azur.",1],
+    [3,"Qui a réalisé The Dark Knight, sorti en 2008 ?",["Tim Burton","Zack Snyder","Christopher Nolan","Ridley Scott"],2,"Il a aussi réalisé Inception et Interstellar.",2],
+    [3,"Quel film de 1975, réalisé par Steven Spielberg, met en scène un requin ?",["Piranha","Orca","Abyss","Les Dents de la mer"],3,"Il est considéré comme le premier blockbuster d'été.",2],
+    [3,"Quelle actrice joue le rôle d'Amélie Poulain ?",["Marion Cotillard","Sophie Marceau","Juliette Binoche","Audrey Tautou"],3,"Le film date de 2001.",2],
+    [3,"Qui a réalisé la trilogie du Parrain ?",["Francis Ford Coppola","Martin Scorsese","Brian De Palma","Sergio Leone"],0,"Le premier film est sorti en 1972.",2],
+    [3,"Quel acteur incarne le Joker dans The Dark Knight ?",["Joaquin Phoenix","Heath Ledger","Jack Nicholson","Jared Leto"],1,"Il a reçu un Oscar à titre posthume.",2],
+    [3,"Quel film d'animation de Miyazaki a remporté l'Oscar en 2003 ?",["Princesse Mononoké","Le Voyage de Chihiro","Mon voisin Totoro","Le Château ambulant"],1,"Il a aussi reçu l'Ours d'or à Berlin.",3],
+    [3,"Quel film est le plus gros succès de l'histoire au box-office mondial ?",["Avatar","Titanic","Avengers: Endgame","Star Wars : Le Réveil de la Force"],0,"Il a dépassé les 2,9 milliards de dollars.",3],
+    [4,"Quel groupe a chanté « Bohemian Rhapsody » ?",["Queen","Les Beatles","Led Zeppelin","The Rolling Stones"],0,"Le chanteur du groupe s'appelait Freddie Mercury.",1],
+    [4,"Quel artiste est surnommé le « Roi de la pop » ?",["Elvis Presley","Prince","Justin Timberlake","Michael Jackson"],3,"Il est l'auteur de l'album Thriller.",1],
+    [4,"Quel compositeur allemand a continué d'écrire alors qu'il devenait sourd ?",["Mozart","Bach","Wagner","Beethoven"],3,"Il a composé neuf symphonies.",1],
+    [4,"Combien de cordes possède une guitare classique ?",["4","6","5","8"],1,"Une basse en a généralement quatre.",1],
+    [4,"Quel artiste belge a chanté « Alors on danse » ?",["Angèle","Jacques Brel","Maître Gims","Stromae"],3,"Le titre est sorti en 2009.",1],
+    [4,"Quel duo français de musique électronique se produit avec des casques de robots ?",["Justice","Daft Punk","Air","Cassius"],1,"Il a sorti l'album Random Access Memories en 2013.",1],
+    [4,"Qui a chanté « Imagine » ?",["John Lennon","Paul McCartney","Elton John","Bob Dylan"],0,"La chanson date de 1971.",2],
+    [4,"Quelle chanteuse britannique a sorti l'album « 21 » en 2011 ?",["Amy Winehouse","Dua Lipa","Lily Allen","Adele"],3,"Il contient le titre « Someone Like You ».",2],
+    [4,"Quel est le prénom du chanteur du groupe Nirvana ?",["Dave","Eddie","Chris","Kurt"],3,"Il s'appelait Kurt Cobain.",2],
+    [4,"Quel groupe britannique a sorti l'album « The Dark Side of the Moon » ?",["Genesis","Deep Purple","Pink Floyd","Supertramp"],2,"Il est resté des centaines de semaines dans les classements.",2],
+    [4,"Quel instrument à vent jouait Louis Armstrong ?",["Le saxophone","Le trombone","La clarinette","La trompette"],3,"Il est l'un des pères du jazz.",2],
+    [4,"Quel chanteur américain est surnommé « The Boss » ?",["Bob Dylan","Billy Joel","Bruce Springsteen","Neil Young"],2,"Il a chanté « Born in the U.S.A. ».",3],
+    [5,"Quel pays a remporté la Coupe du monde de football en 2018 ?",["La Croatie","L'Argentine","L'Allemagne","La France"],3,"Elle a battu la Croatie en finale, 4 à 2.",1],
+    [5,"Quel pays a organisé la Coupe du monde 2022 ?",["Les États-Unis","La Russie","Le Brésil","Le Qatar"],3,"Elle s'est déroulée en novembre et décembre.",1],
+    [5,"Quel joueur détient le record de Ballons d'or, avec huit victoires ?",["Cristiano Ronaldo","Michel Platini","Johan Cruyff","Lionel Messi"],3,"Il a gagné son huitième en 2023.",1],
+    [5,"Dans quel pays se trouve le stade du Maracanã ?",["L'Argentine","Le Brésil","L'Uruguay","La Colombie"],1,"Il est situé à Rio de Janeiro.",1],
+    [5,"Quel club français a remporté la Ligue des champions en 1993 ?",["Le Paris Saint-Germain","L'AS Monaco","L'Olympique de Marseille","L'Olympique lyonnais"],2,"C'est le seul club français à l'avoir gagnée avant 2025.",2],
+    [5,"Quel club français a remporté la Ligue des champions en 2025 ?",["L'Olympique de Marseille","L'AS Monaco","Le Paris Saint-Germain","L'Olympique lyonnais"],2,"Il a battu l'Inter Milan en finale.",2],
+    [5,"Qui a marqué le but de « la main de Dieu » en 1986 ?",["Diego Maradona","Pelé","Zico","Johan Cruyff"],0,"C'était contre l'Angleterre, en quart de finale.",2],
+    [5,"Quelle équipe a battu la France en finale de l'Euro 2016 ?",["Le Portugal","L'Allemagne","L'Espagne","L'Italie"],0,"Un but d'Éder a décidé de la finale en prolongation.",2],
+    [5,"Quel gardien de but a été champion du monde avec la France en 1998 ?",["Bernard Lama","Fabien Barthez","Hugo Lloris","Ulrich Ramé"],1,"Il portait le numéro 16.",2],
+    [5,"Combien de Coupes du monde masculines l'équipe de France a-t-elle gagnées ?",["1","3","4","2"],3,"Elle les a remportées en 1998 et en 2018.",2],
+    [5,"Quel club lyonnais a remporté sept titres de champion de France d'affilée ?",["L'AS Saint-Étienne","L'OGC Nice","Le FC Nantes","L'Olympique lyonnais"],3,"C'était de 2002 à 2008.",2],
+    [5,"Quel pays a remporté l'Euro 2024 ?",["L'Angleterre","La France","L'Espagne","L'Allemagne"],2,"Elle a battu l'Angleterre en finale.",2],
+    [6,"Quel dieu grec règne sur les mers ?",["Zeus","Poséidon","Hadès","Arès"],1,"Son arme est un trident.",1],
+    [6,"Qui est le roi des dieux dans la mythologie grecque ?",["Poséidon","Apollon","Zeus","Arès"],2,"Il règne depuis le mont Olympe.",1],
+    [6,"Quel héros grec a accompli douze travaux ?",["Persée","Thésée","Achille","Héraclès"],3,"Les Romains l'appellent Hercule.",1],
+    [6,"Quel monstre à la chevelure de serpents pétrifie ceux qui la regardent ?",["Écho","Circé","Charybde","Méduse"],3,"Persée l'a vaincue.",1],
+    [6,"Quel dieu nordique manie le marteau Mjöllnir ?",["Odin","Loki","Baldr","Thor"],3,"C'est le dieu du tonnerre.",1],
+    [6,"À quelle déesse grecque correspond Vénus chez les Romains ?",["Athéna","Héra","Artémis","Aphrodite"],3,"C'est la déesse de l'amour et de la beauté.",2],
+    [6,"À quel dieu grec correspond Jupiter chez les Romains ?",["Zeus","Arès","Hermès","Apollon"],0,"C'est le roi des dieux.",2],
+    [6,"Comment s'appelle le chien à trois têtes qui garde les Enfers ?",["Orthros","Fenrir","Cerbère","Argos"],2,"Héraclès l'a capturé lors de son dernier travail.",2],
+    [6,"Quel héros grec a tué le Minotaure ?",["Persée","Ulysse","Thésée","Jason"],2,"Ariane lui a donné un fil pour retrouver son chemin.",2],
+    [6,"Comment s'appelle le père des dieux dans la mythologie nordique ?",["Thor","Loki","Freyr","Odin"],3,"Il n'a qu'un œil.",2],
+    [6,"Quel dieu égyptien à tête de chacal est lié à l'embaumement ?",["Anubis","Horus","Osiris","Thot"],0,"Il guide les morts vers l'au-delà.",2],
+    [6,"Quelle déesse grecque est née tout armée de la tête de Zeus ?",["Héra","Déméter","Artémis","Athéna"],3,"C'est la déesse de la sagesse et de la stratégie.",3],
+    [7,"Quel Français a inventé le cinéma avec son frère, à Lyon, en 1895 ?",["Georges Méliès","Charles Pathé","Louis Lumière","Léon Gaumont"],2,"Les frères Lumière ont organisé la première projection payante à Paris.",1],
+    [7,"Qui a inventé l'imprimerie à caractères mobiles en Europe ?",["Léonard de Vinci","Christophe Colomb","Galilée","Johannes Gutenberg"],3,"Il a imprimé la célèbre Bible à 42 lignes.",1],
+    [7,"Qui a cofondé Microsoft avec Paul Allen ?",["Steve Jobs","Bill Gates","Mark Zuckerberg","Elon Musk"],1,"L'entreprise a été fondée en 1975.",1],
+    [7,"Quel langage sert à structurer les pages web ?",["Python","Java","SQL","HTML"],3,"Son nom signifie langage de balisage hypertexte.",1],
+    [7,"Qui a breveté le téléphone en 1876 ?",["Thomas Edison","Nikola Tesla","Guglielmo Marconi","Alexander Graham Bell"],3,"Il a fait le premier appel avec son assistant Watson.",2],
+    [7,"Quel scientifique a mis au point un vaccin contre la rage en 1885 ?",["Louis Pasteur","Marie Curie","Robert Koch","Alexander Fleming"],0,"Il l'a testé sur un jeune garçon.",2],
+    [7,"En quelle année le premier iPhone est-il sorti ?",["2003","2010","2007","2012"],2,"Steve Jobs l'a présenté en janvier 2007.",2],
+    [7,"Quel est le nom du premier satellite artificiel, lancé en 1957 ?",["Explorer 1","Vostok 1","Apollo 1","Spoutnik 1"],3,"Il a été lancé par l'Union soviétique.",2],
+    [7,"Quelle entreprise a lancé l'ordinateur Macintosh en 1984 ?",["IBM","Microsoft","Apple","Commodore"],2,"Une publicité célèbre a été diffusée pendant le Super Bowl.",2],
+    [7,"Que signifie GPS en français ?",["Système de positionnement mondial","Guide de parcours satellite","Géolocalisation par satellite privée","Grand plan spatial"],0,"Il repose sur une constellation de satellites.",2],
+    [7,"Qui a imaginé le World Wide Web en 1989 ?",["Bill Gates","Tim Berners-Lee","Vint Cerf","Linus Torvalds"],1,"Il travaillait alors au CERN, en Suisse.",3],
+    [7,"Quel médecin français a inventé le stéthoscope en 1816 ?",["Ambroise Paré","Claude Bernard","Paul Broca","René Laennec"],3,"Il a d'abord utilisé un simple rouleau de papier.",3],
+    [8,"Quelle est la monnaie de la zone euro ?",["Le dollar","L'euro","Le franc","La livre"],1,"Elle est utilisée dans la majorité des pays de l'Union européenne.",1],
+    [8,"Que signifie le sigle PIB ?",["Prix intérieur de base","Part d'investissement brute","Produit industriel brut","Produit intérieur brut"],3,"Il mesure la richesse produite par un pays.",1],
+    [8,"Dans quelle ville se trouve Wall Street ?",["New York","Chicago","Boston","Washington"],0,"C'est le cœur financier des États-Unis.",1],
+    [8,"Comment s'appelle l'indice boursier phare de la Bourse de Paris ?",["Le CAC 40","Le Dow Jones","Le DAX","Le FTSE 100"],0,"Il regroupe 40 grandes entreprises françaises.",1],
+    [8,"Que signifie le sigle TVA ?",["Taxe sur la valeur ajoutée","Taxe de vente annuelle","Taxe sur les valeurs acquises","Total des ventes agrégées"],0,"Son taux normal est de 20 % en France.",1],
+    [8,"Comment appelle-t-on la hausse générale et durable des prix ?",["La déflation","La croissance","Le chômage","L'inflation"],3,"Elle réduit le pouvoir d'achat.",1],
+    [8,"En quelle année les pièces et billets en euros sont-ils entrés en circulation ?",["2002","1999","1995","2005"],0,"La monnaie existait déjà de façon scripturale depuis 1999.",2],
+    [8,"Comment s'appelle la banque centrale de la zone euro ?",["La Banque de France","La Banque centrale européenne","La Banque mondiale","La Réserve fédérale"],1,"Son siège est à Francfort.",2],
+    [8,"Que désigne un dividende ?",["Un impôt sur les sociétés","Une part des bénéfices versée aux actionnaires","Un prêt bancaire","Un frais de gestion"],1,"Il est décidé par l'assemblée générale.",2],
+    [8,"Que signifie l'expression « B2B » ?",["Business to business","Back to basics","Buy to build","Bank to bank"],0,"Elle désigne les ventes entre entreprises.",2],
+    [8,"Comment appelle-t-on la différence entre le chiffre d'affaires et le coût des produits vendus ?",["La marge brute","Le résultat net","Le fonds de roulement","La trésorerie"],0,"C'est un indicateur clé de la rentabilité.",2],
+    [8,"À quoi correspond l'EBITDA en français ?",["Le résultat net","Le chiffre d'affaires","L'excédent brut d'exploitation","Le fonds de roulement"],2,"Il se calcule avant intérêts, impôts, dépréciations et amortissements.",3],
+    [9,"Quel gaz les plantes absorbent-elles pour faire la photosynthèse ?",["L'oxygène","L'azote","Le dioxyde de carbone","L'hélium"],2,"Elles rejettent de l'oxygène en échange.",2],
+    [9,"Quelle forêt tropicale est la plus vaste du monde ?",["Le bassin du Congo","L'Amazonie","La forêt de Bornéo","La Taïga"],1,"Elle s'étend sur plusieurs pays d'Amérique du Sud.",1],
+    [9,"Quel est le plus grand océan de la planète ?",["L'océan Pacifique","L'océan Atlantique","L'océan Indien","L'océan Arctique"],0,"Il couvre environ un tiers de la surface du globe.",1],
+    [9,"Quelle couche de l'atmosphère nous protège des rayons ultraviolets ?",["La troposphère","L'ionosphère","La couche d'ozone","La thermosphère"],2,"Les chlorofluorocarbures l'ont longtemps abîmée.",1],
+    [9,"Quel phénomène retient la chaleur dans l'atmosphère ?",["L'effet Doppler","L'effet Venturi","L'effet de mer","L'effet de serre"],3,"Il est amplifié par les gaz émis par les activités humaines.",1],
+    [9,"Quelle énergie renouvelable utilise la force du vent ?",["L'énergie solaire","L'énergie éolienne","L'énergie nucléaire","L'énergie géothermique"],1,"Les éoliennes transforment le vent en électricité.",1],
+    [9,"Quel continent est le plus froid de la planète ?",["L'Asie","L'Antarctique","L'Europe","L'Amérique du Nord"],1,"Il détient les records de températures les plus basses.",1],
+    [9,"Quelle est la plus grande barrière de corail du monde ?",["La barrière de Belize","La barrière de la mer Rouge","La barrière de Nouvelle-Calédonie","La Grande Barrière de corail"],3,"Elle se trouve au large de l'Australie.",2],
+    [9,"Quel arbre est le plus haut du monde ?",["Le chêne","Le séquoia","Le baobab","Le sapin de Douglas"],1,"Certains dépassent 110 mètres.",2],
+    [9,"Que signifie le mot biodiversité ?",["La quantité de forêts","Le nombre d'habitants","La variété des espèces vivantes","La pureté de l'eau"],2,"Elle désigne la richesse du monde vivant.",2],
+    [9,"Quelle est la plus grande île du monde ?",["Le Groenland","Madagascar","Bornéo","La Nouvelle-Guinée"],0,"L'Australie est considérée comme un continent.",2],
+    [9,"Quel volcan très actif se trouve à La Réunion ?",["Le Mont Pelé","La Soufrière","L'Etna","Le piton de la Fournaise"],3,"Il entre en éruption plusieurs fois par décennie.",2],
+    [10,"Quel est le pluriel de « cheval » ?",["Chevals","Chevaux","Chevaus","Chevales"],1,"Plusieurs noms en -al font leur pluriel en -aux.",1],
+    [10,"Que signifie l'expression « poser un lapin » ?",["Faire un cadeau","Ne pas venir à un rendez-vous","Faire une farce","Se tromper de route"],1,"Elle date du XIXe siècle.",1],
+    [10,"Que signifie l'expression « coûter les yeux de la tête » ?",["Faire mal aux yeux","Être sans importance","Coûter très cher","Être gratuit"],2,"On dit aussi « coûter un bras ».",1],
+    [10,"Que signifie l'expression « tomber dans les pommes » ?",["Faire une chute","Manger beaucoup","Se tromper","S'évanouir"],3,"C'est une expression familière.",1],
+    [10,"Que signifie l'expression « avoir le cafard » ?",["Avoir peur","Être fatigué","Être en colère","Être triste"],3,"On dit aussi « avoir le blues ».",2],
+    [10,"Combien de lettres compte l'alphabet français ?",["24","26","28","30"],1,"Il comprend six voyelles, avec le « y ».",1],
+    [10,"Comment appelle-t-on un mot de sens contraire ?",["Un synonyme","Un antonyme","Un homonyme","Un paronyme"],1,"Chaud est l'antonyme de froid.",2],
+    [10,"Quelle institution veille sur la langue française ?",["La Sorbonne","Le Conseil d'État","L'Assemblée nationale","L'Académie française"],3,"Elle a été fondée en 1635.",2],
+    [10,"Que signifie le verbe procrastiner ?",["Remettre à plus tard","Se dépêcher","Mentir","Oublier"],0,"Il vient du latin procrastinare.",2],
+    [10,"Quelle langue compte le plus de locuteurs natifs dans le monde ?",["Le mandarin","L'anglais","L'espagnol","L'hindi"],0,"Plus de 900 millions de personnes le parlent comme langue maternelle.",2],
+    [10,"Que signifie l'expression « avoir un chat dans la gorge » ?",["Avoir peur","Être gourmand","Avoir faim","Avoir la voix enrouée"],3,"On l'utilise quand on tousse un peu.",2],
+    [10,"De qui le mot « sandwich » tire-t-il son nom ?",["Du comte de Sandwich","D'un boulanger anglais","D'une ville américaine","D'un navigateur"],0,"John Montagu, comte de Sandwich, au XVIIIe siècle.",3],
+    [11,"Quel est le plus haut bâtiment du monde ?",["Le Burj Khalifa","La tour de Shanghai","La Tokyo Skytree","La tour Eiffel"],0,"Il mesure environ 828 mètres.",1],
+    [11,"Quel est le plus grand pays du monde par la superficie ?",["Le Canada","La Chine","La Russie","Les États-Unis"],2,"Il s'étend sur onze fuseaux horaires.",1],
+    [11,"Quel est le pays le plus peuplé du monde depuis 2023 ?",["La Chine","Les États-Unis","L'Inde","L'Indonésie"],2,"Elle a dépassé la Chine cette année-là.",2],
+    [11,"Quel est le plus petit État du monde ?",["Le Vatican","Monaco","Saint-Marin","Nauru"],0,"Il couvre environ 0,44 km².",2],
+    [11,"Quelle fosse océanique est la plus profonde du monde ?",["La fosse des Mariannes","La fosse de Java","La fosse des Philippines","La fosse de Porto Rico"],0,"Elle dépasse 10 900 mètres de profondeur.",2],
+    [11,"Quelle construction humaine est la plus longue du monde ?",["Le canal de Panama","La route Panaméricaine","Le Transsibérien","La Grande Muraille de Chine"],3,"Ses différents tronçons totalisent des milliers de kilomètres.",1],
+    [11,"Quelle est la plus grande île de la Méditerranée ?",["La Sardaigne","Chypre","La Sicile","La Corse"],2,"Elle appartient à l'Italie.",2],
+    [11,"Quelle est la plus grande ville de Suisse ?",["Berne","Genève","Zurich","Bâle"],2,"Berne est la capitale, mais moins peuplée.",2],
+    [11,"Quel est le plus petit océan du monde ?",["L'océan Indien","L'océan Austral","L'océan Atlantique","L'océan Arctique"],3,"Il est en grande partie recouvert de glace.",2],
+    [11,"Quel pays possède le plus grand nombre de lacs au monde ?",["La Russie","La Finlande","Le Canada","Les États-Unis"],2,"Il en compte plusieurs millions.",3],
+    [11,"Quel pays compte le plus de pyramides ?",["Le Soudan","L'Égypte","Le Mexique","Le Pérou"],0,"Il en possède plus de 200, plus petites que celles d'Égypte.",3],
+    [11,"Quel est le plus grand lac d'eau douce du monde par sa superficie ?",["Le lac Victoria","Le lac Baïkal","Le lac Michigan","Le lac Supérieur"],3,"Il se trouve entre le Canada et les États-Unis.",3]];
   /* Capitales du monde : [ISO, pays, « de … », capitale, région, niveau, ville-piège, anecdote, question particulière] */
   var CAPS = [["AL","Albanie","de l'Albanie","Tirana",0,2,"","",""],
     ["AD","Andorre","d'Andorre","Andorre-la-Vieille",0,3,"","",""],
@@ -2181,11 +2353,12 @@ html, body {
     [217271368,"Armageddon",2,"I Don't Want to Miss a Thing","Aerosmith",2],
     [566322365,"Skyfall",3,"Skyfall","Adele",2],
     [1440892107,"Moulin Rouge !",3,"Lady Marmalade","Christina Aguilera, Lil' Kim, Mya & Pink",2]];
-  var POOLS = { culture: [], jeuxvideo: [], france: [], gastronomie: [], pokemon: [], series: [], sims: [], disney: [], parcs: [], blindtest: [], capitales: [], drapeaux: [] };
+  var POOLS = { culture: [], jeuxvideo: [], france: [], gastronomie: [], pokemon: [], series: [], sims: [], disney: [], parcs: [], blindtest: [], capitales: [], daily: [], drapeaux: [] };
   QUESTIONS.forEach(function (q, i) { POOLS[CAT_THEME[q.c] || "culture"].push(i); });
   FLAGS.forEach(function (_, i) { POOLS.drapeaux.push(i); });
   BT.forEach(function (_, i) { POOLS.blindtest.push(i); });
   CAPS.forEach(function (_, i) { POOLS.capitales.push(i); });
+  DQ.forEach(function (_, i) { POOLS.daily.push(i); });
 
   function loadConfig() {
     var c = { theme: "culture", limit: "q10", level: "all" };
@@ -2272,7 +2445,7 @@ html, body {
   }
 
   /* Difficulté d'une question (1 facile, 2 intermédiaire, 3 expert). */
-  function dOf(theme, i) { return theme === "drapeaux" ? (FLAGS[i][4] || 2) : theme === "blindtest" ? BT[i][2] : theme === "capitales" ? CAPS[i][5] : (QUESTIONS[i].d || 2); }
+  function dOf(theme, i) { return theme === "drapeaux" ? (FLAGS[i][4] || 2) : theme === "blindtest" ? BT[i][2] : theme === "capitales" ? CAPS[i][5] : theme === "daily" ? DQ[i][5] : (QUESTIONS[i].d || 2); }
 
   /* Questions du niveau demandé ; si elles sont trop peu nombreuses, on complète avec les niveaux voisins. */
   function levelPool(theme, level, need) {
@@ -2288,7 +2461,7 @@ html, body {
 
   /* Chaque question se construit à partir de (thème, numéro, graine) : c'est ce qui permet de la rejouer à l'identique
      (multijoueur, défis par lien). */
-  var TKEYS = ["culture", "drapeaux", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs", "blindtest", "capitales"];
+  var TKEYS = ["culture", "drapeaux", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs", "blindtest", "capitales", "daily"];
   var DATA_V = 1;
 
   function flagQ(i) {
@@ -2349,6 +2522,12 @@ html, body {
     };
   }
 
+  function dailyQ(i) {
+    var q = DQ[i];
+    var opts = q[2].map(function (t, k) { return { t: t, ok: k === q[3] }; });
+    return { c: "Défi du jour · " + DTOPICS[q[0]][0], d: q[5], q: q[1], f: q[4], opts: shuffle(opts) };
+  }
+
   function textQ(i) {
     var q = QUESTIONS[i];
     var opts = q.a.map(function (t, k) { return { t: t, ok: k === q.r }; });
@@ -2359,7 +2538,7 @@ html, body {
     var prev = rng;
     rng = seeded(seed);
     try {
-      var q = t === "drapeaux" ? flagQ(i) : t === "capitales" ? capQ(i) : t === "blindtest" ? btQ(i) : textQ(i);
+      var q = t === "drapeaux" ? flagQ(i) : t === "capitales" ? capQ(i) : t === "blindtest" ? btQ(i) : t === "daily" ? dailyQ(i) : textQ(i);
       q._t = t; q._i = i;
       return q;
     } finally { rng = prev; }
@@ -2431,6 +2610,7 @@ html, body {
     box.innerHTML = "";
     Object.keys(map).forEach(function (key) {
       var it = map[key];
+      if (it.hidden) return;
       var b = document.createElement("button");
       b.type = "button";
       b.className = kind;
@@ -2763,7 +2943,7 @@ html, body {
 
     /* À la fin d'une partie : proposer d'envoyer un défi, enregistrer le score d'un défi relevé. */
     function onFinish() {
-      var can = standalone && state && !state.mp && LIMITS[state.limit].type === "count" && state.qs[0] && state.qs[0]._g != null && state.res.length === LIMITS[state.limit].n;
+      var can = standalone && state && !state.mp && !state.daily && LIMITS[state.limit].type === "count" && state.qs[0] && state.qs[0]._g != null && state.res.length === LIMITS[state.limit].n;
       $("chmake").hidden = !can;
       $("chlink").hidden = true; $("chmsg").textContent = "";
       $("chsend").textContent = "Envoyer le défi"; $("chsend").disabled = false;
@@ -2906,6 +3086,211 @@ html, body {
     return { onFinish: onFinish };
   })();
 
+
+  /* ---------- Défi du jour : mêmes 10 questions pour tout le monde, thème différent chaque jour ---------- */
+  var Daily = (function () {
+    var KEY = "pq:daily", board = null, loadedDay = -1;
+    var standalone = !window.claude;
+    var CFG = { url: "https://loknoaqmzulxkcposrnv.supabase.co/functions/v1/speedquiz", key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxva25vYXFtenVseGtjcG9zcm52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwOTcyMTMsImV4cCI6MjEwNjY3MzIxM30.YYzTTTyGJZ-SgTKBKsjv-xfngr6rt_HoUlw0X33sXaw" };
+    var EXISTING = ["culture", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs", "capitales", "drapeaux"];
+
+    /* Jour courant à l'heure de Paris, pour que tout le monde ait les mêmes questions. */
+    function today() {
+      var y, m, d;
+      try {
+        var p = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()).split("-");
+        y = +p[0]; m = +p[1]; d = +p[2];
+      } catch (e) { var n = new Date(); y = n.getUTCFullYear(); m = n.getUTCMonth() + 1; d = n.getUTCDate(); }
+      return Math.floor(Date.UTC(y, m - 1, d) / 86400000);
+    }
+    function dateLabel(day) {
+      try { return new Date(day * 86400000).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }); } catch (e) { return ""; }
+    }
+    function nick() { return String(storeGet("pq:nick") || "").replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u206f\ufeff]/g, "").trim().slice(0, 14); }
+    function pid() {
+      var p = storeGet("pq:pid");
+      if (!p || p.length !== 36) {
+        var b = new Uint8Array(16);
+        if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(b); else for (var i = 0; i < 16; i++) b[i] = Math.floor(Math.random() * 256);
+        b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+        var h = Array.prototype.map.call(b, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+        p = h.slice(0, 8) + "-" + h.slice(8, 12) + "-" + h.slice(12, 16) + "-" + h.slice(16, 20) + "-" + h.slice(20);
+        storeSet("pq:pid", p);
+      }
+      return p;
+    }
+
+    /* Générateur pseudo-aléatoire local (n'utilise pas celui du jeu). */
+    function mk(seed) { return seeded(seed >>> 0); }
+    function shuf(a, f) {
+      a = a.slice();
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(f() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    /* Thème du jour : les 12 thèmes défilent sans se répéter, dans un ordre mélangé à chaque cycle. */
+    function orderOf(cycle) { return shuf(DTOPICS.map(function (_, i) { return i; }), mk(cycle * 7919 + 31)); }
+    function topicOf(day) {
+      var n = DTOPICS.length, cycle = Math.floor(day / n);
+      var order = orderOf(cycle);
+      /* jamais deux fois le même thème de suite, même au changement de cycle */
+      if (order[0] === orderOf(cycle - 1)[n - 1]) { var t = order[0]; order[0] = order[1]; order[1] = t; }
+      return order[day % n];
+    }
+    /* 6 questions du thème du jour, 2 « surprises » d'autres thèmes inédits, 2 d'un stand habituel. */
+    function planOf(day) {
+      var f = mk(day * 2654435761 + 17), topic = topicOf(day);
+      var mine = shuf(DQ.map(function (_, i) { return i; }).filter(function (i) { return DQ[i][0] === topic; }), f).slice(0, 6);
+      var others = shuf(DQ.map(function (_, i) { return i; }).filter(function (i) { return DQ[i][0] !== topic; }), f), seen = {}, extra = [];
+      others.forEach(function (i) { if (extra.length < 2 && !seen[DQ[i][0]]) { seen[DQ[i][0]] = 1; extra.push(i); } });
+      var plan = mine.concat(extra).map(function (i) { return { t: "daily", i: i }; });
+      shuf(EXISTING, f).slice(0, 2).forEach(function (t) { plan.push({ t: t, i: POOLS[t][Math.floor(f() * POOLS[t].length)] }); });
+      return shuf(plan, f);
+    }
+    function info(day) { var t = topicOf(day); return { name: DTOPICS[t][0], icon: DTOPICS[t][1] }; }
+
+    /* ----- historique local ----- */
+    function load() { try { var o = JSON.parse(storeGet(KEY) || "{}"); return o && typeof o === "object" ? o : {}; } catch (e) { return {}; } }
+    function save(o) { storeSet(KEY, JSON.stringify(o)); }
+    function done(o, day) { return o.d && o.d[day]; }
+    function streak(o, day) {
+      var k = done(o, day) ? day : day - 1, n = 0;
+      while (done(o, k)) { n++; k--; }
+      return n;
+    }
+
+    /* ----- serveur (facultatif) ----- */
+    function api(a, body) {
+      var ctrl = typeof AbortController === "function" ? new AbortController() : null;
+      var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
+      var payload = { a: a };
+      Object.keys(body || {}).forEach(function (k) { payload[k] = body[k]; });
+      return fetch(CFG.url, { method: "POST", signal: ctrl ? ctrl.signal : undefined, headers: { "Content-Type": "application/json", "apikey": CFG.key, "Authorization": "Bearer " + CFG.key }, body: JSON.stringify(payload) })
+        .then(function (r) { clearTimeout(to); return r.json().catch(function () { return { ok: false }; }); })
+        .catch(function () { clearTimeout(to); return { ok: false, offline: true }; });
+    }
+    function ord(n) { return n === 1 ? "1er" : n + "e"; }
+    function list(ol, scores, max) {
+      ol.textContent = "";
+      (scores || []).slice(0, max).forEach(function (s) {
+        var li = document.createElement("li");
+        if (s.me) li.className = "me";
+        var a = document.createElement("span"); a.textContent = ord(s.rank) + "  " + (s.me ? s.nick + " (toi)" : s.nick);
+        var b = document.createElement("b"); b.textContent = fmt(s.score);
+        li.appendChild(a); li.appendChild(b); ol.appendChild(li);
+      });
+      ol.hidden = !scores || !scores.length;
+    }
+
+    /* ----- carte de l'accueil ----- */
+    function render() {
+      var day = today(), o = load(), t = info(day), card = $("dcard");
+      var dn = done(o, day), st = streak(o, day);
+      $("dtitle").textContent = "📅 Défi du jour";
+      $("ddate").textContent = dateLabel(day);
+      $("dtopic").textContent = t.icon + " Thème du jour : " + t.name;
+      $("dsub").textContent = "10 questions, les mêmes pour tout le monde, dont des surprises.";
+      var s = $("dstreak");
+      s.textContent = st >= 1 ? "🔥 " + st + " jour" + (st > 1 ? "s" : "") + " d'affilée" + (dn ? "" : " — joue aujourd'hui pour garder ta série !") : "";
+      s.hidden = st < 1;
+      $("dname").hidden = !!nick() || !!dn;
+      var go = $("dgo");
+      go.textContent = dn ? "S'entraîner (score déjà validé)" : "📅 Jouer le défi du jour";
+      go.classList.toggle("ghost", !!dn);
+      var res = $("dres0");
+      if (dn) {
+        var line = "Ton score du jour : " + fmt(dn[0]) + " pts" + (dn[1] == null ? "" : " (" + dn[1] + "/10)");
+        if (board && board.day === day && board.me) line += " · " + ord(board.me.rank) + " sur " + board.total;
+        res.textContent = line; res.hidden = false;
+      } else res.hidden = true;
+      $("dtop").hidden = !(board && board.day === day && board.scores && board.scores.length);
+      if (!$("dtop").hidden) list($("dtop"), board.scores, 5);
+      card.hidden = false;
+      if (standalone && nick() && loadedDay !== day) {
+        loadedDay = day;
+        api("dget", { day: day, nick: nick() }).then(function (r) {
+          if (!r.ok) return;
+          board = { day: day, scores: r.scores, total: r.total, me: r.me };
+          var o2 = load();
+          if (r.me && !done(o2, day)) {          /* déjà joué depuis un autre appareil */
+            if (!o2.d) o2.d = {};
+            o2.d[day] = [r.me.score, null];
+            save(o2);
+          }
+          render();
+        });
+      }
+    }
+    function start() {
+      var day = today(), o = load();
+      if (!done(o, day) && !nick()) {
+        var v = $("dname").value.replace(/[\u0000-\u001f\u007f-\u009f]/g, "").trim().slice(0, 14);
+        if (v) storeSet("pq:nick", v);
+        else if (standalone) { $("dmsg").textContent = "Entre ton prénom pour apparaître dans le classement du jour."; try { $("dname").focus(); } catch (e) { /* ignoré */ } return; }
+      }
+      $("dmsg").textContent = "";
+      var g = (day * 2654435761) >>> 0;
+      startGame(null, { theme: "daily", limit: "q10", level: "all", g: g, plan: planOf(day), n: 10, daily: { day: day, practice: !!done(o, day) } });
+    }
+
+    /* ----- fin de partie ----- */
+    function onFinish() {
+      var box = $("dres");
+      if (!state || !state.daily) { box.hidden = true; return; }
+      var dd = state.daily, o = load(), official = !dd.practice && !done(o, dd.day);
+      $("chmake").hidden = true; $("chnotif").hidden = true; $("chres").hidden = true;
+      box.textContent = ""; box.hidden = false;
+      var b = document.createElement("b"), sp = document.createElement("span");
+      box.appendChild(b); box.appendChild(sp);
+      var t = info(dd.day);
+      if (!official) {
+        var prev = done(o, dd.day);
+        b.textContent = "Entraînement terminé";
+        sp.textContent = prev ? "Ton score du jour reste " + fmt(prev[0]) + " pts (c'est la première partie qui compte)." : "";
+        $("share").hidden = true;
+        render();
+        return;
+      }
+      if (!o.d) o.d = {};
+      o.d[dd.day] = [state.score, state.right];
+      Object.keys(o.d).forEach(function (k) { if (+k < dd.day - 60) delete o.d[k]; });
+      var st = streak(o, dd.day);
+      o.best = Math.max(o.best || 0, st);
+      save(o);
+      b.textContent = "📅 Défi du jour validé !" + (st > 1 ? "  🔥 " + st + " jours d'affilée" : "");
+      sp.textContent = t.icon + " " + t.name + " · " + fmt(state.score) + " pts (" + state.right + "/10)";
+      var ol = document.createElement("ol"); ol.className = "chrank"; ol.hidden = true; box.appendChild(ol);
+      var tomorrow = info(dd.day + 1), tm = document.createElement("small");
+      tm.textContent = "Demain : " + tomorrow.icon + " " + tomorrow.name;
+      box.appendChild(tm);
+      // texte de partage
+      var text = "📅 SpeedQuiz — défi du jour (" + t.icon + " " + t.name + ") : " + fmt(state.score) + " pts" + (st > 1 ? ", " + st + " jours d'affilée 🔥" : "") + ". Fais mieux !";
+      state.shareText = text;
+      if (standalone && nick()) {
+        sp.textContent += "  ·  Envoi de ton score…";
+        api("dsubmit", { day: dd.day, pid: pid(), nick: nick(), score: state.score, right: state.right }).then(function (r) {
+          if (!r.ok) { sp.textContent = t.icon + " " + t.name + " · " + fmt(state.score) + " pts (" + state.right + "/10)"; return; }
+          board = { day: dd.day, scores: r.scores, total: r.total, me: r.me };
+          if (r.official === false && r.me) {    /* ce prénom a déjà joué aujourd'hui (autre appareil) : le score du serveur fait foi */
+            var o3 = load(); if (!o3.d) o3.d = {}; o3.d[dd.day] = [r.me.score, null]; save(o3);
+            b.textContent = "Déjà joué aujourd'hui";
+            sp.textContent = "Ce prénom a déjà joué le défi du jour : ton score reste " + fmt(r.me.score) + " pts (" + ord(r.me.rank) + " sur " + r.total + ").";
+          } else {
+            sp.textContent = t.icon + " " + t.name + " · " + fmt(state.score) + " pts (" + state.right + "/10)" + (r.me ? "  ·  " + ord(r.me.rank) + " sur " + r.total + " aujourd'hui" : "");
+          }
+          list(ol, r.scores, 5);
+          render();
+        });
+      }
+      FX.party();
+      render();
+    }
+
+    $("dgo").addEventListener("click", start);
+    $("dcard").hidden = false;
+    render();
+    return { onFinish: onFinish, start: start };
+  })();
+
   /* ---------- Blind test : lecture des aperçus ---------- */
   var SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
   var btAudio = null, btClip = 0;
@@ -3006,7 +3391,7 @@ html, body {
     state = {
       theme: theme, limit: limKey, level: level, qs: qs,
       i: 0, score: 0, streak: 0, bestStreak: 0, right: 0, res: [], locked: false,
-      gRemaining: lim.type === "time" ? lim.ms : 0, mp: !!mp, ch: ch || null
+      gRemaining: lim.type === "time" ? lim.ms : 0, mp: !!mp, ch: ch && !ch.daily ? ch : null, daily: ch && ch.daily ? ch.daily : null
     };
     state.best = mp ? 0 : (parseInt(storeGet(bestKey(limKey, level)) || "0", 10) || 0);
     state.recBanner = false;
@@ -3193,7 +3578,7 @@ html, body {
     cancelAnimationFrame(raf);
     var key = bestKey(state.limit, state.level);
     var best = parseInt(storeGet(key) || "0", 10) || 0;
-    var record = !state.mp && state.score > best;
+    var record = !state.mp && !state.daily && state.score > best;
     if (record) storeSet(key, String(state.score));
     var answered = state.res.length;
     show("result");
@@ -3223,9 +3608,10 @@ html, body {
     $("share").hidden = !(navigator.share);
     updateHome();
     Challenge.onFinish();
+    Daily.onFinish();
     if (state.mp) MP.onFinish();
     else {
-      $("again").textContent = "Rejouer";
+      $("again").textContent = state.daily ? "Refaire le défi (entraînement)" : "Rejouer";
       $("menu").textContent = "Nouvelle partie";
       $("rboard").hidden = true;
     }
@@ -3885,7 +4271,7 @@ html, body {
     $("mp-level").addEventListener("change", function () { if (isHost) put({ lv: $("mp-level").value }); });
     $("mp-n").addEventListener("change", function () { if (isHost) put({ n: parseInt($("mp-n").value, 10) }); });
     Object.keys(THEMES).forEach(function (k) {
-      if (k === "blindtest") return;
+      if (k === "blindtest" || THEMES[k].hidden) return;
       var o = document.createElement("option");
       o.value = k; o.textContent = THEMES[k].icon + " " + THEMES[k].label;
       $("mp-theme").appendChild(o);
@@ -4206,8 +4592,9 @@ html, body {
     };
     var TRACKS = {};
     function trackFor(key) {
-      if (!TRACKS[key]) TRACKS[key] = SPECS[key] ? build(SPECS[key]) : legacy();
-      return TRACKS[key];
+      var sk = key === "daily" ? "culture" : key;
+      if (!TRACKS[sk]) TRACKS[sk] = SPECS[sk] ? build(SPECS[sk]) : legacy();
+      return TRACKS[sk];
     }
 
     /* Trois modes : « theme » (un air par thème), « galaxy » (ambiance spatiale), « off ». */
@@ -4480,12 +4867,12 @@ html, body {
 
   $("play-btn").addEventListener("click", start);
   $("btplay").addEventListener("click", function () { if (state && state.qs[state.i] && state.qs[state.i].audio) btPlay(state.qs[state.i]); });
-  $("again").addEventListener("click", function () { if (state && state.mp) MP.toLobby(); else start(); });
+  $("again").addEventListener("click", function () { if (state && state.mp) MP.toLobby(); else if (state && state.daily) Daily.start(); else start(); });
   $("next").addEventListener("click", next);
   $("menu").addEventListener("click", function () { if (state && state.mp) MP.leave(); show("home"); });
   $("share").addEventListener("click", function () {
     var answered = state.res.length;
-    var text = "J'ai fait " + fmt(state.score) + " points au SpeedQuiz (" + state.right + "/" + answered + " bonnes réponses). À toi de jouer !";
+    var text = state.shareText || ("J'ai fait " + fmt(state.score) + " points au SpeedQuiz (" + state.right + "/" + answered + " bonnes réponses). À toi de jouer !");
     try { navigator.share({ text: text }).catch(function () {}); } catch (e) { /* ignoré */ }
   });
 
