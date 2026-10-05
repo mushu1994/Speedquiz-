@@ -552,6 +552,51 @@ html, body {
 .dres0 { font-weight: 800 !important; color: #fff !important; }
 .chres small { color: var(--on-bg-soft); font-weight: 700; }
 
+.btoast { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 14px); width: min(92vw, 420px);
+  display: grid; gap: 2px; padding: 12px 16px; border-radius: 18px; text-align: center; pointer-events: none;
+  background: linear-gradient(180deg, #FFE15A, #FFB020); color: #2A1200; box-shadow: 0 6px 0 #A85500, 0 0 34px rgba(255, 190, 40, 0.7); }
+.btoast b { font-family: var(--display); font-size: 18px; }
+.btoast small { font-weight: 700; font-size: 13px; opacity: .85; }
+.btoast.in { animation: btin .45s cubic-bezier(.2, .9, .3, 1.3) both; }
+@keyframes btin { from { opacity: 0; transform: translate(-50%, -26px) scale(.9); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
+.rbadges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; background: rgba(255, 201, 58, 0.16); border: 1.5px solid rgba(255, 201, 58, 0.7); border-radius: 16px; padding: 10px; }
+.rbadges small { flex: 1 0 100%; text-align: center; font-weight: 800; color: var(--accent); }
+.rbadges span { background: linear-gradient(180deg, #FFE15A, #FFB020); color: #2A1200; font-weight: 800; padding: 6px 12px; border-radius: 999px; font-size: 14px; }
+.prof { gap: 14px; }
+.phead { display: flex; gap: 14px; align-items: center; background: linear-gradient(160deg, rgba(36, 54, 140, 0.95), rgba(16, 24, 84, 0.97)); border: 1.5px solid var(--neon-soft); border-radius: 20px; padding: 14px; }
+.pav { flex: 0 0 auto; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 36px; background: radial-gradient(circle at 30% 30%, #5B8CFF, #1E2A9A); border: 3px solid #FFC93A; box-shadow: 0 0 18px rgba(255, 190, 40, 0.5); font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.pwho { display: grid; gap: 4px; flex: 1; min-width: 0; }
+.pwho b { font-family: var(--display); font-size: 22px; }
+.pwho small { color: var(--ink-soft); font-weight: 700; }
+.pxp { height: 10px; border-radius: 6px; background: var(--track); overflow: hidden; }
+.pxp span { display: block; height: 100%; width: 4%; background: linear-gradient(90deg, #38BDF8, #FFD23F); border-radius: 6px; box-shadow: 0 0 10px rgba(120, 200, 255, 0.7); }
+.pstats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pstats.three { grid-template-columns: 1fr 1fr 1fr; }
+.pcard { background: rgba(76, 155, 255, 0.12); border: 1.5px solid rgba(110, 160, 255, 0.35); border-radius: 16px; padding: 12px; display: grid; gap: 2px; }
+.pcard b { font-family: var(--display); font-size: 24px; font-variant-numeric: tabular-nums; }
+.pcard small { color: var(--ink-soft); font-weight: 700; font-size: 13px; }
+.pcard em { font-style: normal; color: var(--on-bg-soft); font-size: 12px; font-weight: 600; }
+.pstats.three .pcard b { font-size: 20px; } .pstats.three .pcard small { font-size: 12px; }
+.ph { margin: 6px 0 0; font-family: var(--display); font-size: 16px; letter-spacing: .04em; text-transform: uppercase; color: #CFE0FF; border-left: 4px solid var(--accent); padding-left: 10px; }
+.ph small { color: var(--accent); font-size: 14px; margin-left: 6px; }
+.pbars { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.ptop { display: flex; justify-content: space-between; gap: 8px; font-weight: 700; font-size: 15px; }
+.ptop b { font-family: var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pbar { height: 9px; border-radius: 6px; background: var(--track); overflow: hidden; margin-top: 4px; }
+.pbar i { display: block; height: 100%; border-radius: 6px; }
+.pbadges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.bdg { display: grid; gap: 5px; justify-items: center; align-content: start; text-align: center; padding: 10px 6px; border-radius: 16px; font: inherit; color: var(--ink); cursor: pointer;
+  background: rgba(76, 155, 255, 0.08); border: 1.5px solid rgba(110, 160, 255, 0.25); }
+.bdg .bic { font-size: 30px; line-height: 1; filter: grayscale(1) opacity(.45); font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.bdg .bnm { font-weight: 800; font-size: 12px; line-height: 1.15; color: var(--ink-soft); }
+.bdg .bpr { width: 100%; height: 5px; border-radius: 3px; background: var(--track); overflow: hidden; }
+.bdg .bpr i { display: block; height: 100%; background: var(--neon); }
+.bdg .bds { font-size: 11px; font-weight: 600; line-height: 1.25; color: var(--on-bg-soft); }
+.bdg.on { background: linear-gradient(180deg, rgba(255, 225, 90, 0.22), rgba(255, 176, 32, 0.12)); border-color: rgba(255, 201, 58, 0.8); box-shadow: 0 0 16px rgba(255, 190, 40, 0.25); }
+.bdg.on .bic { filter: none; }
+.bdg.on .bnm { color: #fff; }
+.bdg.fresh { animation: pulse 1.2s ease-in-out 3; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .steam { opacity: .7; }
@@ -559,6 +604,7 @@ html, body {
 </style>
 </head>
 <body>
+<div class="btoast" id="btoast" role="status" aria-live="polite" hidden></div>
 <div class="mtoast" id="mtoast" role="status" aria-live="polite" hidden></div>
 <button class="music" id="music" type="button" aria-pressed="true" aria-label="Couper la musique">🔊</button>
 <div id="fx" aria-hidden="true"></div>
@@ -646,6 +692,7 @@ html, body {
       <div class="tickets lv" id="levels" role="radiogroup" aria-labelledby="h-level"></div>
     </div>
     <p class="best" id="best"></p>
+    <button class="btn mpbtn" id="prof-btn" type="button">🏅 Mon profil <b class="badge" id="prof-new" hidden></b></button>
     <button class="btn mpbtn" id="mych-btn" type="button" hidden>⚔️ Mes défis <b class="badge" id="mych-badge" hidden></b></button>
     <button class="btn mpbtn" id="mp-btn" type="button">👥 Jouer à plusieurs</button>
     <button class="btn play" id="play-btn" type="button">⚡ Jouer !</button>
@@ -710,6 +757,26 @@ html, body {
     <button class="btn ghost" id="pad-quit" type="button">Quitter</button>
   </section>
 
+  <!-- Mon profil -->
+  <section id="prof" class="screen prof" hidden>
+    <div class="top"><span>🏅 Mon profil</span></div>
+    <div class="phead">
+      <div class="pav" id="pav" aria-hidden="true"></div>
+      <div class="pwho"><b id="pnick"></b><small id="ptitle"></small>
+        <div class="pxp" aria-hidden="true"><span id="pxpbar"></span></div>
+        <small id="pxptxt"></small></div>
+    </div>
+    <div class="pstats" id="pstats"></div>
+    <h3 class="ph">Réussite par stand</h3>
+    <ul class="pbars" id="pbars"></ul>
+    <h3 class="ph">Réussite par difficulté</h3>
+    <div class="pstats three" id="plevels"></div>
+    <h3 class="ph">Badges <small id="pcount"></small></h3>
+    <div class="pbadges" id="pbadges"></div>
+    <p class="mpnote" id="psave"></p>
+    <button class="btn ghost" id="pback" type="button">← Retour</button>
+  </section>
+
   <!-- Mes défis -->
   <section id="mych" class="screen mych" hidden>
     <div class="top"><span>⚔️ Mes défis</span></div>
@@ -768,6 +835,7 @@ html, body {
     <ol class="board" id="rboard" hidden aria-label="Classement"></ol>
     <div class="chres" id="chres" hidden></div>
     <div class="chres" id="dres" hidden></div>
+    <div class="rbadges" id="rbadges" hidden></div>
     <div class="chmake" id="chmake" hidden>
       <b>⚔️ Défie un ami</b>
       <p>Il joue exactement les mêmes questions que toi, et tu verras qui gagne.</p>
@@ -2584,7 +2652,7 @@ html, body {
   function levelTag(level) { return level && level !== "all" ? " · " + LEVELS[level].short : ""; }
 
   function show(name) {
-    ["home", "play", "result", "mp", "tv", "pad", "mych"].forEach(function (n) { $(n).hidden = n !== name; });
+    ["home", "play", "result", "mp", "tv", "pad", "mych", "prof"].forEach(function (n) { $(n).hidden = n !== name; });
     $("app").scrollTop = 0;
     if (name !== "play") btStop();
     if (name === "home") Music.quiet(false);
@@ -2660,6 +2728,270 @@ html, body {
   function start() { startGame(null); }
 
 
+
+  /* ---------- Profil : statistiques, niveau et badges (sauvegardés avec le prénom pour les retrouver partout) ---------- */
+  var Stats = (function () {
+    var KEY = "pq:stats";
+    var CFG = { url: "https://loknoaqmzulxkcposrnv.supabase.co/functions/v1/speedquiz", key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxva25vYXFtenVseGtjcG9zcm52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwOTcyMTMsImV4cCI6MjEwNjY3MzIxM30.YYzTTTyGJZ-SgTKBKsjv-xfngr6rt_HoUlw0X33sXaw" };
+    var standalone = !window.claude;
+    var STAND = ["culture", "drapeaux", "capitales", "jeuxvideo", "france", "gastronomie", "pokemon", "series", "sims", "disney", "parcs", "blindtest"];
+    var AVATARS = ["🦊", "🐼", "🐸", "🐙", "🦄", "🐯", "🐵", "🦉", "🐳", "🐝", "🦖", "🐧"];
+    var TITLES = [[1, "Curieux"], [3, "Malin"], [5, "Fortiche"], [8, "Expert"], [12, "Maître"], [18, "Légende"]];
+    var S = blank(), toastQ = [], toasting = false, syncT = 0, pulled = "";
+
+    function blank() { return { g: 0, p: 0, a: 0, c: 0, bs: 0, st: 0, pf: 0, t: {}, lv: [[0, 0], [0, 0], [0, 0]], fast: 0, hg: 0, sp: 0, dy: 0, dst: 0, win: 0, inv: 0, mp: 0, rec: 0, b: {}, nb: [] }; }
+    function num(x) { var v = Number(x); return isFinite(v) && v >= 0 ? Math.min(v, 1e9) : 0; }
+    function nick() { return String(storeGet("pq:nick") || "").replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u206f\ufeff]/g, "").trim().slice(0, 14); }
+    function dayNum() { return Math.floor(Date.now() / 86400000); }
+    function theme(k) { if (!S.t[k]) S.t[k] = [0, 0]; return S.t[k]; }
+
+    /* Fusion de deux profils : on garde toujours le maximum, donc rien ne se perd. */
+    function merge(a, b) {
+      var o = blank();
+      ["g", "p", "a", "c", "bs", "st", "pf", "fast", "hg", "sp", "dy", "dst", "win", "inv", "mp", "rec"].forEach(function (k) { o[k] = Math.max(num(a[k]), num(b[k])); });
+      [a, b].forEach(function (x) {
+        Object.keys(x.t || {}).forEach(function (k) {
+          if (!Array.isArray(x.t[k])) return;
+          var t = o.t[k] || (o.t[k] = [0, 0]);
+          t[0] = Math.max(t[0], num(x.t[k][0])); t[1] = Math.max(t[1], num(x.t[k][1]));
+        });
+        for (var i = 0; i < 3; i++) if (x.lv && x.lv[i]) { o.lv[i][0] = Math.max(o.lv[i][0], num(x.lv[i][0])); o.lv[i][1] = Math.max(o.lv[i][1], num(x.lv[i][1])); }
+        Object.keys(x.b || {}).forEach(function (id) { var d = num(x.b[id]); if (d && (!o.b[id] || d < o.b[id])) o.b[id] = d; });
+      });
+      o.nb = (a.nb || []).filter(function (id) { return o.b[id]; });
+      return o;
+    }
+    function load() {
+      try { var x = JSON.parse(storeGet(KEY) || "null"); if (x && typeof x === "object") S = merge(x, blank()); } catch (e) { S = blank(); }
+      S.nb = ((function () { try { return (JSON.parse(storeGet(KEY) || "{}").nb) || []; } catch (e) { return []; } })()).filter(function (id) { return S.b[id]; });
+    }
+    function save() { storeSet(KEY, JSON.stringify(S)); queueSync(); updateBtn(); }
+
+    /* ----- niveau ----- */
+    function xp() { return S.p + 150 * Object.keys(S.b).length; }
+    function level() {
+      var x = xp(), l = Math.floor(Math.sqrt(x / 250)) + 1, lo = 250 * (l - 1) * (l - 1), hi = 250 * l * l;
+      var title = TITLES[0][1]; TITLES.forEach(function (t) { if (l >= t[0]) title = t[1]; });
+      return { l: l, title: title, cur: x - lo, need: hi - lo };
+    }
+
+    /* ----- badges ----- */
+    function polyCount() { var n = 0; STAND.forEach(function (k) { var t = S.t[k]; if (t && t[0] >= 10 && t[1] / t[0] >= 0.7) n++; }); return n; }
+    function played() { return STAND.filter(function (k) { return S.t[k] && S.t[k][0] > 0; }).length; }
+    function right(k) { return S.t[k] ? S.t[k][1] : 0; }
+    var BADGES = [
+      ["first", "🎮", "Premiers pas", "Termine ta première partie.", 1, function () { return S.g; }],
+      ["g10", "🔟", "Habitué", "Termine 10 parties.", 10, function () { return S.g; }],
+      ["g50", "💯", "Accro au quiz", "Termine 50 parties.", 50, function () { return S.g; }],
+      ["pts", "💎", "Millier", "Cumule 10 000 points.", 10000, function () { return S.p; }],
+      ["perf", "🎯", "Sans faute", "Réponds juste à toutes les questions d'une partie de 10 questions ou plus.", 1, function () { return S.pf; }],
+      ["perf5", "🏅", "Perfectionniste", "Réalise 5 parties sans faute.", 5, function () { return S.pf; }],
+      ["st5", "🔥", "En feu", "Enchaîne 5 bonnes réponses.", 5, function () { return S.st; }],
+      ["st10", "🌋", "Intouchable", "Enchaîne 10 bonnes réponses.", 10, function () { return S.st; }],
+      ["st20", "☄️", "Légende", "Enchaîne 20 bonnes réponses.", 20, function () { return S.st; }],
+      ["fast", "⚡", "Éclair", "Donne 30 bonnes réponses en moins de 3 secondes.", 30, function () { return S.fast; }],
+      ["hard20", "🧠", "Cerveau", "Donne 20 bonnes réponses à des questions de niveau expert.", 20, function () { return S.lv[2][1]; }],
+      ["hardg", "🔴", "Maître expert", "Réussis au moins 80 % d'une partie de 10 questions ou plus en difficulté Expert.", 1, function () { return S.hg; }],
+      ["tour", "🌍", "Tour du monde", "Réponds à des questions dans chacun des 12 stands.", 12, played],
+      ["poly", "🧩", "Polyvalent", "Atteins 70 % de réussite (10 réponses minimum) dans 5 stands différents.", 5, polyCount],
+      ["cap", "🗺️", "Cartographe", "Donne 30 bonnes réponses en Capitales du monde.", 30, function () { return right("capitales"); }],
+      ["flag", "🏁", "Œil de drapeau", "Donne 30 bonnes réponses en Drapeaux du monde.", 30, function () { return right("drapeaux"); }],
+      ["gv", "🕹️", "Manette en main", "Donne 25 bonnes réponses en Jeux vidéo.", 25, function () { return right("jeuxvideo"); }],
+      ["disney", "🏰", "Fan de Disney", "Donne 25 bonnes réponses en Disney.", 25, function () { return right("disney"); }],
+      ["parc", "🎢", "Accro aux manèges", "Donne 20 bonnes réponses en Parcs d'attractions.", 20, function () { return right("parcs"); }],
+      ["bt", "🎧", "Oreille d'or", "Reconnais 15 extraits au blind test.", 15, function () { return right("blindtest"); }],
+      ["d3", "📅", "Régulier", "Joue le défi du jour 3 jours d'affilée.", 3, function () { return S.dst; }],
+      ["d7", "🗓️", "Semainier", "Joue le défi du jour 7 jours d'affilée.", 7, function () { return S.dst; }],
+      ["d30", "📆", "Mois parfait", "Joue le défi du jour 30 jours d'affilée.", 30, function () { return S.dst; }],
+      ["dy10", "🎟️", "Curieux du jour", "Joue 10 défis du jour.", 10, function () { return S.dy; }],
+      ["inv", "⚔️", "Duelliste", "Envoie un défi à un ami.", 1, function () { return S.inv; }],
+      ["win", "🏆", "Vainqueur", "Bats un ami sur un défi.", 1, function () { return S.win; }],
+      ["win5", "👑", "Roi du duel", "Bats tes amis 5 fois.", 5, function () { return S.win; }],
+      ["mp", "👥", "Esprit d'équipe", "Joue une partie à plusieurs.", 1, function () { return S.mp; }],
+      ["rec", "🚀", "Dépassement", "Bats ton record personnel.", 1, function () { return S.rec; }],
+      ["sprint", "⏱️", "Sprinteur", "Réponds à 40 questions ou plus pendant une partie chronométrée.", 1, function () { return S.sp; }]
+    ];
+    function check(silent) {
+      var fresh = [];
+      BADGES.forEach(function (b) {
+        if (!S.b[b[0]] && b[5]() >= b[4]) { S.b[b[0]] = dayNum(); if (!silent) { S.nb.push(b[0]); fresh.push(b); } }
+      });
+      if (fresh.length) { storeSet(KEY, JSON.stringify(S)); queueSync(); fresh.forEach(toast); updateBtn(); }
+      return fresh;
+    }
+    function toast(b) { toastQ.push(b); if (!toasting) nextToast(); }
+    function nextToast() {
+      var b = toastQ.shift(), el = $("btoast");
+      if (!b || !el) { toasting = false; return; }
+      toasting = true;
+      el.textContent = "";
+      var t = document.createElement("b"); t.textContent = "🏅 Nouveau badge : " + b[2];
+      var d = document.createElement("small"); d.textContent = b[1] + " " + b[3];
+      el.appendChild(t); el.appendChild(d);
+      el.hidden = false;
+      el.classList.remove("in"); void el.offsetWidth; el.classList.add("in");
+      try { Music.sfx(3); } catch (e) { /* ignoré */ }
+      try { if (navigator.vibrate) navigator.vibrate([20, 40, 20]); } catch (e) { /* ignoré */ }
+      setTimeout(function () { el.hidden = true; nextToast(); }, 3400);
+    }
+
+    /* ----- événements du jeu ----- */
+    function answer(q, correct, ms, st) {
+      var t = theme(q._t || (st && st.theme) || "mix"), d = Math.max(1, Math.min(3, q.d || 2)) - 1;
+      S.a++; t[0]++; S.lv[d][0]++;
+      if (correct) { S.c++; t[1]++; S.lv[d][1]++; if (ms >= 0 && ms < 3000) S.fast++; }
+      if (st) S.st = Math.max(S.st, st.streak);
+      storeSet(KEY, JSON.stringify(S));
+    }
+    function finish(brokeRecord) {
+      if (!state) return;
+      var n = state.res.length, lim = LIMITS[state.limit];
+      S.g++; S.p += state.score; S.bs = Math.max(S.bs, state.score);
+      if (lim.type === "count" && n >= 10 && state.right === n) S.pf++;
+      if (state.level === "hard" && lim.type === "count" && n >= 10 && state.right / n >= 0.8) S.hg++;
+      if (lim.type === "time" && n >= 40) S.sp++;
+      if (state.mp) S.mp++;
+      if (brokeRecord) S.rec++;
+      var fresh = check(false);
+      save();
+      var box = $("rbadges");
+      if (box) {
+        box.textContent = "";
+        fresh.forEach(function (b) { var c = document.createElement("span"); c.textContent = b[1] + " " + b[2]; box.appendChild(c); });
+        box.hidden = !fresh.length;
+        if (fresh.length) { var h = document.createElement("small"); h.textContent = fresh.length > 1 ? "Nouveaux badges !" : "Nouveau badge !"; box.insertBefore(h, box.firstChild); }
+      }
+      sync();
+    }
+    function event(k) { S[k] = (S[k] || 0) + 1; check(false); save(); }
+    function daily(st) { S.dy++; S.dst = Math.max(S.dst, st); check(false); save(); }
+
+    /* ----- sauvegarde avec le prénom ----- */
+    function api(a, body) {
+      var ctrl = typeof AbortController === "function" ? new AbortController() : null;
+      var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
+      var payload = { a: a };
+      Object.keys(body || {}).forEach(function (k) { payload[k] = body[k]; });
+      return fetch(CFG.url, { method: "POST", signal: ctrl ? ctrl.signal : undefined, headers: { "Content-Type": "application/json", "apikey": CFG.key, "Authorization": "Bearer " + CFG.key }, body: JSON.stringify(payload) })
+        .then(function (r) { clearTimeout(to); return r.json().catch(function () { return { ok: false }; }); })
+        .catch(function () { clearTimeout(to); return { ok: false, offline: true }; });
+    }
+    function dailyOf() { try { return JSON.parse(storeGet("pq:daily") || "{}") || {}; } catch (e) { return {}; } }
+    function payload() { var d = dailyOf(); return { s: S, dh: d.d || {}, db: d.best || 0 }; }
+    function absorb(r) {
+      if (!r || typeof r !== "object") return;
+      if (r.s && typeof r.s === "object") S = merge(S, r.s);
+      var d = dailyOf(), changed = false;
+      if (r.dh && typeof r.dh === "object") {
+        if (!d.d) d.d = {};
+        Object.keys(r.dh).slice(0, 80).forEach(function (k) { if (/^\d+$/.test(k) && !d.d[k] && Array.isArray(r.dh[k])) { d.d[k] = [num(r.dh[k][0]), r.dh[k][1] == null ? null : num(r.dh[k][1])]; changed = true; } });
+      }
+      if (num(r.db) > num(d.best)) { d.best = num(r.db); changed = true; }
+      if (changed) storeSet("pq:daily", JSON.stringify(d));
+    }
+    function queueSync() {
+      if (!standalone || !nick()) return;
+      clearTimeout(syncT);
+      syncT = setTimeout(function () { api("pput", { nick: nick(), data: payload() }); }, 2500);
+    }
+    function sync() {
+      if (!standalone || !nick()) return Promise.resolve();
+      var me = nick();
+      if (pulled === me) { queueSync(); return Promise.resolve(); }
+      return api("pget", { nick: me }).then(function (r) {
+        if (!r.ok) return;
+        pulled = me;
+        absorb(r.data);
+        check(true);
+        storeSet(KEY, JSON.stringify(S));
+        updateBtn();
+        render();
+        try { Daily.refresh(); } catch (e) { /* ignoré */ }
+        queueSync();
+      });
+    }
+
+    /* ----- écran « Mon profil » ----- */
+    function pct(a, b) { return b > 0 ? Math.round(100 * a / b) + " %" : "—"; }
+    function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
+    function updateBtn() {
+      var b = $("prof-new");
+      if (!b) return;
+      b.hidden = !S.nb.length; b.textContent = S.nb.length ? String(S.nb.length) : "";
+    }
+    function card(label, value, sub) {
+      var d = document.createElement("div"); d.className = "pcard";
+      var v = document.createElement("b"); v.textContent = value;
+      var l = document.createElement("small"); l.textContent = label;
+      d.appendChild(v); d.appendChild(l);
+      if (sub) { var s = document.createElement("em"); s.textContent = sub; d.appendChild(s); }
+      return d;
+    }
+    function render() {
+      if ($("prof").hidden) return;
+      var lv = level(), me = nick();
+      $("pav").textContent = AVATARS[hash(me || "joueur") % AVATARS.length];
+      $("pnick").textContent = me || "Joueur";
+      $("ptitle").textContent = "Niveau " + lv.l + " · " + lv.title;
+      $("pxpbar").style.width = Math.max(4, Math.round(100 * lv.cur / lv.need)) + "%";
+      $("pxptxt").textContent = fmt(lv.cur) + " / " + fmt(lv.need) + " XP pour le niveau " + (lv.l + 1);
+      var box = $("pstats"); box.textContent = "";
+      box.appendChild(card("parties", fmt(S.g)));
+      box.appendChild(card("points", fmt(S.p)));
+      box.appendChild(card("bonnes réponses", pct(S.c, S.a), fmt(S.c) + " sur " + fmt(S.a)));
+      box.appendChild(card("meilleure série", String(S.st), "bonnes réponses d'affilée"));
+      box.appendChild(card("meilleur score", fmt(S.bs)));
+      box.appendChild(card("défis du jour", String(S.dy), S.dst ? "record : " + S.dst + " jours d'affilée" : ""));
+      var bars = $("pbars"); bars.textContent = "";
+      var rows = Object.keys(THEMES).filter(function (k) { return !THEMES[k].hidden && k !== "mix"; }).map(function (k) { return [k, THEMES[k].icon + " " + THEMES[k].label, THEMES[k].color]; });
+      rows.push(["daily", "📅 Défi du jour", "#FF8A1F"]);
+      rows.forEach(function (r) {
+        var t = S.t[r[0]] || [0, 0];
+        var li = document.createElement("li");
+        var top = document.createElement("div"); top.className = "ptop";
+        var a = document.createElement("span"); a.textContent = r[1];
+        var b = document.createElement("b"); b.textContent = t[0] ? pct(t[1], t[0]) + " · " + t[0] : "—";
+        top.appendChild(a); top.appendChild(b);
+        var bar = document.createElement("div"); bar.className = "pbar";
+        var f = document.createElement("i"); f.style.width = t[0] ? Math.max(3, Math.round(100 * t[1] / t[0])) + "%" : "0"; f.style.background = r[2];
+        bar.appendChild(f); li.appendChild(top); li.appendChild(bar); bars.appendChild(li);
+      });
+      var lvl = $("plevels"); lvl.textContent = "";
+      [["🟢 Facile", 0], ["🟡 Intermédiaire", 1], ["🔴 Expert", 2]].forEach(function (x) { lvl.appendChild(card(x[0], pct(S.lv[x[1]][1], S.lv[x[1]][0]), fmt(S.lv[x[1]][0]) + " réponses")); });
+      var bg = $("pbadges"); bg.textContent = "";
+      var got = 0;
+      BADGES.forEach(function (b) {
+        var cur = Math.min(b[5](), b[4]), unlocked = !!S.b[b[0]];
+        if (unlocked) got++;
+        var d = document.createElement("button"); d.type = "button"; d.className = "bdg" + (unlocked ? " on" : "") + (S.nb.indexOf(b[0]) >= 0 ? " fresh" : "");
+        var ic = document.createElement("span"); ic.className = "bic"; ic.textContent = b[1];
+        var nm = document.createElement("span"); nm.className = "bnm"; nm.textContent = b[2];
+        var pr = document.createElement("span"); pr.className = "bpr";
+        if (!unlocked) { var f = document.createElement("i"); f.style.width = Math.round(100 * cur / b[4]) + "%"; pr.appendChild(f); }
+        var ds = document.createElement("span"); ds.className = "bds"; ds.hidden = true;
+        ds.textContent = b[3] + (unlocked ? "" : " (" + fmt(Math.min(b[5](), b[4])) + " / " + fmt(b[4]) + ")");
+        d.appendChild(ic); d.appendChild(nm); if (!unlocked) d.appendChild(pr); d.appendChild(ds);
+        d.addEventListener("click", function () { ds.hidden = !ds.hidden; });
+        bg.appendChild(d);
+      });
+      $("pcount").textContent = got + " / " + BADGES.length;
+      $("psave").textContent = standalone ? (me ? "☁️ Ton profil est sauvegardé avec ton prénom : tu le retrouves sur tous tes appareils." : "Entre ton prénom en jouant (défi du jour ou défi d'un ami) pour sauvegarder ton profil.") : "Dans l'application Claude, ton profil reste sur cet appareil.";
+    }
+    function open() {
+      show("prof");
+      render();
+      if (S.nb.length) { var seen = S.nb.slice(); setTimeout(function () { S.nb = S.nb.filter(function (id) { return seen.indexOf(id) < 0; }); storeSet(KEY, JSON.stringify(S)); updateBtn(); }, 1500); }
+      sync();
+    }
+
+    load();
+    check(true);
+    updateBtn();
+    $("prof-btn").addEventListener("click", open);
+    $("pback").addEventListener("click", function () { show("home"); });
+    if (standalone && nick()) sync();
+    return { answer: answer, finish: finish, event: event, daily: daily, sync: sync, open: open };
+  })();
 
   /* ---------- Défis : lien partageable, scores partagés en ligne (Supabase) et notifications ---------- */
   var Challenge = (function () {
@@ -2863,6 +3195,7 @@ html, body {
         if (online) remember(r.code);
         share(url, text, online);
         lastShare.game = game;
+        Stats.event("inv");
       });
     }
 
@@ -2924,7 +3257,7 @@ html, body {
       topList(ol, r.scores, 5);
       box.appendChild(ol);
       box.hidden = false;
-      if (r.rank === 1 && r.total > 1 && r.improved) FX.party();
+      if (r.rank === 1 && r.total > 1 && r.improved) { FX.party(); Stats.event("win"); }
     }
     function renderLocal(c) {
       var box = $("chres"), diff = state.score - (c.score || 0);
@@ -2938,7 +3271,7 @@ html, body {
         box.appendChild(sp);
       }
       box.hidden = false;
-      if (diff > 0) FX.party();
+      if (diff > 0) { FX.party(); Stats.event("win"); }
     }
 
     /* À la fin d'une partie : proposer d'envoyer un défi, enregistrer le score d'un défi relevé. */
@@ -3256,6 +3589,7 @@ html, body {
       var st = streak(o, dd.day);
       o.best = Math.max(o.best || 0, st);
       save(o);
+      Stats.daily(st);
       b.textContent = "📅 Défi du jour validé !" + (st > 1 ? "  🔥 " + st + " jours d'affilée" : "");
       sp.textContent = t.icon + " " + t.name + " · " + fmt(state.score) + " pts (" + state.right + "/10)";
       var ol = document.createElement("ol"); ol.className = "chrank"; ol.hidden = true; box.appendChild(ol);
@@ -3288,7 +3622,7 @@ html, body {
     $("dgo").addEventListener("click", start);
     $("dcard").hidden = false;
     render();
-    return { onFinish: onFinish, start: start };
+    return { onFinish: onFinish, start: start, refresh: render };
   })();
 
   /* ---------- Blind test : lecture des aperçus ---------- */
@@ -3507,6 +3841,7 @@ html, body {
       state.streak = 0;
     }
     state.res[state.i] = correct;
+    Stats.answer(q, correct, SECONDS * 1000 - remaining, state);
 
     if (lim.type === "time") {
       state.gRemaining = Math.max(0, gDeadline - performance.now());
@@ -3609,6 +3944,7 @@ html, body {
     updateHome();
     Challenge.onFinish();
     Daily.onFinish();
+    Stats.finish(record && best > 0);
     if (state.mp) MP.onFinish();
     else {
       $("again").textContent = state.daily ? "Refaire le défi (entraînement)" : "Rejouer";
