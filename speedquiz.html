@@ -670,6 +670,15 @@ html, body {
 .bd-recap li { display: flex; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 14px; background: rgba(255, 247, 228, 0.09); font-size: 17px; color: #fff; }
 .bd-recap .bd-m { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #052E1B; background: var(--bd-good); }
 .bd-recap li.bd-ko .bd-m { background: var(--bd-bad); color: #3A0B03; }
+.btgroup { border: 2px solid rgba(255, 201, 60, 0.5); border-radius: 22px; padding: 14px 14px 12px; background: rgba(23, 43, 99, 0.45); }
+.btcats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.btcat { display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 10px 12px; border: 2px solid rgba(255, 247, 228, 0.35); border-radius: 16px; background: rgba(14, 29, 69, 0.6); color: #fff; font-family: var(--display); font-weight: 800; font-size: 16px; text-align: left; }
+.btcat .ck { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; border: 2px solid rgba(255, 247, 228, 0.55); font-size: 16px; line-height: 1; color: transparent; }
+.btcat[aria-checked="true"] { background: linear-gradient(180deg, #FFD34F, #FF9A1F); color: #2A1A00; border-color: #FFD34F; }
+.btcat[aria-checked="true"] .ck { background: #2A1A00; border-color: #2A1A00; color: #FFD34F; }
+.bthint { margin: 10px 2px 0; font-size: 15px; color: #AEB9DA; }
+.bth2 { margin-top: 16px; }
+
 @media (prefers-reduced-motion: reduce) { .bd-rec::before { animation: none; } .bd-btn:active { transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
@@ -769,6 +778,14 @@ html, body {
     <div class="group">
       <h2 id="h-theme">Choisis ton stand</h2>
       <div class="tiles" id="themes" role="radiogroup" aria-labelledby="h-theme"></div>
+    </div>
+    <div class="group btgroup" id="btgroup" hidden>
+      <h2 id="h-btcats">Choisis tes catégories</h2>
+      <div class="btcats" id="btcats" role="group" aria-labelledby="h-btcats"></div>
+      <p class="bthint" id="bthint"></p>
+      <h2 class="bth2" id="h-btlevel">Choisis ta difficulté</h2>
+      <div class="tickets lv" id="btlevels" role="radiogroup" aria-labelledby="h-btlevel"></div>
+      <p class="bthint">Plus le niveau monte, plus l'extrait est court : 15 s en facile, 10 s en intermédiaire, 6 s en expert.</p>
     </div>
     <div class="group">
       <h2 id="h-limit">Choisis ton ticket</h2>
@@ -2803,7 +2820,265 @@ html, body {
     [280711410,"Flashdance",2,"Flashdance...What a Feeling","Irene Cara",2],
     [217271368,"Armageddon",2,"I Don't Want to Miss a Thing","Aerosmith",2],
     [566322365,"Skyfall",3,"Skyfall","Adele",2],
-    [1440892107,"Moulin Rouge !",3,"Lady Marmalade","Christina Aguilera, Lil' Kim, Mya & Pink",2]];
+    [1440892107,"Moulin Rouge !",3,"Lady Marmalade","Christina Aguilera, Lil' Kim, Mya & Pink",2],
+    [41229142,"Batman",1,"The Batman Theme","Danny Elfman",2],
+    [1443483126,"Les Dents de la mer",1,"Main Title","John Williams",2],
+    [418557001,"Forrest Gump",2,"Forrest Gump Suite","Alan Silvestri",2],
+    [1440492772,"Ghost",2,"Unchained Melody","The Righteous Brothers",2],
+    [1774372938,"Le Grand Bleu",3,"The Big Blue (Ouverture)","Eric Serra",2],
+    [1299856916,"The Greatest Showman",1,"This Is Me","Keala Settle",2],
+    [1440895194,"La La Land",1,"City of Stars","Ryan Gosling",2],
+    [1440768615,"Mamma Mia !",1,"Dancing Queen","Meryl Streep",2],
+    [1440859155,"Les Misérables",2,"I Dreamed a Dream","Anne Hathaway",2],
+    [1440817159,"La Famille Bélier",2,"Je vais t'aimer","Louane",2],
+    [342383917,"Avatar",2,"I See You","Leona Lewis",2],
+    [1580377539,"Dune",2,"Paul's Dream","Hans Zimmer",2],
+    [1454326485,"Mad Max",3,"Brothers in Arms","Junkie XL",2],
+    [6776896788,"Casino Royale",2,"You Know My Name","Chris Cornell",2],
+    [1500818928,"Terminator",2,"Main Title - The Terminator","Brad Fiedel",2],
+    [73327316,"Blade Runner",3,"Blade Runner Blues","Vangelis",2],
+    [1444080788,"Les Chariots de feu",2,"Chariots of Fire","Vangelis",2],
+    [1440773543,"Braveheart",3,"Main Title","James Horner",2],
+    [830679927,"Il était une fois dans l'Ouest",3,"Once Upon a Time In the West","Ennio Morricone",2],
+    [1735534479,"Kill Bill",2,"Bang Bang (My Baby Shot Me Down)","Nancy Sinatra",2],
+    [1472040459,"Django Unchained",3,"Freedom","Anthony Hamilton",2],
+    [1440847524,"Reservoir Dogs",3,"Stuck in the Middle with You","Stealers Wheel",2],
+    [1440882903,"Trainspotting",3,"Lust For Life","Iggy Pop",2],
+    [1445668462,"La Fièvre du samedi soir",1,"Stayin' Alive","Bee Gees",2],
+    [1440740331,"Karaté Kid",3,"You're the Best","Joe \"Bean\" Esposito",2],
+    [1452241098,"Coup de foudre à Notting Hill",2,"She","Elvis Costello",2],
+    [1593301169,"Love Actually",2,"Glasgow Love Theme","Craig Armstrong",2],
+    [1440903439,"8 Mile",2,"Lose Yourself","Eminem",2],
+    [279366591,"Men in Black",1,"Men In Black","Will Smith",2],
+    [1170755174,"Space Jam",2,"Space Jam","Quad City DJ's",2],
+    [1454449433,"Le Magicien d'Oz",2,"Over the Rainbow","Judy Garland",2],
+    [1471537384,"Le Cinquième Élément",3,"The Diva Dance","Eric Serra",2],
+    [996703868,"Jurassic World",2,"Welcome to Jurassic World","Michael Giacchino",2],
+    [690456025,"Les Gardiens de la Galaxie",2,"Hooked On a Feeling","Blue Swede",2],
+    [1193014651,"Les Visiteurs",2,"Enae Volare","Eric Lévi",2],
+    [1473487978,"Le Roi Lion (2019)",3,"SPIRIT","Beyoncé",2],
+    [1454371819,"Wonder Woman",3,"Wonder Woman's Wrath","Rupert Gregson-Williams",2],
+    [1440903307,"Black Panther",2,"All The Stars","Kendrick Lamar",2],
+    [1697599275,"Oppenheimer",3,"Can You Hear the Music","Ludwig Göransson",2],
+    [1689239206,"Barbie",2,"Barbie World (with Aqua)","Nicki Minaj",2],
+    [1621817905,"Top Gun : Maverick",2,"Hold My Hand","Lady Gaga",2],
+    [1481598347,"Joker",3,"Bathroom Dance","Hildur Guðnadóttir",2],
+    [1454398449,"Le Hobbit",2,"Misty Mountains","Richard Armitage",2],
+    [1440735219,"Out of Africa",3,"I Had a Farm in Africa (Main Title from Out of Africa)","John Barry",2],
+    [140787115,"Magnum",2,"Theme from \"Magnum, P.I.\"","Mike Post",1],
+    [712912882,"Grey's Anatomy",2,"Cosy In the Rocket","Psapp",1],
+    [1443207728,"Desperate Housewives",2,"Desperate Housewives Theme","Danny Elfman",1],
+    [1500962389,"24 heures chrono",2,"'24' Theme","Sean Callery",1],
+    [201411459,"Starsky et Hutch",3,"Gotcha","Tom Scott",1],
+    [3631530,"Code Quantum",3,"Theme from \"Quantum Leap\"","Mike Post",1],
+    [1168757720,"The Crown",3,"The Crown Main Title","Hans Zimmer",1],
+    [598102683,"Les Revenants",3,"Hungry Face","Mogwai",1],
+    [1474977118,"Euphoria",2,"All for Us","Labrinth",1],
+    [1454372388,"Westworld",3,"Main Title Theme - Westworld","Ramin Djawadi",1],
+    [283466475,"Les Soprano",2,"Woke Up This Morning","Alabama 3",1],
+    [1444166874,"Scrubs",2,"Superman","Lazlo Bane",1],
+    [1506688697,"How I Met Your Mother",2,"Hey Beautiful","The Solids",1],
+    [516197946,"Le Prince de Bel-Air",1,"The Fresh Prince of Bel Air","DJ Jazzy Jeff",1],
+    [1653660161,"Mercredi",2,"Wednesday Main Titles","Danny Elfman",1],
+    [1469431787,"Dawson",3,"I Don't Want to Wait","Paula Cole",1],
+    [294414181,"Newport Beach",2,"California (Tchad Blake Mix)","Phantom Planet",1],
+    [1495203863,"The Witcher",2,"Toss a Coin to Your Witcher","Sonya Belousova",1],
+    [1574250179,"Loki",3,"Loki Green Theme","Natalie Holt",1],
+    [1736163411,"Fallout",3,"Brotherhood of Steel (Full Version)","Ramin Djawadi",1],
+    [1658411902,"Lupin",2,"Lupin","Mathieu Lamboley",1],
+    [1534329463,"Ted Lasso",3,"Ted Lasso Theme","Marcus Mumford",1],
+    [882410533,"Mon voisin Totoro",1,"Totoro","Joe Hisaishi",0],
+    [883501723,"Le Voyage de Chihiro",2,"Ce Jour d’été","Joe Hisaishi",0],
+    [883501073,"Princesse Mononoké",3,"Princesse Mononoké - chant","Joe Hisaishi",0],
+    [1770907052,"One Piece",2,"We Are!","Kitadani Hiroshi",0],
+    [283379766,"Bob l'éponge",1,"SpongeBob SquarePants Theme Song","SpongeBob SquarePants",0],
+    [1450669519,"Kung Fu Panda",2,"Oogway Ascends","Hans Zimmer",0],
+    [1443740149,"L'Âge de glace",2,"Scrat To the Rescue","John Powell",0],
+    [652255048,"Les Minions",1,"Y.M.C.A.","The Minions",0],
+    [1655415610,"La Pat' Patrouille",2,"PAW Patrol Opening Theme","PAW Patrol",0],
+    [1440755450,"Dragons",2,"Test Drive","John Powell",0],
+    [1487738283,"Frozen II",2,"Into the Unknown","Idina Menzel",0],
+    [1543828845,"Soul",3,"Born to Play","Jon Batiste",0],
+    [1445606413,"Wall-E",3,"Define Dancing","Thomas Newman",0],
+    [1469357962,"Les Aventures de Rabbi Jacob",3,"Rabbi Jacob (BOF \"Les aventures de Rabbi Jacob\")","Vladimir Cosma",0],
+    [1849225269,"Fallout 4",3,"Fallout 4 Main Theme","Inon Zur",4],
+    [655118443,"The Last of Us",2,"The Last of Us","Gustavo Santaolalla",4],
+    [1370191770,"God of War",2,"God of War","Bear McCreary",4],
+    [1825881841,"Diablo III",3,"I Am Justice","Russell Brower",4],
+    [1810420304,"World of Warcraft",2,"What Makes Us Strong","Neal Acree",4],
+    [1305353586,"Cuphead",3,"Floral Fury","Kristofer Maddigan",4],
+    [1531339863,"Hades",3,"Good Riddance (Eurydice Solo)","Darren Korb",4],
+    [62445714,"Final Fantasy X",3,"Suteki Da Ne (Isn't It Wonderful?)","Rikki",4],
+    [1226945991,"Persona 5",3,"Life Will Change","Lyn",4],
+    [1544899676,"Celeste",3,"Reach for the Summit","Lena Raine",4],
+    [1544457962,"Cyberpunk 2077",3,"V","Marcin Przybyłowicz",4],
+    [1519189675,"Genshin Impact",2,"Genshin Impact Main Theme","Yu-Peng Chen",4],
+    [1831861474,"League of Legends",2,"POP/STARS","K/DA",4],
+    [1622678609,"Spyro",3,"Spyro 1 Main Theme (orbit)","Stewart Copeland",4],
+    [1021788123,"Mortal Kombat",3,"Techno Syndrome (Mortal Kombat)","The Immortals",4],
+    [164070000,"Silent Hill",3,"Theme of Laura (Reprise)","Akira Yamaoka",4],
+    [1467259299,"Outer Wilds",3,"Timber Hearth","Andrew Prahlow",4],
+    [1470242056,"Sea of Thieves",3,"The Summoning","Sea of Thieves",4],
+    [971519733,"Ori and the Blind Forest",3,"The Blinded Forest","Gareth Coker",4],
+    [1778357513,"Elden Ring",2,"Shaman Village","Tsukasa Saitoh",4],
+    [1705383613,"Baldur's Gate 3",3,"Raphael's Final Act","Borislav Slavov",4],
+    [1446739138,"Lost : Les Disparus",3,"Main Title","",1],
+    [1275301945,"The Walking Dead",2,"Theme from The Walking Dead","",1],
+    [1445732931,"Le Roi lion",1,"Hakuna Matata","",3],
+    [1442812775,"Le Roi lion",1,"L'Histoire de la vie (Circle of Life)","",3],
+    [1445732929,"Le Roi lion",2,"Be Prepared","",3],
+    [1462702461,"Aladdin",1,"Friend Like Me","",3],
+    [1462702463,"Aladdin",1,"A Whole New World","",3],
+    [1445883242,"Aladdin",3,"Arabian Nights","",3],
+    [1440722281,"Aladdin",2,"Prince Ali","",3],
+    [1440618281,"La Reine des neiges",1,"Let It Go","",3],
+    [1440618183,"La Reine des neiges",1,"Do You Want to Build a Snowman?","",3],
+    [1440618188,"La Reine des neiges",2,"Love Is an Open Door","",3],
+    [1440618285,"La Reine des neiges",2,"In Summer","",3],
+    [1440661297,"La Petite Sirène",1,"Under the Sea","",3],
+    [1440661296,"La Petite Sirène",1,"Part of Your World","",3],
+    [1442918223,"La Petite Sirène",2,"Kiss the Girl","",3],
+    [1442917791,"La Petite Sirène",2,"Poor Unfortunate Souls","",3],
+    [1440618901,"La Belle et la Bête",1,"Be Our Guest","",3],
+    [1440618895,"La Belle et la Bête",2,"Belle","",3],
+    [1440618898,"La Belle et la Bête",2,"Gaston","",3],
+    [1699102831,"La Belle et la Bête",1,"Beauty and the Beast","",3],
+    [1442941902,"Pocahontas",2,"Colors of the Wind","",3],
+    [1467938146,"Le Livre de la jungle",1,"The Bare Necessities","",3],
+    [1444076541,"Le Livre de la jungle",2,"I Wanna Be Like You","",3],
+    [1440662804,"Mulan",2,"Reflection","",3],
+    [1440662805,"Mulan",2,"I'll Make a Man Out of You","",3],
+    [1437333914,"Tarzan",2,"You'll Be in My Heart","",3],
+    [1452873021,"Toy Story",1,"You've Got a Friend in Me","",3],
+    [1452873362,"Toy Story",3,"Strange Things","",3],
+    [1440877079,"Coco",2,"Remember Me","",3],
+    [1440671253,"Coco",3,"Un Poco Loco","",3],
+    [1440638151,"Vaiana",1,"How Far I'll Go","",3],
+    [1440638156,"Vaiana",3,"Shiny","",3],
+    [1440639422,"Raiponce",2,"I See the Light","",3],
+    [1440639066,"Raiponce",3,"When Will My Life Begin","",3],
+    [1409984039,"Blanche-Neige et les Sept Nains",2,"Heigh-Ho","",3],
+    [1452851094,"Pinocchio",2,"When You Wish Upon a Star","",3],
+    [1594677760,"Encanto : La Fantastique Famille Madrigal",1,"We Don't Talk About Bruno","",3],
+    [1594677759,"Encanto : La Fantastique Famille Madrigal",2,"Surface Pressure","",3],
+    [1594677763,"Encanto : La Fantastique Famille Madrigal",3,"Dos Oruguitas","",3],
+    [714969432,"Le Bossu de Notre-Dame",3,"Out There","",3],
+    [1443823522,"Les 101 Dalmatiens",2,"Cruella de Vil","",3],
+    [1494520440,"Fantasia",2,"L'Apprenti sorcier","",3],
+    [1440788777,"Robin des Bois",3,"Oo-De-Lally","",3],
+    [1417397131,"La Princesse et la Grenouille",3,"Almost There","",3],
+    [1412859027,"Hercule",2,"Go the Distance","",3],
+    [1412859037,"Hercule",3,"Zero to Hero","",3],
+    [775874342,"Mary Poppins",3,"Chim Chim Cher-ee","",3],
+    [1443298928,"Mary Poppins",3,"A Spoonful of Sugar","",3],
+    [1440652179,"Peter Pan",3,"Following the Leader","",3],
+    [1443355142,"Bambi",3,"Little April Shower","",3],
+    [548204931,"Dumbo",3,"Baby Mine","",3],
+    [537208371,"Cendrillon",2,"Bibbidi-Bobbidi-Boo","",3],
+    [724178265,"Oliver et Compagnie",3,"Why Should I Worry?","",3],
+    [714054003,"Frère des ours",3,"On My Way","",3],
+    [1443622021,"Atlantide, l'empire perdu",3,"Where the Dream Takes You","",3],
+    [1440650203,"Pirates des Caraïbes",2,"He's a Pirate","",3],
+    [724256948,"Le Monde de Nemo",3,"Beyond the Sea","",3],
+    [61018643,"Final Fantasy VII",2,"One-Winged Angel","",4],
+    [1670074974,"Kingdom Hearts",2,"Dearly Beloved","",4],
+    [324080961,"Chrono Trigger",3,"Chrono Trigger","",4],
+    [1867885632,"Minecraft",1,"Sweden","",4],
+    [1867885443,"Minecraft",2,"Wet Hands","",4],
+    [1528217897,"Undertale",2,"Megalovania","",4],
+    [1528217884,"Undertale",3,"Hopes and Dreams","",4],
+    [1682522054,"Halo",2,"Halo","",4],
+    [1849547040,"The Elder Scrolls V: Skyrim",1,"Dragonborn","",4],
+    [1333501416,"The Witcher 3: Wild Hunt",2,"The Trail","",4],
+    [1640108517,"Assassin's Creed II",2,"Ezio's Family","",4],
+    [270749989,"Portal",2,"Still Alive","",4],
+    [1655229854,"Red Dead Redemption",2,"Far Away","",4],
+    [1571062434,"Sonic the Hedgehog",1,"Green Hill Zone","",4],
+    [1085989773,"Street Fighter II",2,"Guile's Theme","",4],
+    [895690123,"Resident Evil 2",3,"The First Floor","",4],
+    [1885803774,"Doom",2,"BFG Division","",4],
+    [1544457964,"Cyberpunk 2077",3,"The Rebel Path","",4],
+    [1544899661,"Celeste",3,"Resurrections","",4],
+    [1263341720,"Hollow Knight",3,"Dirtmouth","",4],
+    [1158129392,"Stardew Valley",2,"Stardew Valley Overture","",4],
+    [1553230110,"Journey",3,"Apotheosis","",4],
+    [1522381409,"Mass Effect",3,"M4, Part II","",4],
+    [1705384083,"Baldur's Gate 3",3,"Down by the River","",4],
+    [1553580965,"Among Us",2,"Among Us Space Theme","",4],
+    [690242156,"Rayman Legends",3,"Medieval Theme","",4],
+    [1584866493,"Tomb Raider",3,"Tomb Raider Theme","",4],
+    [1778357706,"Elden Ring",3,"The Putrescent Knight","",4],
+    [1490637481,"Les Sims",3,"Now Entering","",4],
+    [1490637485,"Les Sims",3,"Mall Rat","",4],
+    [1490637483,"Les Sims",3,"Under Construction","",4],
+    [1490637484,"Les Sims",3,"Buying Lumber","",4],
+    [1490638088,"Les Sims",3,"Groceries","",4],
+    [1490638154,"Les Sims",3,"SIM Nights","",4],
+    [1496443299,"Les Sims 2",2,"The Sims 2 Theme","",4],
+    [1496443300,"Les Sims 2",3,"Sim Time Sim Place","",4],
+    [1496443301,"Les Sims 2",3,"Sim Heaven","",4],
+    [1496443302,"Les Sims 2",3,"Makeover","",4],
+    [1496443303,"Les Sims 2",3,"Simsation","",4],
+    [1496443308,"Les Sims 2",3,"Busy Sim","",4],
+    [1516530124,"Les Sims 3",2,"The Sims Theme","",4],
+    [1516530125,"Les Sims 3",3,"Simmering Mallets","",4],
+    [1516530456,"Les Sims 3",3,"Constructive Simicism","",4],
+    [1516530457,"Les Sims 3",3,"Consumerism Simplified","",4],
+    [1516530458,"Les Sims 3",3,"Verismilitude","",4],
+    [1516530470,"Les Sims 3",3,"Fortissimo Personality","",4],
+    [771135471,"Kanto",1,"Bourg Palette","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135763,"Kanto",1,"Lavanville","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135524,"Kanto",2,"la Forêt de Jade","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135521,"Kanto",2,"Argenta","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135742,"Kanto",2,"le Mont Sélénite","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135745,"Kanto",2,"Carmin sur Mer","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135812,"Kanto",2,"Céladopole","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135777,"Kanto",3,"la Tour Pokémon","Pokémon Rouge Feu et Vert Feuille",5],
+    [771139028,"Kanto",3,"Cramois'Île","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135625,"Kanto",2,"un combat de Champion d'Arène","Pokémon Rouge Feu et Vert Feuille",5],
+    [771138979,"Kanto",3,"un combat contre un Pokémon légendaire","Pokémon Rouge Feu et Vert Feuille",5],
+    [771135597,"Kanto",2,"la chanson de Rondoudou","Pokémon Rouge Feu et Vert Feuille",5],
+    [771139506,"Kanto",3,"la Salle d'Honneur","Pokémon Rouge Feu et Vert Feuille",5],
+    [880663008,"Johto",2,"Bourg Geon","Pokémon HeartGold et SoulSilver",5],
+    [880663019,"Johto",2,"la Route 29","Pokémon HeartGold et SoulSilver",5],
+    [880663160,"Johto",2,"Doublonville","Pokémon HeartGold et SoulSilver",5],
+    [880663045,"Johto",3,"Ville Griotte","Pokémon HeartGold et SoulSilver",5],
+    [880663106,"Johto",3,"les Ruines d'Alpha","Pokémon HeartGold et SoulSilver",5],
+    [880663560,"Johto",3,"la Tour Cendrée","Pokémon HeartGold et SoulSilver",5],
+    [880663507,"Johto",3,"le Parc Naturel","Pokémon HeartGold et SoulSilver",5],
+    [880663638,"Johto",3,"le Phare d'Oliville","Pokémon HeartGold et SoulSilver",5],
+    [880663613,"Johto",3,"le combat contre Raikou","Pokémon HeartGold et SoulSilver",5],
+    [820996247,"Hoenn",1,"Bourg-en-Vol","Pokémon Rubis et Saphir",5],
+    [820996259,"Hoenn",2,"la Route 101","Pokémon Rubis et Saphir",5],
+    [820996298,"Hoenn",3,"le Bois Clémenti","Pokémon Rubis et Saphir",5],
+    [820996319,"Hoenn",2,"Mérouville","Pokémon Rubis et Saphir",5],
+    [820996375,"Hoenn",2,"Poivressel","Pokémon Rubis et Saphir",5],
+    [820996415,"Hoenn",3,"Vergazon","Pokémon Rubis et Saphir",5],
+    [820999890,"Hoenn",3,"Cimetronelle","Pokémon Rubis et Saphir",5],
+    [820996520,"Hoenn",3,"le Mont Chimnée","Pokémon Rubis et Saphir",5],
+    [820996740,"Hoenn",2,"la musique de surf","Pokémon Rubis et Saphir",5],
+    [820996642,"Hoenn",2,"un combat de Champion d'Arène","Pokémon Rubis et Saphir",5],
+    [840159412,"Sinnoh",2,"Bonaugure","Pokémon Diamant et Perle",5],
+    [840159420,"Sinnoh",2,"la Route 201","Pokémon Diamant et Perle",5],
+    [840162936,"Sinnoh",3,"la Forêt Vestigion","Pokémon Diamant et Perle",5],
+    [840159590,"Sinnoh",2,"Féli-Cité","Pokémon Diamant et Perle",5],
+    [840162959,"Sinnoh",3,"Unionpolis","Pokémon Diamant et Perle",5],
+    [840163037,"Sinnoh",3,"le Mont Couronné","Pokémon Diamant et Perle",5],
+    [840163049,"Sinnoh",3,"les Colonnes Lances","Pokémon Diamant et Perle",5],
+    [840163170,"Sinnoh",3,"la Ligue Pokémon","Pokémon Diamant et Perle",5],
+    [839755013,"Unys",2,"Renouet","Pokémon Noir et Blanc",5],
+    [839755040,"Unys",3,"la Route 1","Pokémon Noir et Blanc",5],
+    [839755161,"Unys",3,"Ogoesse","Pokémon Noir et Blanc",5],
+    [839755349,"Unys",2,"Volucité","Pokémon Noir et Blanc",5],
+    [839755761,"Unys",3,"la Grotte Électrolithe","Pokémon Noir et Blanc",5],
+    [839755355,"Unys",2,"Méanville","Pokémon Noir et Blanc",5],
+    [741190242,"Kalos",3,"Bourg Croquis","Pokémon X et Y",5],
+    [741190246,"Kalos",3,"Quarellis","Pokémon X et Y",5],
+    [741190689,"Kalos",2,"Illumis","Pokémon X et Y",5],
+    [741190105,"Kalos",3,"le thème de la région de Kalos","Pokémon X et Y",5],
+    [741190389,"Kalos",3,"la Forêt de Neuvartault","Pokémon X et Y",5],
+    [1173163943,"Alola",3,"Lili'i","Pokémon Soleil et Lune",5],
+    [1173163818,"Alola",2,"le thème de la région d'Alola","Pokémon Soleil et Lune",5]];
   var POOLS = { culture: [], jeuxvideo: [], france: [], gastronomie: [], pokemon: [], series: [], ncis: [], sims: [], disney: [], parcs: [], blindtest: [], capitales: [], daily: [], drapeaux: [] };
   QUESTIONS.forEach(function (q, i) { POOLS[CAT_THEME[q.c] || "culture"].push(i); });
   FLAGS.forEach(function (_, i) { POOLS.drapeaux.push(i); });
@@ -2814,12 +3089,16 @@ html, body {
   DQ.forEach(function (_, i) { POOLS.daily.push(i); });
 
   function loadConfig() {
-    var c = { theme: "culture", limit: "q10", level: "all" };
+    var c = { theme: "culture", limit: "q10", level: "all", btcats: [0, 1, 2, 3, 4, 5] };
     try {
       var s = JSON.parse(storeGet("pq:cfg") || "null");
       if (s && THEMES[s.theme]) c.theme = s.theme;
       if (s && LIMITS[s.limit]) c.limit = s.limit;
       if (s && LEVELS[s.level]) c.level = s.level;
+      if (s && Array.isArray(s.btcats)) {
+        var okc = s.btcats.filter(function (x, i, arr) { return typeof x === "number" && x >= 0 && x < 6 && arr.indexOf(x) === i; });
+        if (okc.length) c.btcats = okc;
+      }
     } catch (e) { /* valeurs par défaut */ }
     return c;
   }
@@ -2904,6 +3183,10 @@ html, body {
   /* mode : « full » = avec les musiques, « none » = sans, sinon selon ce que permet l'appareil */
   function levelPool(theme, level, need, mode) {
     var all = POOLS[theme];
+    if (theme === "blindtest" && mode !== "full" && config && Array.isArray(config.btcats) && config.btcats.length) {
+      var chosen = all.filter(function (i) { return config.btcats.indexOf(BT[i][5] || 0) >= 0; });
+      if (chosen.length) all = chosen;
+    }
     var withAudio = mode === "full" ? true : mode === "none" ? false : audioAllowed();
     if (!withAudio && (theme === "pokemon" || XB[theme] || (mode === "none" && theme === "blindtest"))) all = all.filter(function (i) { return !isAudioQ(theme, i); });
     if (!LEVELS[level] || level === "all") return all;
@@ -2963,9 +3246,12 @@ html, body {
 
   /* Blind test : un extrait musical, quatre propositions du même genre (dessin animé, série ou film). */
   var BT_TYPES = [
-    { cat: "Dessins animés", q: "De quel dessin animé vient cet extrait ?" },
-    { cat: "Séries TV", q: "De quelle série vient cet extrait ?" },
-    { cat: "Films", q: "De quel film vient cet extrait ?" }
+    { cat: "Dessins animés", icon: "🎨", q: "De quel dessin animé vient cet extrait ?" },
+    { cat: "Séries TV", icon: "📺", q: "De quelle série vient cet extrait ?" },
+    { cat: "Films", icon: "🎬", q: "De quel film vient cet extrait ?" },
+    { cat: "Disney", icon: "🏰", q: "De quel film Disney ou Pixar vient cette chanson ?", f: function (t) { return "C'était « " + t[3] + " », tirée de « " + t[1] + " »."; } },
+    { cat: "Jeux vidéo", icon: "🎮", q: "De quel jeu vidéo vient cette musique ?", f: function (t) { return "C'était « " + t[3] + " », dans « " + t[1] + " »."; } },
+    { cat: "Pokémon", icon: "⚡", q: "De quelle région Pokémon vient cette musique ?", f: function (t) { return "C'était « " + t[3] + " », dans " + t[4] + " (région de " + t[1] + ")."; } }
   ];
   function btQ(i) {
     var t = BT[i], ty = BT_TYPES[t[5] || 0];
@@ -2974,7 +3260,7 @@ html, body {
     var opts = [{ t: t[1], ok: true }].concat(shuffle(films).slice(0, 3).map(function (f) { return { t: f }; }));
     return {
       c: "Blind test · " + ty.cat, q: ty.q, d: t[2], audio: t[0], clip: [0, 15, 10, 6][t[2]],
-      f: "C'était « " + t[3] + " », par " + t[4] + ".", opts: shuffle(opts)
+      f: ty.f ? ty.f(t) : "C'était « " + t[3] + " », par " + t[4] + ".", opts: shuffle(opts)
     };
   }
 
@@ -3025,7 +3311,31 @@ html, body {
     } finally { rng = prev; }
   }
 
+  /* Blind test : on tourne entre les catégories choisies, sans jamais reposer le même titre ni un extrait déjà entendu récemment. */
+  function planBlind(n, level) {
+    var pool = levelPool("blindtest", level, n), key = SEEN_KEY.blindtest, seen = [];
+    if (!fresh) { try { seen = JSON.parse(storeGet(key) || "[]"); } catch (e) { seen = []; } }
+    if (!Array.isArray(seen)) seen = [];
+    var groups = {};
+    pool.forEach(function (i) { var ty = BT[i][5] || 0; (groups[ty] = groups[ty] || []).push(i); });
+    var order = shuffle(Object.keys(groups)), picked = [], usedTitle = {}, usedTrack = {}, k = 0, guard = 0;
+    while (picked.length < n && guard++ < n * 8) {
+      var g = groups[order[k++ % order.length]];
+      var cand = g.filter(function (i) { return seen.indexOf(i) < 0 && !usedTrack[i] && !usedTitle[BT[i][1]]; });
+      if (!cand.length) {
+        seen = seen.filter(function (i) { return g.indexOf(i) < 0; });
+        cand = g.filter(function (i) { return !usedTrack[i] && !usedTitle[BT[i][1]]; });
+      }
+      if (!cand.length) cand = g.filter(function (i) { return !usedTrack[i]; });
+      if (!cand.length) continue;
+      var id = cand[Math.floor(rng() * cand.length)];
+      picked.push(id); usedTrack[id] = 1; usedTitle[BT[id][1]] = 1; seen.push(id);
+    }
+    if (!fresh) storeSet(key, JSON.stringify(seen.slice(-500)));
+    return picked.map(function (i) { return { t: "blindtest", i: i }; });
+  }
   function planTheme(t, n, level) {
+    if (t === "blindtest") return planBlind(n, level);
     return pickIds(SEEN_KEY[t], levelPool(t, level, n), n).map(function (i) { return { t: t, i: i }; });
   }
 
@@ -6011,14 +6321,49 @@ html, body {
   document.addEventListener("pointerdown", function () { Music.unlock(); }, true);
   $("music").addEventListener("click", function () { Music.toggle(); });
 
-  buildChips($("themes"), THEMES, config.theme, function (k) { config.theme = k; saveConfig(); Music.setTheme(k); }, "tile");
+  function renderBtPanel() {
+    var on = config.theme === "blindtest";
+    $("btgroup").hidden = !on;
+    $("levels").parentNode.hidden = on;   /* en blind test, la difficulté se choisit dans le panneau */
+    if (!on) return;
+    var box = $("btcats"); box.textContent = "";
+    BT_TYPES.forEach(function (ty, idx) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "btcat"; b.setAttribute("role", "checkbox");
+      b.setAttribute("aria-checked", config.btcats.indexOf(idx) >= 0 ? "true" : "false");
+      var ck = document.createElement("span"); ck.className = "ck"; ck.setAttribute("aria-hidden", "true"); ck.textContent = "✓";
+      var tx = document.createElement("span"); tx.textContent = ty.icon + " " + ty.cat;
+      b.appendChild(ck); b.appendChild(tx);
+      b.addEventListener("click", function () {
+        var at = config.btcats.indexOf(idx);
+        if (at >= 0) {
+          if (config.btcats.length === 1) { $("bthint").textContent = "Garde au moins une catégorie."; return; }
+          config.btcats.splice(at, 1);
+        } else config.btcats.push(idx);
+        config.btcats.sort(function (a, c) { return a - c; });
+        saveConfig(); renderBtPanel();
+      });
+      box.appendChild(b);
+    });
+    var n = BT.filter(function (x) { return config.btcats.indexOf(x[5] || 0) >= 0; }).length;
+    $("bthint").textContent = config.btcats.length + " catégorie" + (config.btcats.length > 1 ? "s" : "") + " sur " + BT_TYPES.length + " · " + n + " extraits au total, tirés au hasard et sans répétition.";
+  }
+  function syncLevels() {
+    ["levels", "btlevels"].forEach(function (id) {
+      Array.prototype.forEach.call($(id).children, function (c) { c.setAttribute("aria-checked", c.getAttribute("data-key") === config.level ? "true" : "false"); });
+    });
+  }
+  function setLevel(k) { config.level = k; saveConfig(); updateHome(); syncLevels(); }
+  buildChips($("themes"), THEMES, config.theme, function (k) { config.theme = k; saveConfig(); Music.setTheme(k); renderBtPanel(); }, "tile");
   if (window.claude) {
     /* Dans l'application Claude, le réseau est bloqué : pas de blind test. */
     var btTile = document.querySelector('#themes [data-key="blindtest"]');
     if (btTile) btTile.hidden = true;
     if (config.theme === "blindtest") { config.theme = "culture"; saveConfig(); }
   }
-  buildChips($("levels"), LEVELS, config.level, function (k) { config.level = k; saveConfig(); updateHome(); }, "ticket");
+  buildChips($("levels"), LEVELS, config.level, setLevel, "ticket");
+  buildChips($("btlevels"), LEVELS, config.level, setLevel, "ticket");
+  renderBtPanel();
   buildChips($("limits"), LIMITS, config.limit, function (k) { config.limit = k; saveConfig(); updateHome(); }, "ticket");
 
   $("play-btn").addEventListener("click", start);
