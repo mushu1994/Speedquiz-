@@ -639,7 +639,7 @@ html, body {
 .bd-btn.bd-quiet:active { transform: none; background: rgba(255, 255, 255, 0.08); }
 .bd-btn:disabled { background: rgba(255, 247, 228, 0.18); color: rgba(255, 247, 228, 0.55); box-shadow: none; cursor: default; }
 .bd-link { display: block; margin: 18px auto 0; padding: 10px; border: 0; background: none; color: var(--bd-muted); font-size: 16px; text-decoration: underline; text-underline-offset: 3px; }
-.bd-bar { display: flex; gap: 10px; margin: 14px 0 16px; padding-right: 56px; }
+.bd-bar { display: flex; gap: 10px; margin: 0 0 12px; padding: 14px 56px 10px 0; position: sticky; top: 0; z-index: 30; background: linear-gradient(#0e1d45 70%, rgba(14, 29, 69, 0)); }
 .bd-mini { flex: 0 1 auto; min-height: 46px; padding: 8px 14px; border: 2px solid rgba(255, 247, 228, 0.6); border-radius: 14px; background: rgba(14, 29, 69, 0.55); color: #fff; font-family: var(--display); font-weight: 800; font-size: 15px; white-space: nowrap; }
 .bd-mini:active { background: rgba(255, 255, 255, 0.12); }
 .bd-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; color: var(--bd-paper); font-weight: 700; font-size: 17px; }
