@@ -639,6 +639,9 @@ html, body {
 .bd-btn.bd-quiet:active { transform: none; background: rgba(255, 255, 255, 0.08); }
 .bd-btn:disabled { background: rgba(255, 247, 228, 0.18); color: rgba(255, 247, 228, 0.55); box-shadow: none; cursor: default; }
 .bd-link { display: block; margin: 18px auto 0; padding: 10px; border: 0; background: none; color: var(--bd-muted); font-size: 16px; text-decoration: underline; text-underline-offset: 3px; }
+.bd-bar { display: flex; gap: 10px; margin: 14px 0 16px; padding-right: 56px; }
+.bd-mini { flex: 0 1 auto; min-height: 46px; padding: 8px 14px; border: 2px solid rgba(255, 247, 228, 0.6); border-radius: 14px; background: rgba(14, 29, 69, 0.55); color: #fff; font-family: var(--display); font-weight: 800; font-size: 15px; white-space: nowrap; }
+.bd-mini:active { background: rgba(255, 255, 255, 0.12); }
 .bd-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; color: var(--bd-paper); font-weight: 700; font-size: 17px; }
 .bd-tape { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; margin-bottom: 20px; }
 .bd-tape span { height: 8px; border-radius: 4px; background: rgba(255, 247, 228, 0.22); }
@@ -887,6 +890,7 @@ html, body {
       </div>
 
       <div class="bd-s" id="bd-play" hidden>
+        <div class="bd-bar"><button class="bd-mini" id="bd-back" type="button">← Retour</button><button class="bd-mini" id="bd-restart" type="button">↻ Nouvelle partie</button></div>
         <div class="bd-top"><span id="bd-count"></span><span id="bd-pts"></span></div>
         <div class="bd-tape" id="bd-tape" aria-hidden="true"></div>
         <div class="bd-q"><p id="bd-qtext"></p></div>
@@ -895,7 +899,6 @@ html, body {
         <button class="bd-btn" id="bd-check" type="button" hidden disabled>Valider mes deux réponses</button>
         <div class="bd-fb" id="bd-fb" hidden></div>
         <button class="bd-btn" id="bd-next" type="button" hidden>Question suivante</button>
-        <button class="bd-link" id="bd-quit1" type="button">Quitter le quiz</button>
       </div>
 
       <div class="bd-s" id="bd-end" hidden>
@@ -4788,7 +4791,8 @@ html, body {
     $("bd-next").addEventListener("click", next);
     $("bd-check").addEventListener("click", validate);
     $("bd-again").addEventListener("click", start);
-    ["bd-quit0", "bd-quit1", "bd-quit2"].forEach(function (id) { $(id).addEventListener("click", leave); });
+    ["bd-quit0", "bd-back", "bd-quit2"].forEach(function (id) { $(id).addEventListener("click", leave); });
+    $("bd-restart").addEventListener("click", start);
 
     refresh();
     /* Lien reçu dans la notification : ?quiz=papa */
